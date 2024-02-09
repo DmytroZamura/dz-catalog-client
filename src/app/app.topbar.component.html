@@ -1,0 +1,267 @@
+<div class="topbar clearfix" [class.onboarding-container]="app.appService.onboarding">
+  <ng-container *ngIf="app.translate.currentLang">
+    <div class="logo-main">
+
+      <a class="logo-link" [routerLink]="['/feed/'+app.translate.currentLang]">
+        <img src="static/assets/img/uafine-smile.svg" alt="UaFine Logo">
+
+
+      </a>
+
+    </div>
+
+    <div class="logo ">
+
+    <span class="mobile-logo-link"
+          (click)="app.appService.onSidebarClick($event)">
+      <i class="pi pi-sliders-h topbar-mobile-icon" joyrideStep="mobileFilter"
+         title="{{ 'ONBOARDING.filterTitle' | translate }}"
+         text="{{ 'ONBOARDING.filterText' | translate }}" stepPosition="bottom"
+         (click)="app.appService.onTabClick($event, 0)"></i>
+    </span>
+
+
+    </div>
+
+
+    <ng-container *ngIf="app.appService.isAuthenticated()">
+
+      <div class="logo show-mobile">
+
+      <span class="show-mobile" (click)="app.appService.onSidebarClick($event)">
+        <i class="pi pi-inbox topbar-mobile-icon" (click)="app.appService.onTabClick($event, 1)"></i>
+        <ng-container *ngIf="app.appService.totalEventsQty">
+          <span class="icon-badge">{{app.appService.totalEventsQty.new_messages}}</span>
+        </ng-container>
+      </span>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="app.appService.loadingIcons && isBrowser">
+      <app-top-buttons-lazy *ngxLazyEl #topButtons></app-top-buttons-lazy>
+    </ng-container>
+
+
+    <span id="topbar-menu-button" class="cursor-pointer" (click)="app.appService.onTopbarMenuButtonClick($event)">
+    <i class="pi pi-bars" joyrideStep="mobileLogin" title="{{ 'ONBOARDING.loginTitle' | translate }}"
+       text="{{ 'ONBOARDING.loginText' | translate }}" stepPosition="bottom"></i>
+
+
+    </span>
+
+    <div class="topbar-container" [class.signedin]="app.appService.isAuthenticated()">
+
+      <ul class="topbar-menu fadeInDown width-auto"
+          [ngClass]="{'topbar-menu-visible': app.appService.topbarMenuActive}">
+
+
+        <li *ngIf="!app.appService.isAuthenticated()" role="menuitem" class="top-menu-item"
+            joyrideStep="login"
+            title="{{ 'ONBOARDING.loginTitle' | translate }}"
+            text="{{ 'ONBOARDING.loginText' | translate }}" stepPosition="bottom">
+
+          <a [routerLink]="['/auth']" class="topbar-link cursor-pointer">
+            <i class="topbar-icon pi pi-sign-in"></i>
+            <br/> <span class="middle-icon"> {{ 'MENU.LOGIN' | translate }}</span>
+          </a>
+
+
+        </li>
+
+        <ng-container *ngIf="isBrowser">
+          <li *ngIf="app.appService.isAuthenticated()" #profile class="profile-item topbar-link"
+              [ngClass]="{'active-topmenuitem':app.appService.activeTopbarItem === profile}">
+            <div class="cursor-pointer" (click)="app.appService.onTopbarItemClick($event,profile)">
+              <div class="profile-image">
+                <img *ngIf="app.appService.userProfile.img_details"
+                     src="{{app.appService.userProfile.img_details.small_image_url}}"
+                     alt="{{app.appService.userProfile.first_name}}" class="top-profile-image">
+                <img *ngIf="!app.appService.userProfile.img_details" alt="{{app.appService.userProfile.first_name}}"
+                     class="top-profile-image"
+                     src="static/assets/img/default-user.jpeg"/>
+              </div>
+              <div class="profile-info hide-md">
+          <span *ngIf="app.appService.userProfile"
+                class="topbar-item-name profile-name">
+            <ng-container *ngIf="app.appService.userProfile.first_name">
+                {{app.appService.userProfile.first_name}}
+            </ng-container>
+             <ng-container *ngIf="!app.appService.userProfile.first_name">
+                {{app.appService.userProfile.nickname}}
+            </ng-container>
+
+          </span>
+
+              </div>
+            </div>
+
+
+            <ul class="fadeInDown">
+
+              <li role="menuitem">
+                <a [routerLink]="['/profile']">
+                  <i class="pi pi-user"></i>
+                  <span>{{ 'MENU.PROFILE' | translate }}</span>
+
+                </a>
+              </li>
+              <li role="menuitem">
+                <a [routerLink]="['/manage-company']">
+                  <i class="pi pi-briefcase"></i>
+                  <span>{{ 'COMPANY.Manage your company' | translate }}</span>
+
+                </a>
+              </li>
+              <ng-container>
+                <li role="menuitem">
+                  <a [routerLink]="['/payment-accounts']">
+                    <i class="pi pi-star-o"></i>
+                    <span>{{ 'PROMOTION.Payment accounts' | translate }}</span>
+
+                  </a>
+                </li>
+              </ng-container>
+              <li role="menuitem">
+                <a [routerLink]="['requests/supplier']">
+                  <i class="pi pi-money-bill"></i>
+                  <span>{{ 'GENERAL.Sales' | translate }}</span>
+                  <ng-container *ngIf="app.appService.totalEventsQty">
+                    <ng-container *ngIf="app.appService.totalEventsQty.new_customer_requests>0">
+                      <span
+                        class="topbar-submenuitem-badge">{{app.appService.totalEventsQty.new_customer_requests}}</span>
+                    </ng-container>
+                  </ng-container>
+                </a>
+              </li>
+              <li role="menuitem">
+                <a [routerLink]="['requests/customer']">
+                  <i class="pi pi-shopping-cart"></i>
+                  <span>{{ 'GENERAL.Purchases' | translate }}</span>
+                  <ng-container *ngIf="app.appService.totalEventsQty">
+                    <ng-container *ngIf="app.appService.totalEventsQty.your_open_supply_requests>0">
+                      <span
+                        class="topbar-submenuitem-badge">{{app.appService.totalEventsQty.your_open_supply_requests}}</span>
+                    </ng-container>
+                  </ng-container>
+
+                </a>
+              </li>
+
+              <li role="menuitem">
+                <a [routerLink]="['/favorites']">
+                  <i class="pi pi-bookmark"></i>
+                  <span>{{ 'GENERAL.Favorites' | translate }}</span>
+                </a>
+              </li>
+
+
+              <li role="menuitem">
+                <a [routerLink]="['/settings']">
+                  <i class="pi pi-cog"></i>
+                  <span>{{ 'MENU.SETTINGS' | translate }}</span>
+                </a>
+              </li>
+
+
+              <li *ngIf="app.appService.isAuthenticated()" role="menuitem">
+                <a class="cursor-pointer" (click)="app.logout()">
+                  <i class="pi pi-sign-out"></i>
+                  <span><span>{{ 'MENU.LOGOUT' | translate }}</span></span>
+                </a>
+              </li>
+
+
+            </ul>
+
+          </li>
+
+
+          <li *ngIf="app.appService.isAuthenticated()" role="menuitem" class="top-menu-item">
+
+
+            <a class="cursor-pointer topbar-link" (click)="showNotifications()">
+
+              <i class="topbar-icon pi pi-bell"></i>
+              <ng-container *ngIf="app.appService.totalEventsQty">
+                <ng-container *ngIf="app.appService.totalEventsQty.notifications>0">
+                  <span class="topbar-badge">{{app.appService.totalEventsQty.notifications}}</span>
+                </ng-container>
+              </ng-container>
+              <br/><span>{{ 'GENERAL.Notifications' | translate }}</span>
+
+
+            </a>
+
+          </li>
+
+          <li *ngIf="app.appService.isAuthenticated()" role="menuitem" class="top-menu-item">
+
+            <a [routerLink]="['/communities']" class="topbar-link">
+
+
+              <i class="topbar-icon pi pi-users"></i>
+
+              <br/><span class="middle-icon">{{ 'COMMUNITY.Communities' | translate }}</span>
+
+
+            </a>
+
+          </li>
+        </ng-container>
+
+
+        <li role="menuitem" class="top-menu-item">
+
+          <a [routerLink]="['/products/'+app.translate.currentLang]" class="topbar-link">
+
+
+            <i class="topbar-icon pi pi-th-large"></i>
+
+            <br/><span class="middle-icon">{{ 'GENERAL.Products' | translate }}</span>
+
+
+          </a>
+
+        </li>
+        <li role="menuitem" class="top-menu-item">
+
+          <a [routerLink]="['/companies/'+app.translate.currentLang]" class="topbar-link">
+
+
+            <i class="topbar-icon pi pi-briefcase"></i>
+
+            <br/><span class="middle-icon">{{ 'GENERAL.Companies' | translate }}</span>
+
+
+          </a>
+
+        </li>
+
+
+        <li role="menuitem" class="top-menu-item">
+
+          <a [routerLink]="['/feed/'+app.translate.currentLang]" class="topbar-link">
+
+
+            <i class="topbar-icon pi pi-home"></i>
+
+            <br/>
+            <span class="middle-icon">{{ 'GENERAL.Feed' | translate }}</span>
+
+
+          </a>
+
+
+        </li>
+
+
+      </ul>
+
+
+    </div>
+  </ng-container>
+</div>
+
+

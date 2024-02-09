@@ -1,0 +1,58 @@
+<ng-container *ngIf="!promotion">
+  <div class="ui-g-12 text-center loading" align="center">
+    <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                       animationDuration=".5s"></p-progressSpinner>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="promotion">
+  <div class="ui-g dashboard main-component-layout">
+
+    <div class="ui-g-12 info-search-list-size">
+       <div class="ui-g-12 ui-fluid">
+        <ng-container *ngIf="msgs1">
+          <p-message id="messages" text="{{msgs1}}" severity="{{severity}}" #messages></p-message>
+        </ng-container>
+      </div>
+
+      <div class="ui-g-12">
+        <h2>{{ promotion.product.name}}:</h2>
+      </div>
+      <ng-container *ngIf="postCodes.includes(productCode)">
+      <div class="ui-g-12">
+        <app-post-preview [post]="promotion.object" [language]="app.translate.currentLang" #postPreview></app-post-preview>
+      </div>
+        </ng-container>
+
+      <div class="ui-g-12">
+        <app-payment-product-preview [product]="promotion.product" [showTitle]="false" [showOrderForm]="!promotion.object.promotion || productCode=='post-grade'"
+                                     [currencyCode]="promotion.account.currency_details.code"
+                                     [price]="promotion.price" [balance]="promotion.account.balance" [qty]="qty"
+                                     (orderCreated)="onCreateOrder($event)"
+                                     (makePaymentClicked)="onMakePayment(promotion.account.id, promotion.account.currency_details, $event)" #productPreview></app-payment-product-preview>
+
+      </div>
+      <div class="ui-g-12">
+
+
+        <app-payment-account-preview [account]="promotion.account" [shortMode]="true"
+                                     (makePaymentClicked)="onMakePayment(promotion.account.id, promotion.account.currency_details)"></app-payment-account-preview>
+
+
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <app-make-payment-dialog [locale]="app.translate.currentLang" (paymentCreated)="onPaymentCreated($event)"
+                           #paymentDialog></app-make-payment-dialog>
+
+</ng-container>
+
+
+<app-process-dialog [header]="'BUTTONS.Start' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

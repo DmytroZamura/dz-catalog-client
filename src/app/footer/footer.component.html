@@ -1,0 +1,34 @@
+<footer class="mobile-footer">
+
+    <div class="ui-g-12 padding-0">
+      <div class="ui-toolbar" align="center">
+         <a [routerLink]="['/feed/'+app.translate.currentLang]" class="ripplelink tabmenuitem-link">
+           <ng-container *ngIf="app.appService.loadingIcons"><i class="footer-icon pi pi-home float-left" ></i></ng-container>
+         </a>
+          <a [routerLink]="['/companies/'+app.translate.currentLang]" class="ripplelink tabmenuitem-link">
+            <ng-container *ngIf="app.appService.loadingIcons"><i class="footer-icon pi pi-briefcase float-left" ></i></ng-container>
+         </a>
+
+        <a [routerLink]="['/products/'+app.translate.currentLang]" class="ripplelink tabmenuitem-link">
+          <ng-container *ngIf="app.appService.loadingIcons"><i class="footer-icon pi pi-th-large float-left" ></i></ng-container>
+         </a>
+
+         <a *ngIf="app.appService.isAuthenticated()" [routerLink]="['/communities']"  class="ripplelink tabmenuitem-link">
+           <ng-container *ngIf="app.appService.loadingIcons"><i class="footer-icon pi pi-users float-left" ></i></ng-container>
+         </a>
+         <a *ngIf="app.appService.isAuthenticated()" (click)="onShowNotifications()"  class="ripplelink cursor-pointer tabmenuitem-link">
+           <ng-container *ngIf="app.appService.loadingIcons"><i class="footer-icon pi pi-bell float-left" ></i></ng-container>
+           <ng-container *ngIf="app.appService.totalEventsQty">
+            <ng-container *ngIf="app.appService.totalEventsQty.notifications>0">
+            <span class="footer-icon-badge">{{app.appService.totalEventsQty.notifications}}</span>
+
+          </ng-container>
+           </ng-container>
+         </a>
+
+      </div>
+
+
+    </div>
+
+</footer>

@@ -1,0 +1,64 @@
+
+
+<div class="ui-g">
+  <div class="ui-g-12 padding-0">
+    <div class="layout-top">
+      <div class="card">
+
+        <div style="display : flex; align-items: center ">
+
+    <span style="font-size: medium;">&nbsp;&nbsp;&nbsp;
+
+      <strong>
+        <ng-container *ngIf="userType=='supplier'">{{ 'GENERAL.Sales' | translate }}</ng-container>
+         <ng-container *ngIf="userType=='customer'">{{ 'GENERAL.Purchases' | translate }}</ng-container>
+      </strong></span>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <app-select-user-or-company [viewType]="3" [showUnreadMessages]="false" [selected_company]="companyId" (selectedRole)="onRoleSelect($event)" [disabled]="loading"></app-select-user-or-company>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-g-12 layout-work">
+
+ <div class="ui-g  dashboard main-component-layout">
+  <div class="ui-g-12 ui-md-10 posts-list-size padding-left-right-0">
+
+              <div class="ui-g-12 padding-left-right-0" style="margin-top: 10px;">
+            <div class="ui-g-12 padding-left-right-0 border-bottom-small">
+              <div class="ui-g-12 ui-md-2 padding-0">
+
+               {{ 'GENERAL.Requests' | translate }}:
+              </div>
+              <div class="ui-g-5 ui-md-4 padding-0">
+                <div style="float: left;    margin-top: -6px;">
+                <app-search-box [showRightIcon]="true" [showRightButton]="false" [rightIconClass]="'search-icon-no-border'" (searchKeyword)="list.setKeyword($event)" ></app-search-box>
+                </div>
+              </div>
+
+              <div class="ui-g-7 ui-md-6 padding-0">
+                <span style="float: right">
+                <span
+                class="text-muted middle-text">{{ 'GENERAL.Ordering' | translate }}: </span>
+                <app-select-ordering [currentOrderingCode]="'-create_date'" [status]="true" [recent]="true"
+                                     (selectedOrdering)="list.changeOrdering($event)"></app-select-ordering>
+                </span>
+              </div>
+              <ng-container>
+              <app-filter-navigator [filterType]="'supply-requests'" [showCategories]="false"></app-filter-navigator>
+              </ng-container>
+            </div>
+            <div class="ui-g-12 padding-left-right-0">
+
+                  <app-supply-requests-list [currentUserId]="currentUserId" [userType]="userType" #list></app-supply-requests-list >
+
+
+            </div>
+          </div>
+  </div>
+ </div>
+  </div>
+</div>
+

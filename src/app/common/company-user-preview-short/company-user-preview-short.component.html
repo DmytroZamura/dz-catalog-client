@@ -1,0 +1,62 @@
+<div *ngIf="userData && company" class="contacts">
+  <ul>
+    <li class="clearfix ">
+      <span  class="link-color cursor-pointer" (click)="showProfile()">
+        <img *ngIf="userData.user_profile.img_details && userData.user_profile_default.is_active" alt="{{userData.user_profile_default.first_name}}"
+             src="{{userData.user_profile.img_details.small_image_url}}" class="user-preview-image-{{size}}"/>
+
+        <img *ngIf="!userData.user_profile.img_details || !userData.user_profile_default.is_active"
+             src="static/assets/img/default-user.jpeg" alt="{{userData.user_profile_default.first_name}}"
+             class="user-preview-image-{{size}}"/>
+
+        <img *ngIf="company.logo_details" alt="{{company.name}}"
+             src="{{company.logo_details.small_image_url}}" class="company-preview-image-{{size}}"/>
+
+        <img *ngIf="!company.logo_details" alt="{{company.name}}"
+             src="static/assets/img/company-default.png"
+             class="company-preview-image-{{size}}"/>
+
+      </span>
+      <div class="contact-info">
+        <ng-container *ngIf="userData.user_profile_default.is_active">
+          <span  class="link-color cursor-pointer" (click)="showProfile()">
+
+            <span *ngIf="userData.user_profile.first_name"
+                  class="user-preview-name-{{size}}">{{userData.user_profile.first_name}} {{userData.user_profile.last_name}}</span>
+            <span *ngIf="!userData.user_profile.first_name && userData.user_profile_default.first_name"
+                  class="user-preview-name-{{size}}">
+                         {{userData.user_profile_default.first_name}} {{userData.user_profile_default.last_name}}</span>
+
+
+            <span *ngIf="!userData.user_profile.first_name && !userData.user_profile_default.first_name"
+                  class="user-preview-name-{{size}}">{{userData.user_profile.nickname}}</span>
+          </span>
+        </ng-container>
+        <ng-container *ngIf="!userData.user_profile_default.is_active">
+          <span class="user-preview-name-{{size}}">{{ 'GENERAL.А user is deleted' | translate }}</span>
+        </ng-container>
+
+        <ng-container *ngIf="!company.deleted">
+          <span  class="link-color cursor-pointer" (click)="showCompany()"> <span
+            class="user-preview-info-{{size}}">{{company.name}}</span>
+
+          </span>
+        </ng-container>
+        <ng-container *ngIf="company.deleted">
+             <span class="user-preview-info-{{size}}">{{'GENERAL.А company is deleted' | translate}}
+                      </span>
+        </ng-container>
+
+        <ng-container *ngIf="message">
+          <span class="user-preview-message-{{size}}">{{message}}</span>
+
+        </ng-container>
+
+      </div>
+
+    </li>
+
+  </ul>
+
+
+</div>

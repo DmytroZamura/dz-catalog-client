@@ -1,0 +1,14 @@
+<span class="md-inputfield">
+
+ <p-autoComplete id="select-group-p"
+                 [ngModel]="group"
+                 [suggestions]="filteredGroups" (onSelect)="onGroupSelect($event)"
+                 (completeMethod)="getFilteredGroups($event)"
+                 dataKey="id" field="name" [forceSelection]="true" [minLength]="1" [delay]="debounceTime"
+                 (onClear)="onClear()"
+                 [disabled]="disabled" [dropdown]="true">
+
+   </p-autoComplete>
+   <label for="select-group-p">{{ 'PRODUCT.Product group' | translate }}
+   <ng-container *ngIf="required"> *:</ng-container></label>
+                    </span>

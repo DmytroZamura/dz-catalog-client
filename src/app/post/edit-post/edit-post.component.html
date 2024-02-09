@@ -1,0 +1,428 @@
+<ng-container *ngIf="post && isBrowser">
+
+  <div class="ui-g form-group ui-fluid">
+    <ng-container *ngIf="post.type_details.code == 'offering'">
+      <div *ngIf="post.post_offering" class="ui-g-12 padding-top-0 padding-left-right-0 select-button-mobile-line"
+           align="center">
+        <app-offering-type [(type)]="post.post_offering.type"></app-offering-type>
+      </div>
+    </ng-container>
+
+
+    <div class="ui-g-12">
+
+      <app-select-category [category]="post.category_details" [label_text]="'CATEGORY.Category' | translate "
+                           [showSuggestCategory]="true" [suggestedCategory]="post.suggested_category_details"
+                           (categorySelect)="onCategorySelect($event)" (categorySuggested)="onCategorySuggested($event)"
+                           #selectCategory></app-select-category>
+
+
+    </div>
+
+    <ng-container *ngIf="post.type_details.code=='review' && post.post_review">
+      <div class="ui-g-12 padding-bottom-0">
+
+        <div class="ui-toolbar-group-left">
+          <ng-container *ngIf="post.related_company || post.related_user">
+            <ng-container *ngIf="post.related_company_details && post.post_review">
+              <app-company-preview-short [company]="post.related_company_details" [showPreview]="false"
+                                         [truncate_number]="truncateNumber" [rating]="post.post_review.rating"
+                                         [editRating]="true" [showLink]="false"
+                                         [product]="post.related_product_details"
+
+                                         [showInfo]="false" [showSlug]="false"
+                                         (rated)="onRate($event)"></app-company-preview-short>
+            </ng-container>
+
+            <ng-container *ngIf="!post.related_company && post.post_review">
+              <app-user-preview-short [showSlug]="false" [showPreview]="false"
+                                      [userData]="post.related_user_data" [truncate_number]="truncateNumber"
+                                      [product]="post.related_product_details"
+                                      [rating]="post.post_review.rating" [editRating]="true" [showInfo]="false"
+                                      [showLink]="false"
+                                      (rated)="onRate($event)"></app-user-preview-short>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="!post.related_company && !post.related_user">
+            <p-rating [(ngModel)]="post.post_review.rating" [cancel]="false" (onRate)="newContent()"
+                      [iconOnStyle]="{'color': '#FFC107'}"></p-rating>
+          </ng-container>
+        </div>
+
+
+      </div>
+    </ng-container>
+
+
+    <ng-container *ngIf="post.type_details.code == 'request' && post.post_request">
+
+      <div class="ui-g-12 ui-md-6">
+
+       <span class="md-inputfield">
+
+        <p-calendar id="deadline" [ngModel]="post.post_request.deadline" (onSelect)="onDateSelect($event)"
+                    [dateFormat]="'yy-mm-dd'"></p-calendar>
+     <label for="deadline">{{ 'REQUEST.Deadline' | translate }}:</label>
+       </span>
+      </div>
+
+      <div class="ui-g-12 ui-md-6">
+
+        <app-select-common-item [(item)]="post.post_request.price_currency_details" [endpoint]="'currencies'"
+                                [showFilter]="true" [componentId]="'select-currency'"
+                                [sortByName]="true" [showClear]="false" [placeholder]="''"
+                                [label]="'USERPROFILE.Default currency' | translate"
+                                (itemChange)="onCurrencyChange($event)"></app-select-common-item>
+
+
+
+
+      </div>
+
+
+      <div class="ui-g-12 ui-md-12">
+     <span class="md-inputfield">
+
+      <input id="address" type="text" pInputText [(ngModel)]="this.post.post_request.delivery_address"/>
+        <label for="address">{{ 'REQUEST.Delivery address' | translate }}:</label>
+     </span>
+      </div>
+
+
+    </ng-container>
+
+    <ng-container *ngIf="contentError">
+      <div class="ui-g-12">
+        <p-message severity="error" text="{{ 'ALERTS.'+errorMessage | translate }}"></p-message>
+      </div>
+    </ng-container>
+
+    <ng-container
+      *ngIf="post.type_details.code == 'request' || post.type_details.code == 'offering' || post.type_details.code == 'job'">
+      <div class="ui-g-12">
+     <span class="md-inputfield">
+
+      <input id="post_title" type="text" pInputText [(ngModel)]="post.post_title" [maxlength]="500" (input)="newContent()" />
+
+        <label for="post_title">{{ 'GENERAL.Title' | translate }}:</label>
+
+
+     </span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="post.type_details.code == 'job' && post.post_job">
+      <ng-container *ngIf="!post.id">
+      <div class="ui-g-12 ui-md-6">
+        <app-select-common-item [(item)]="post.post_job.job_type_details" [endpoint]="'job-types'" [showFilter]="false"
+                                [sortByName]="false" [showClear]="true" [label]="'POSTS.Employment Type' | translate"
+                                [componentId]="'select-job-type'"
+                                (itemChange)="jobTypeSelected($event)"></app-select-common-item>
+      </div>
+
+      <div class="ui-g-12 ui-md-6">
+        <app-select-common-item [(item)]="post.post_job.seniority_details" [endpoint]="'seniority-labels'"
+                                [showFilter]="false" [componentId]="'select-seniority'"
+                                [sortByName]="false" [showClear]="true" [label]="'POSTS.Seniority Level' | translate"
+                                (itemChange)="seniorityLevelSelected($event)"></app-select-common-item>
+      </div>
+
+      <div class="ui-g-12 ui-md-12">
+        <app-select-common-item [(item)]="post.post_job.job_function_details" [endpoint]="'job-functions'"
+                                [showFilter]="true" [componentId]="'select-job-function'"
+                                [sortByName]="true" [showClear]="true" [label]="'POSTS.Job Function' | translate"
+                                (itemChange)="jobFunctionSelected($event)"></app-select-common-item>
+      </div>
+      </ng-container>
+      <ng-container *ngIf="post.id">
+        <div class="ui-g-12">
+           <ng-container *ngIf="post.post_job.job_type_details">
+          <span class="value-badge-attributes">{{post.post_job.job_type_details.name}}</span>&nbsp;
+        </ng-container>
+        <ng-container *ngIf="post.post_job.seniority_details">
+          <span class="value-badge-attributes">{{post.post_job.seniority_details.name}}</span>&nbsp;
+        </ng-container>
+        <ng-container *ngIf="post.post_job.job_function_details">
+          <span class="value-badge-attributes">{{post.post_job.job_function_details.name}}</span>
+        </ng-container>
+        </div>
+
+      </ng-container>
+
+
+      <div class="ui-g-7" align="right">
+            <span class="md-inputfield">
+
+               <input id="salary" name="salary" type="number" pInputText [(ngModel)]="post.post_job.salary"
+                      pKeyFilter="pnum" style="text-align: right"/>
+
+
+              <label for="salary">{{ 'POSTS.Salary' | translate }}</label>
+               </span>
+
+      </div>
+
+      <div class="ui-g-5">
+
+        <app-select-common-item [(item)]="post.post_job.salary_currency_details" [endpoint]="'currencies'"
+                                [showFilter]="true" [componentId]="'select-curr'"
+                                [sortByName]="true" [showClear]="false"
+                                [label]="'GENERAL.Select a currency' | translate"
+                                (itemChange)="salaryCurrencySelected($event)"></app-select-common-item>
+
+
+      </div>
+      <div class="ui-g-12">
+        {{'GENERAL.CV required' | translate}}:
+        <p-checkbox [(ngModel)]="post.post_job.resume_required" binary="true"
+        ></p-checkbox>
+      </div>
+
+    </ng-container>
+
+    <div class="ui-g-12" style="padding-left: 1em; padding-right: 1em;">
+      <ng-container *ngIf="post.type_details.code != 'job' && post.type_details.code != 'question'">
+        <label for="post-text"><b>{{ 'POSTS.Post_text' | translate }}:</b> </label>
+      </ng-container>
+
+      <ng-container *ngIf="post.type_details.code == 'job'">
+        <label for="post-text"><b>{{ 'POSTS.Job description' | translate }}: </b></label>
+      </ng-container>
+      <ng-container *ngIf="post.type_details.code == 'question'">
+        <label for="post-text"><b>{{ 'POSTS.Your question' | translate }}: </b></label>
+      </ng-container>
+
+      <ng-container *ngIf="post.type_details.code != 'job' && bounds">
+        <app-text-editor  id="post-text" [(text)]="post.comment" (mainLinkChanged)="mainLinkChanged($event)"
+                         [placeholder]="'GENERAL.Comment placeholder' | translate" [mentions]="true" [checkLinks]="true"
+
+                         [currentLink]="post.url" [bounds]="bounds" [showImageButton]="false" (textChange)="newContent()"
+                         [styles]="{'min-height': '80px', 'height': '100%'}" [showAttachments]="true" ></app-text-editor>
+      </ng-container>
+      <ng-container *ngIf="post.type_details.code == 'job' && bounds">
+        <app-text-editor  id="post-text1" [(text)]="post.comment" (mainLinkChanged)="mainLinkChanged($event)"
+                         [placeholder]="'POSTS.Job description placeholder' | translate " [mentions]="true"
+                         [checkLinks]="true" [bounds]="bounds" [showImageButton]="false" (textChange)="newContent()"
+                         [currentLink]="post.url" [showAttachments]="true"
+                         [styles]="{'min-height': '80px', 'height': '100%'}"></app-text-editor>
+      </ng-container>
+
+    </div>
+
+    <ng-container
+      *ngIf="post.type_details.code=='question' && !post.related_product && !post.related_company && !post.related_user">
+
+
+      <div class="ui-g-12">
+
+        <label for="multi_selection"><b>{{ 'GENERAL.Multi-selection' | translate }}: </b></label>
+        <p-checkbox id="multi_selection" [(ngModel)]="post.multi_selection" binary="true"
+        ></p-checkbox>
+      </div>
+      <div class="ui-g-12">
+
+        <app-post-options [options]="post.post_options" #options></app-post-options>
+      </div>
+    </ng-container>
+
+
+    <ng-container *ngIf="post.type_details.code=='review' && post.post_review">
+      <div class="ui-g-12">
+        <label for="advantages"><b>{{ 'GENERAL.Advantages' | translate }}: </b></label>
+        <app-text-editor  id="advantages" [(text)]="post.post_review.advantages"
+                         [mentions]="true" [checkLinks]="false" [bounds]="bounds"
+
+                         [styles]="{'min-height': '40px', 'height': '100%'}"></app-text-editor>
+      </div>
+
+      <div class="ui-g-12">
+        <label for="disadvantages"><b>{{ 'GENERAL.Disadvantages' | translate }}: </b></label>
+        <app-text-editor  id="disadvantages" [(text)]="post.post_review.disadvantages"
+                         [mentions]="true" [checkLinks]="false" [bounds]="bounds"
+
+                         [styles]="{'min-height': '40px', 'height': '100%'}"></app-text-editor>
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="post.type_details.code == 'offering' && post.post_offering">
+
+      <div class="ui-g-12 ui-md-4  text-align-right">
+        {{ 'PRODUCT.One price' | translate }}:
+        <p-checkbox name="one_price" [(ngModel)]="post.post_offering.one_price" binary="true"
+        ></p-checkbox>
+
+      </div>
+
+      <div class="ui-g-12 ui-md-4">
+        <app-select-common-item [(item)]="post.post_offering.unit_type_details" [endpoint]="'unit-types'"
+                                [showFilter]="true" [componentId]="'select-unit'"
+                                [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                [label]="'GENERAL.Unit type' | translate "
+                                (itemChange)="onUnitTypeChange($event)"></app-select-common-item>
+
+      </div>
+      <div class="ui-g-12 ui-md-4">
+        <app-select-common-item [(item)]="post.post_offering.price_currency_details" [endpoint]="'currencies'"
+                                [showFilter]="true" [componentId]="'select-cur-2'"
+                                [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                [label]="'GENERAL.Currency' | translate "
+                                (itemChange)="onCurrencyChange($event)"></app-select-common-item>
+
+
+      </div>
+
+
+      <div class="ui-md-4 ui-g-12 hide-mobile">
+        &nbsp;
+      </div>
+      <div class="ui-md-4 ui-g-6">
+
+        <ng-container *ngIf="!post.post_offering.one_price">
+            <span class="md-inputfield">
+
+
+
+               <input id="from" name="from" type="number" class="text-align-right" pInputText
+                      [(ngModel)]="post.post_offering.price_from" [disabled]="!post.post_offering.price_currency"
+                      (ngModelChange)="calcDiscount()"
+                      pKeyFilter="pnum"/>
+
+            <label for="from">{{ 'PRODUCT.Price from' | translate }}:</label>
+               </span>
+        </ng-container>
+
+      </div>
+      <div class="ui-md-4 ui-g-6">
+            <span class="md-inputfield">
+
+               <input id="to" name="to" type="number" class="text-align-right" pInputText
+                      [disabled]="!post.post_offering.price_currency"
+                      [(ngModel)]="post.post_offering.price" (ngModelChange)="calcDiscount()"
+                      pKeyFilter="pnum"/>
+
+            <label *ngIf="!post.post_offering.one_price" for="to">{{ 'PRODUCT.Price to' | translate }}:</label>
+              <label *ngIf="post.post_offering.one_price" for="to">{{ 'PRODUCT.Price' | translate }}:</label>
+               </span>
+
+      </div>
+      <ng-container *ngIf="post.post_offering.type == 3">
+
+        <div class="ui-md-4 ui-g-3 text-align-right">
+          <label for="discount">{{ 'GENERAL.Discount' | translate }} %:</label>
+        </div>
+        <div class="ui-md-4 ui-g-3">
+
+
+          <input id="discount" name="discount" type="number" class="text-align-right" pInputText maxlength="2"
+                 [(ngModel)]="post.post_offering.discount" (ngModelChange)="onDiscountInput($event)"
+                 pKeyFilter="pint"/>
+
+
+        </div>
+        <div class="ui-md-4 ui-g-6">
+
+       <span class="md-inputfield">
+
+        <p-calendar id="post_deadline" [ngModel]="post.deadline" (onSelect)="onPostDeadlineSelect($event)"
+                    [dateFormat]="'yy-mm-dd'" [showButtonBar]="true" (onClearClick)="clearPostDeadLine()"></p-calendar>
+     <label for="post_deadline">{{ 'PRODUCT.Discount ends date' | translate }}:</label>
+       </span>
+        </div>
+
+        <div class="ui-md-4 ui-g-12 hide-mobile">
+          &nbsp;
+
+        </div>
+
+        <div class="ui-md-4 ui-g-6">
+
+          <ng-container *ngIf="!post.post_offering.one_price">
+            <span class="md-inputfield">
+
+
+
+               <input id="discount_from" name="discount_from" type="number" pInputText class="text-align-right opacity1"
+                      [(ngModel)]="post.post_offering.discount_price_from"
+                      [disabled]="post.post_offering.discount || !post.post_offering.price_currency"
+                      pKeyFilter="pnum"/>
+
+            <label for="discount_from">{{ 'PRODUCT.New price from' | translate }}</label>
+               </span>
+          </ng-container>
+
+        </div>
+        <div class="ui-md-4 ui-g-6 text-align-right">
+            <span class="md-inputfield">
+
+               <input id="discount_to" name="discount_to" type="number" pInputText class="text-align-right opacity1"
+                      [(ngModel)]="post.post_offering.discount_price"
+                      [disabled]="post.post_offering.discount || !post.post_offering.price_currency"
+                      pKeyFilter="pnum"/>
+
+            <label *ngIf="!post.post_offering.one_price"
+                   for="discount_to">{{ 'PRODUCT.New price to' | translate }}</label>
+              <label *ngIf="post.post_offering.one_price"
+                     for="discount_to">{{ 'PRODUCT.New price' | translate }}</label>
+               </span>
+
+        </div>
+      </ng-container>
+
+    </ng-container>
+
+    <ng-container>
+      <div class="ui-g-12" style="margin-top: -15px">
+        <app-object-attributes [show]="post.type_details.code == 'offering'" [attributes]="post.attributes"
+                               [editMode]="true"
+                               #attributes></app-object-attributes>
+      </div>
+    </ng-container>
+
+
+    <ng-container>
+
+      <app-url-preview [urlPreview]="urlPreview" [showImage]="showUrlImage" [editMode]="true"
+                       (newPreview)="onNewPreview($event)"
+                       #previewurl></app-url-preview>
+    </ng-container>
+
+    <div class="ui-g-12 border-top-small border-bottom-small">
+      <app-file id="file_upload" [cropImage]="true"
+                [class]="'ui-button-secondary ui-button-raised flat'"
+                [cropperMinWidth]="600" [resizeToWidth]="1000"
+                [changeAspectRatio]="true" (fileUpload)="onFileUpload($event)" [onlyIcon]="false"
+                [label]="'BUTTONS.Photo' | translate " [icon]="'pi pi-camera'"></app-file>
+      <ng-container *ngIf="post.images">
+        <ng-container *ngIf="post.images[0]">
+          <p-fieldset legend="{{'BUTTONS.Photo' | translate}}">
+            <app-images-list [editMode]="true" [viewMode]="false" [images]="post.images"
+                             (imageDeleted)="onImageDeleted($event)"></app-images-list>
+          </p-fieldset>
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngIf="post.type_details.code == 'request' && post.post_request">
+        <app-attached-documents [editMode]="true" [documents]="post.documents"
+                                (documentsChanged)="onDocumentsChanged($event)"></app-attached-documents>
+      </ng-container>
+
+
+    </div>
+
+    <ng-container *ngIf="!dialog">
+      <div class="ui-g-12 text-align-center buttons-row">
+
+        <button pButton class="ui-button-secondary flat" type="button"
+                label="{{ 'BUTTONS.Cancel' | translate }}"
+                (click)="cancel()"
+                icon="pi pi-times" style="width: auto"></button> &nbsp;&nbsp;
+
+        <button pButton type="button" label="{{ 'BUTTONS.Publish' | translate }}" (click)="onPublishPost()"
+                icon="pi pi-share-alt" style="width: auto"
+                [disabled]="publishButtonDisabled || !(post.company || post.user)"></button>
+      </div>
+    </ng-container>
+
+  </div>
+</ng-container>

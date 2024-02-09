@@ -1,0 +1,19 @@
+.info-box-product {
+
+  background-color: forestgreen;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+
+.info-box-service {
+
+  background-color: #0D47A1;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+

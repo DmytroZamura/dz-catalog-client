@@ -1,0 +1,37 @@
+<ng-container *ngIf="editMode">
+  <app-file [onlyIcon]="false" id="file_document_upload" [icon]="'pi pi-paperclip'" [cropImage]="false"
+            [label]="'BUTTONS.Documents' | translate "
+            (fileUpload)="onDocumentFileUpload($event)" [accept]="'image/*,.doc,.xls,.pdf,.docx,.xlsx'"
+
+            [class]="'ui-button-secondary ui-button-raised flat'"></app-file>
+
+
+</ng-container>
+<ng-container *ngIf="documents">
+  <ng-container *ngIf="documents.length>0">
+
+    <p-fieldset legend="{{'BUTTONS.Documents' | translate}}">
+
+      <div class="ui-g-12 padding-0 attached-documents-box">
+      <ng-container *ngFor="let document of documents; let i = index"  >
+
+                <span class="small-primary-badge"><a href="{{document.file_details.file_url}}" target="_self">{{document.file_details.name}}</a>
+                  <ng-container *ngIf="editMode">
+                  &nbsp;<i class="pi pi-times close-icon middle-icon"  (click)="deleteDocument(i)"></i></ng-container></span>
+        <br/>
+
+
+
+
+      </ng-container>
+      </div>
+
+
+    </p-fieldset>
+
+  </ng-container>
+</ng-container>
+
+
+
+

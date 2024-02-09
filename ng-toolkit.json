@@ -1,0 +1,24 @@
+{
+  "universal": {
+    "project": "uafine",
+    "skipInstall": false,
+    "directory": ".",
+    "http": true
+  },
+  "serverless": {
+    "provider": "aws",
+    "project": "uafine",
+    "skipInstall": false,
+    "directory": ".",
+    "clientProject": "uafine",
+    "serverless": {
+      "aws": {},
+      "gcloud": {}
+    }
+  },
+  "pwa": {
+    "project": "uafine",
+    "skipInstall": false,
+    "directory": "."
+  }
+}

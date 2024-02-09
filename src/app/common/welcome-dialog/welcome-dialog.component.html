@@ -1,0 +1,29 @@
+<p-dialog header="{{ 'ONBOARDING.Welcome to UaFine' | translate }}" [(visible)]="appService.showWelcomeDialog"
+          [modal]="false" [appendTo]="'body'" [positionTop]="100">
+  <div class="ui-g ui-fluid  dashboard margin-bottom-10px">
+
+    <div class="ui-g-12 padding-top-0 posts-list-size">
+      <div class="ui-g-12 border-primary-small">
+
+         <span [innerHTML]=" 'ONBOARDING.Welcome message' | translate "></span>
+      </div>
+      <div class="ui-g-12">
+
+
+      </div>
+      <div class="ui-g-12" align="center">
+
+
+        <button class="width-auto" type="button" pButton
+                icon="pi pi-directions"
+                label="{{ 'ONBOARDING.Take a tour' | translate }}"
+                (click)="onStartTour($event)"></button>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</p-dialog>

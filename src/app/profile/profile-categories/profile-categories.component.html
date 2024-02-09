@@ -1,0 +1,8 @@
+
+  <app-select-multiple-categories [categories]="categories" [disabled]="disabled"
+                                  (categorySelect)="onCategorySelect($event)"
+                                  (categoryUnselect)="deleteCategory($event)"
+                                  [dropdown]="!disabled" ></app-select-multiple-categories>
+
+
+

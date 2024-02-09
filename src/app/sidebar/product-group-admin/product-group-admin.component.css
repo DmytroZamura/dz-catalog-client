@@ -1,0 +1,15 @@
+.di-tree-container {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: .25em;
+    white-space: normal;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.ui-tree .ui-treenode-label {
+    display: initial;
+    padding: 0 .25em;
+    vertical-align: middle;
+}

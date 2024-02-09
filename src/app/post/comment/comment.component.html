@@ -1,0 +1,94 @@
+<ng-container *ngIf="postComment">
+  <ng-container *ngIf="!editMode">
+    <div class="ui-g-12 ui-md-12 comment-item">
+      <div class="ui-g-8 ui-md-9 padding-0">
+
+        <app-user-preview-short [size]="'small'" [userData]="postComment.user_data" [currentUser]="user"
+                          [locale]="locale"      [showPreview]="true"></app-user-preview-short>
+
+
+      </div>
+
+      <div class="ui-g-4 ui-md-3  text-align-right">
+        <span class="date-time-text">{{postComment.update_date | dateAgo: locale }}</span>
+      </div>
+
+      <div class="ui-g-12 padding-0">
+        <div class="comment-box post-comment">
+          <div class="ui-g">
+            <ng-container *ngIf="text">
+
+              <div class="ui-g-12 padding-0">
+                <app-text-show-more [text]="text" [richText]="true" [currentUserId]="user"
+                                    [truncateWords]="120"></app-text-show-more>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="postComment.image_details">
+
+              <div class="ui-g-12 padding-left-right-0">
+                <app-user-image-preview [image]="postComment.image_details"
+                                        [className]="'comment-image'"></app-user-image-preview>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="postComment.urlpreview && !postComment.image">
+              <app-url-preview [urlPreview]="postComment.urlpreview" [size]="1"
+                               [bgClass]="'bg-preview'"></app-url-preview>
+            </ng-container>
+
+          </div>
+        </div>
+        <div class="comments-qty-box">
+          <app-like [comment]="postComment.id" [user]="user" [likesCount]="postComment.eventsqty.likes" [locale]="locale"
+                    [likeStatus]="postComment.like_status" (likeStatusChanged)="onLikeChanged($event)"></app-like>
+
+          <ng-container>
+            <span class="small-link">&nbsp;&nbsp;<i class="pi pi-comment clickable-icon" (click)="reply()"></i></span>
+          </ng-container>
+          <ng-container *ngIf="postComment.eventsqty.comments">
+          <span class="select-text small-link" (click)="showComments()"><strong> {{'POSTS.Replies' | translate}}
+            : {{postComment.eventsqty.comments}}</strong></span>
+          </ng-container>
+
+          <ng-container *ngIf="editable">
+          <div class="ui-toolbar-group-right ql-color-white">
+            <ng-container *ngIf="postComment.user == user">
+
+        <span *ngIf="!editMode" class="small-link"><i class="pi pi-pencil clickable-icon"
+                                                      (click)="edit()"></i></span>
+            </ng-container>
+            <ng-container *ngIf="postComment.user == user || postComment.can_delete_status">
+            <span class="small-link">&nbsp;<i
+              class="pi pi-trash clickable-icon" (click)="delete()"></i></span>
+            </ng-container>
+
+
+          </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="editMode">
+
+
+      <app-create-comment-lazy *ngxLazyEl [user]="user" [post]="postComment.post" [parentComment]="postComment.parent"
+                        [postComment]="postComment" [updateMode]="true"
+                        (commentPublished)="onCommentPublished($event.detail)"></app-create-comment-lazy>
+  </ng-container>
+
+
+  <ng-container *ngIf="showChildComments">
+    <div class="ui-g-12 padding-0">
+      <div class="comments-list-box">
+        <app-comments-list [showCreateCommentPanel]="showChildCreateCommentPanel" [user]="user"
+                           [parentComment]="postComment" [post]="postComment.post"
+                           [postCommentsPreview]="postCommentsPreview" [locale]="locale"
+                           (commentCreatedOrDeleted)="onChildCommentCreatedOrDeleted($event)"
+                           (commentPublished)="onCommentCreated($event)"
+                           (updatePostCommentQty)="onUpdatePostCommentQty($event)"
+                            #list></app-comments-list>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

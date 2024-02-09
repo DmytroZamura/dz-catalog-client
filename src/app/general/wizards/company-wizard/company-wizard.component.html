@@ -1,0 +1,37 @@
+<div class="ui-g-1">
+</div>
+<div class="ui-g-10">
+  <div class="ui-g form-group ui-fluid">
+    <div class="ui-g-12"><span class="middle-text text-muted"> {{ 'GENERAL.Please fill data in English' | translate }}</span>
+    </div>
+    <div class="ui-g-12">
+
+         <span class="md-inputfield">
+
+        <input id="name" type="text" pInputText [(ngModel)]="company.name" (input)="validate()"/>
+        <label for="name">{{ 'COMPANY.Company name' | translate }}:</label>
+         </span>
+      <span *ngIf="show_duplicated_alert" style="font-size: 10px; color: red">{{ 'COMPANY.Company duplicate' |
+        translate }}
+      </span>
+    </div>
+    <div class="ui-g-12">
+      <p-checkbox [(ngModel)]="company_representative" binary="true" (onChange)="validate()"></p-checkbox>
+      <span class="middle-text">{{ 'COMPANY.I am the official representative' | translate }}</span>
+
+    </div>
+
+    <div class="ui-g-12" align="center">
+      <button pButton type="button" label="{{ 'BUTTONS.Cancel' | translate }}"
+              (click)="onCancel()" style="width:auto" class="ui-button-secondary flat"></button>
+
+      &nbsp;&nbsp;
+      <button pButton type="button" label="{{ 'BUTTONS.Next step' | translate }}"
+              (click)="createCompany()" style="width:auto" [disabled]="save_button_disabled"></button>
+
+    </div>
+
+  </div>
+</div>
+<div class="ui-g-1">
+</div>

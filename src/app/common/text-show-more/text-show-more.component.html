@@ -1,0 +1,52 @@
+<ng-container *ngIf="text">
+
+  <ng-container *ngIf="see_more">
+
+    <ng-container *ngIf="richText">
+      <ng-container>
+        <div class="text-show-more" appRouteTransformer>
+
+
+          <span class="text-pre-line ql-editor ql-container" [innerHTML]="text  | words: truncateWords : '...'  | safeHtml  "
+                (mouseover)="mention.checkMention($event)" ></span>
+        </div>
+      </ng-container>
+
+
+    </ng-container>
+    <ng-container *ngIf="!richText">
+
+      <span class="text-pre-line" [innerHTML]="text  | truncate : truncate_number"></span>
+
+    </ng-container>
+
+    <span *ngIf="showSeeMore" class="cursor-pointer color-primary"
+          (click)="seeMore()"><b>{{ 'GENERAL.See More' | translate }}</b> </span>
+
+  </ng-container>
+  <ng-container *ngIf="!see_more">
+
+
+    <ng-container *ngIf="richText">
+      <ng-container >
+        <div class="text-show-more" appRouteTransformer>
+          <span class="text-pre-line ql-editor ql-container" [innerHTML]="text | safeHtml "
+                (mouseover)="mention.checkMention($event)"></span>
+
+        </div>
+      </ng-container>
+
+
+    </ng-container>
+    <ng-container *ngIf="!richText">
+      <span class="text-pre-line" [innerHTML]="text"></span>
+
+    </ng-container>
+
+
+  </ng-container>
+
+
+  <app-mention-preview [currentUserId]="currentUserId" #mention></app-mention-preview>
+
+</ng-container>

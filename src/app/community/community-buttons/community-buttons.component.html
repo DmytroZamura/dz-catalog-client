@@ -1,0 +1,34 @@
+<button *ngIf="community.admin_status" pButton type="button" class="{{buttonsClass}} width-auto"
+        label="{{ 'COMMUNITY.Manage Community' | translate }}"
+        (click)="onEditCommunity()" ></button>
+
+<ng-container *ngIf="!community.invitation_status">
+  <button *ngIf="!community.member_status && community.open" pButton type="button" class="{{joinButtonClass}} width-auto"
+          label="{{ 'COMMUNITY.Join the community' | translate }}"
+          (click)="joinCommunity()" ></button>
+
+  <button *ngIf="community.member_status && !community.admin_status && showLeaveCommunity" pButton type="button" class="{{buttonsClass}} width-auto"
+          label="{{ 'COMMUNITY.Leave the community' | translate }}"
+          (click)="leaveCommunity()" ></button>
+
+
+  <button *ngIf="!community.member_status && !community.open" pButton type="button" class="{{joinButtonClass}} width-auto"
+          label="{{ 'COMMUNITY.Send a request' | translate }}"
+          (click)="sendUserRequest()" ></button>
+</ng-container>
+
+<ng-container *ngIf="community.invitation_status">
+  <button *ngIf="community.invitation_status=='pending'" pButton type="button"
+          class="{{joinButtonClass}} width-auto"
+          label="{{ 'COMMUNITY.Cancel your request' | translate }}"
+          (click)="cancelRequest()"></button>
+  <button *ngIf="community.invitation_status=='acceptance'" pButton type="button"
+          class="{{joinButtonClass}} width-auto"
+          label="{{ 'COMMUNITY.Accept the invite' | translate }}"
+          (click)="cancelRequest()"></button>
+
+</ng-container>
+
+<app-process-dialog [header]="'COMMUNITY.Community' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

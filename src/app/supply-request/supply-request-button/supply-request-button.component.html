@@ -1,0 +1,29 @@
+<ng-container *ngIf="isBrowser">
+
+  <button pButton class="width-auto" type="button" icon="pi pi-shopping-cart" label="{{ 'REQUEST.Send Inquiry' | translate }}"
+          (click)="showSelectRoleDialog()"></button> &nbsp;
+
+
+  <app-supply-request (createdSupplyRequest)="onCreateSupplyRequest($event)"
+                      #requestForm></app-supply-request>
+
+
+  <p-dialog [(visible)]="showDialog" [responsive]="true"
+            [modal]="true" [style]="{'width': '350px'}">
+
+
+    <p-header>
+      <strong>{{ 'REQUEST.Customer' | translate }}</strong>
+
+    </p-header>
+
+    <app-select-user-or-company [viewType]="2" [clearAfterSelection]="true" [profile]="app.appService.userProfile"
+                                (selectedRole)="createSupplyRequest($event)"></app-select-user-or-company>
+
+
+  </p-dialog>
+
+
+</ng-container>
+
+

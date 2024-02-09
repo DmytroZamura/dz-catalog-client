@@ -1,0 +1,57 @@
+<ng-container *ngIf="isBrowser">
+
+
+<ng-container *ngIf="!profile">
+    <div class="ui-g-12 text-center loading" align="center">
+      <p-progressSpinner  strokeWidth="8" fill="#EEEEEE"
+                         animationDuration=".5s"></p-progressSpinner>
+    </div>
+  </ng-container>
+
+
+
+  <div class="ui-g ">
+     <ng-container *ngIf="!profile">
+    <div class="ui-g-12 text-center" align="center">
+      <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+                         animationDuration=".5s"></p-progressSpinner>
+    </div>
+  </ng-container>
+
+    <div class="ui-g-12 padding-0">
+      <div class="layout-top">
+        <div *ngIf="profile" class="card">
+
+          <div class="align-items-center">
+            <img *ngIf="profile.img_details" alt="{{profile.first_name+' '+profile.last_name}}"
+                 src="{{profile.img_details.small_image_url}}" class="top-tab-image "/>
+            <img *ngIf="!profile.img_details" alt="{{profile.first_name+' '+profile.last_name}}"
+                 src="static/assets/img/default-user.jpeg"
+                 class="top-tab-image "/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}"></p-tabMenu>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g-12 padding-0 layout-work">
+      <ng-container *ngIf="activeTab==0 && currentUserId!=0">
+        <app-user-overview-admin [user_id]="currentUserId"></app-user-overview-admin>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==1 && profile">
+        <app-user-posts-admin [user_id]="currentUserId"></app-user-posts-admin>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==2 && profile">
+        <app-user-products-admin  [currentUserId]="currentUserId" [locale]="language" [isMobile]="isMobile"></app-user-products-admin>
+      </ng-container>
+
+
+    </div>
+  </div>
+
+
+</ng-container>

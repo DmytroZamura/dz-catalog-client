@@ -1,0 +1,7 @@
+<ng-container *ngIf="country">
+<img class="flag-img" src="{{country.flag_url}}" alt="{{country.name}}"/>
+<ng-container *ngIf="!flagOnly">
+        <span class="small-location-name"><ng-container *ngIf="city">{{city.name}},&nbsp;</ng-container>
+          {{country.short_name}}</span>
+  </ng-container>
+</ng-container>

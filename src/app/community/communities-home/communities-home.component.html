@@ -1,0 +1,43 @@
+<ng-container *ngIf="isBrowser">
+
+
+  <div class="ui-g ui-fluid  dashboard main-component-layout">
+
+
+    <div class="ui-g-12 padding-0 info-profile-size">
+
+
+      <div class="ui-g-12 padding-left-right-0 text-align-right">
+          <span [appHighlightborder]="'#ebe7ef'" class="select-text"
+                (click)="dialog.newCommunity()"><b>{{ 'COMMUNITY.Create community' | translate }}</b></span>
+      </div>
+
+      <div class="ui-g-12 padding-left-right-0">
+        <app-manage-items-list [itemsType]="'communities'" [showSearch]="false" [showFilter]="true"
+                               [showCategories]="true" [appliedFilter]="{}"
+                               [showOrdering]="true" (newKeyword)="list.setKeyword($event)"
+                               (newOrdering)="list.changeOrdering($event)"></app-manage-items-list>
+      </div>
+      <div class="ui-g-12 padding-left-right-0">
+        <app-items-list-agile [endPoint]="'communities-by-page/'" [itemsPerPage]="10" [itemsType]="'communities'"
+                              [orderingCode]="'popularity'"
+                              [appliedFilter]="{}" #list>
+          <ng-template let-item let-i="index" #body>
+            <div class="ui-g-12 padding-left-right-0">
+              <app-community-item [community]="item" [currentUserId]="currentUserId" [index]="i"
+              ></app-community-item>
+            </div>
+
+          </ng-template>
+
+        </app-items-list-agile>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <app-create-community [user_id]="currentUserId" #dialog></app-create-community>
+
+</ng-container>

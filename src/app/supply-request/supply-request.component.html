@@ -1,0 +1,215 @@
+<ng-container *ngIf="supplyRequest">
+  <p-dialog [(visible)]="showDialog" [header]="'REQUEST.Inquiry' | translate "
+            [styleClass]="'mobile-dialog'" [appendTo]="'body'" [modal]="true">
+
+    <div class="ui-g ui-fluid  dashboard">
+      <div class="ui-g-12 padding-top-0 info-profile-size">
+
+        <form #requestForm="ngForm" (ngSubmit)="saveSupplyRequest()">
+          <p-scrollPanel [styleClass]="'dialog-scroll'">
+            <div class="ui-g form-group ui-fluid">
+
+
+              <div class="ui-md-6 ui-g-6">
+                <div class="ui-g-12 padding-top-0 padding-bottom-0">
+                  <span> <strong>{{ 'REQUEST.Customer' | translate }}:</strong></span>
+                </div>
+                <div class="ui-g-12">
+                  <ng-container *ngIf="supplyRequest.customer_user_details">
+                    <app-user-preview-short [userData]="supplyRequest.customer_user_details" [size]="'small'"
+                                            [showLink]="false"
+                                            [showSlug]="false"
+                    ></app-user-preview-short>
+
+                  </ng-container>
+
+                  <ng-container *ngIf="!supplyRequest.customer_user_details">
+                    <ng-container *ngIf="supplyRequest.customer_company_details">
+
+                      <app-company-preview-short [company]="supplyRequest.customer_company_details" [showSlug]="false"
+                                                 [showLink]="false" [size]="'small'"></app-company-preview-short>
+
+                    </ng-container>
+                    <ng-container *ngIf="!supplyRequest.customer_company_details">
+
+                      <app-company-preview-short [company]="supplyRequest.customer_company_default_details"
+                                                 [showSlug]="false"
+                                                 [showLink]="false" [size]="'small'"></app-company-preview-short>
+
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="ui-md-6 ui-g-6">
+                <div class="ui-g-12 padding-top-0 padding-bottom-0">
+                  <span> <strong>{{ 'REQUEST.Supplier' | translate }}:</strong></span>
+                </div>
+                <div class="ui-g-12">
+
+                  <ng-container *ngIf="supplyRequest.supplier_user_details">
+                    <app-user-preview-short [userData]="supplyRequest.supplier_user_details" [size]="'small'"
+                                            [showLink]="false"
+                                            [showSlug]="false"
+                    ></app-user-preview-short>
+
+                  </ng-container>
+
+                  <ng-container *ngIf="supplyRequest.supplier_company_details && !supplyRequest.supplier_user_details">
+
+
+                    <ng-container *ngIf="supplyRequest.supplier_company_details">
+
+                      <app-company-preview-short [company]="supplyRequest.supplier_company_details" [showSlug]="false"
+                                                 [showLink]="false" [size]="'small'"></app-company-preview-short>
+
+                    </ng-container>
+                    <ng-container *ngIf="!supplyRequest.supplier_company_details">
+
+                      <app-company-preview-short [company]="supplyRequest.supplier_company_default_details"
+                                                 [showSlug]="false"
+                                                 [showLink]="false" [size]="'small'"></app-company-preview-short>
+
+                    </ng-container>
+
+                  </ng-container>
+
+                </div>
+              </div>
+
+
+              <div class="ui-g-12 ui-md-4">
+
+         <span class="md-inputfield">
+
+        <input id="email" name="email" type="text" pInputText
+               [(ngModel)]="supplyRequest.contact_email" required
+               pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" #email="ngModel"/>
+        <label for="email">{{ 'GENERAL.Contact Email' | translate }}:</label>
+
+           <div [hidden]="email.valid ">
+
+           <div *ngIf="email.errors && email.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           <div *ngIf="email.errors && email.errors.pattern" class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+         </span>
+              </div>
+
+              <div class="ui-g-12 ui-md-4">
+
+                       <span class="md-inputfield">
+        <input id="phone_number" name="phone_number"  type="text"
+               pInputText
+               [(ngModel)]="supplyRequest.contact_phone"/>
+
+        <label for="phone_number">{{ 'GENERAL.Contact Phone Number' | translate }}:</label>
+
+         </span>
+
+
+              </div>
+              <div class="ui-g-12 ui-md-4">
+
+                       <span class="md-inputfield">
+        <input id="skype" name="skype"  type="text"
+               pInputText
+               [(ngModel)]="supplyRequest.skype"/>
+
+        <label for="skype">Skype:</label>
+
+         </span>
+
+
+              </div>
+              <div class="ui-g-12" style="margin-top: -15px">
+                <label for="message"><strong>{{ 'REQUEST.Inquiry Details' | translate }}:</strong> </label>
+                <textarea id="message" name="message" pInputTextarea
+                          [placeholder]="'REQUEST.Inquiry Customer Message' | translate"
+                          [(ngModel)]="supplyRequest.customer_comment"
+                          rows="5" [maxlength]="1000" style="border: 1px solid #d8d8d8;"></textarea>
+
+
+                <app-attached-documents [documents]="supplyRequest.documents" [editMode]="true"
+                                        (documentsChanged)="onDocumentsChanged($event)"></app-attached-documents>
+
+
+              </div>
+
+              <div class="ui-md-3 ui-g-12" style="margin-top: -15px">
+                <label for="address"> <strong>{{ 'REQUEST.Delivery address' | translate }}:</strong> </label><br/>
+              </div>
+              <div class="ui-md-9 ui-g-12" style="margin-top: -15px">
+                <input id="address" name="address" title="{{ 'REQUEST.Delivery address' | translate }}" type="text"
+
+                       pInputText [(ngModel)]="supplyRequest.delivery_address"/>
+
+
+              </div>
+
+
+              <ng-container *ngIf="!supplyRequest.id">
+                <div class="ui-g-12" style="margin-top: -15px">
+                  <span class="text-muted small-text">  {{ 'REQUEST.Delivery message' | translate }} </span>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="supplyRequest.currency_details">
+                <div class="ui-g-12">
+                  <div class="ui-toolbar-group-left">
+                     <span> {{ 'GENERAL.Currency' | translate }}:  <strong>{{supplyRequest.currency_details.name  }}</strong></span>
+                  </div>
+                  <ng-container *ngIf="supplyRequest.total_amount>0">
+                  <div class="ui-toolbar-group-right">
+                     <strong> {{ 'REQUEST.Total Amount' | translate }}
+                    : {{supplyRequest.total_amount | currency:supplyRequest.currency_details.code :'symbol-narrow' }}</strong>
+                  </div>
+                  </ng-container>
+
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="supplyRequest.positions">
+                <ng-container *ngIf="supplyRequest.positions.length>0">
+                <div class="ui-g-12 border-primary-small">
+                  <app-supply-request-positions [editMode]="true" [positions]="supplyRequest.positions"
+                                                [updateMode]="false"
+                                                [userType]="'customer'" (deleted)="calculateTotalAmount()"
+                                                [currency]="supplyRequest.currency_details"
+                                                (positionsChanged)="onPostionsChanged($event)"></app-supply-request-positions>
+                </div>
+                </ng-container>
+              </ng-container>
+
+
+            </div>
+            <div class="ui-g-12">
+              &nbsp;
+            </div>
+          </p-scrollPanel>
+          <div class="ui-g-12" align="center">
+            <button pButton type="button" label="{{ 'REQUEST.Continue purchasing' | translate }}" class="ui-button-secondary flat"
+                    style="width: auto" (click)="onCancel()"></button>
+
+            &nbsp;&nbsp;
+            <button class="ui-button ui-button-success" pButton type="submit"
+                      label="{{ 'REQUEST.Send to a supplier' | translate }}"
+                     [disabled]=" !requestForm.form.valid || (!supplyRequest.customer_user && !supplyRequest.customer_company) "
+                      icon="pi pi-send" style="width: auto"></button>
+
+
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </p-dialog>
+</ng-container>
+
+<app-process-dialog [header]="'REQUEST.Customer inquiry' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

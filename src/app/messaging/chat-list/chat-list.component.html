@@ -1,0 +1,152 @@
+<ng-container *ngIf="lazyChats">
+  <p-menu #menu [popup]="true" [model]="menu_items" [style]="{'color': 'black'}" [appendTo]="'body'"></p-menu>
+  <div class="ui-g ui-fluid box-border-small">
+    <div class="ui-g-10">
+
+
+      <app-search-box [keyword]="keyword" [showRightButton]="false" [showLeftButton]="true"
+                      [placeholder]="'MESSAGING.Search contacts' | translate"
+                      (searchKeyword)="onSearch($event)"></app-search-box>
+
+
+    </div>
+    <div class="ui-g-2">
+
+      <button type="button" class="ui-button-secondary flat" style="float: right"
+                pButton (click)="menu.toggle($event)" icon="pi pi-ellipsis-v" #menuButton></button>
+
+    </div>
+    <div *ngIf="filterValues" class="ui-g-12" style="padding-top: 0">
+      <ng-container *ngFor="let filterValue of filterValues; let i = index"  >
+
+        <span class="value-badge" style="cursor: pointer;"
+              (click)="deleteFilteredValue(i)">&nbsp;&nbsp;{{filterValue.label}} <i
+          class="pi pi-times close-filter-icon"></i>&nbsp;</span>
+        <span style="float: left">&nbsp;</span>
+
+
+      </ng-container>
+    </div>
+  </div>
+
+
+
+  <div class="ui-g dashboard">
+    <div class="chat-view box-border-small" appInfscroll (scroll)="onScrolled($event)">
+
+      <ng-container *ngFor="let chat of lazyChats; let i = index"  >
+
+
+        <div class="ui-listbox padding-0" (click)="selectChat(i)" style="width: 100%">
+          <div class="ui-g-12 padding-top-0 padding-bottom-0 ui-listbox-item  {{chat.ui_state}}">
+
+
+            <ng-container *ngFor="let participant of chat.participants; let i1 = index" >
+
+              <div class="ui-toolbar-group-left ql-color-white">
+                <ng-container *ngIf="!participant.company">
+
+
+                  <ng-container *ngIf="participant.user!==user_id">
+                    <ng-container *ngIf="participant.user">
+                    <app-user-preview-short [size]="'middle'" [userData]="participant.user_details" [showInfo]="true"
+                                            [locale]="locale" [truncate_number]="15"
+                                            [showLink]="false"></app-user-preview-short>
+                    </ng-container>
+
+                  </ng-container>
+
+
+                </ng-container>
+
+                <ng-container *ngIf="participant.company">
+
+
+                  <ng-container *ngIf="participant.company!==company_id">
+
+                    <app-company-preview-short *ngIf="participant.company_details.name" [size]="'middle'"
+                                               [locale]="locale" [truncate_number]="15"
+                                               [company]="participant.company_details" [showInfo]="true"
+                                               [showLink]="false"></app-company-preview-short>
+
+                    <app-company-preview-short *ngIf="!participant.company_details.name" [size]="'middle'"
+                                               [locale]="locale" [truncate_number]="15"
+                                               [company]="participant.company_default_details" [showInfo]="true"
+                                               [showLink]="false"></app-company-preview-short>
+
+                  </ng-container>
+
+
+                </ng-container>
+
+              </div>
+
+              <ng-container
+                *ngIf="(participant.user==user_id && !company_id) || (participant.company==company_id && !user_id) ">
+                <div class="ui-toolbar-group-right ql-color-white" align="right">
+                  <span class="date-time-text">{{chat.update_date | dateAgo: locale}}</span><br/>
+
+                  <ng-container *ngIf="participant.user">
+                    <ng-container *ngIf="participant.user == user_id">
+
+                    <span *ngIf="participant.customer"
+                          class="info-purchase-badge"><strong>&nbsp;{{'GENERAL.Purchase' | translate}}&nbsp;</strong></span>
+                      <span *ngIf="participant.supplier"
+                            class="info-request-badge"><strong>&nbsp;{{'GENERAL.Sale' | translate}}&nbsp;</strong></span>
+
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="participant.company">
+                    <ng-container *ngIf="participant.company == company_id">
+
+                    <span *ngIf="participant.customer"
+                          class="info-purchase-badge"><strong>&nbsp;{{'GENERAL.Purchase' | translate}}&nbsp;</strong></span>
+                      <span *ngIf="participant.supplier"
+                            class="info-request-badge"><strong>&nbsp;{{'GENERAL.Sale' | translate}}&nbsp;</strong></span>
+
+                    </ng-container>
+                  </ng-container>
+
+                  <span *ngIf="chat.type == 5"
+                        class="info-job-badge"><strong>&nbsp;{{'GENERAL.Job' | translate}}&nbsp;</strong></span>
+
+                  <span *ngIf="chat.type == 4"
+                        class="info-offering-badge"><strong>&nbsp;{{'GENERAL.Offering one' | translate}}&nbsp;</strong></span>
+
+                  <span *ngIf="chat.type == 6"
+                        class="info-post-request-badge"><strong>&nbsp;{{'GENERAL.Request' | translate}}&nbsp;</strong></span>
+
+
+
+                </div>
+              </ng-container>
+
+
+            </ng-container>
+
+
+                <ng-container *ngIf="chat.unread_messages>0">
+                    <span class="info-badge chat-unread-messages"><strong>{{chat.unread_messages}}</strong></span><br/>
+                  </ng-container>
+          </div>
+
+
+        </div>
+
+
+
+
+      </ng-container>
+
+      <ng-container *ngIf="loading">
+        <div class="ui-g-12 text-center" align="center">
+          <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+                             animationDuration=".5s"></p-progressSpinner>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+
+
+</ng-container>

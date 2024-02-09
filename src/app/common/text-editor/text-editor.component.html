@@ -1,0 +1,26 @@
+<div class="ui-g-12  padding-0" [class.box-border-small]="showBorder">
+  <div id="scrolling-container">
+
+
+    <quill-editor id="textEditor" name="textEditor"
+                  [(ngModel)]="text"
+                  (onEditorCreated)="onEditorCreated()"
+                  [modules]="modules" (onContentChanged)="contentChanged($event)"
+                  [bounds]="bounds" [scrollingContainer]="scrollingContainer"
+                  [styles]="styles" [placeholder]="placeholder" [theme]="theme"
+                  [className]="className"
+                  [maxLength]="maxLength"></quill-editor>
+</div>
+
+
+</div>
+
+<ng-container *ngIf="showAttachments">
+  <div class="ui-g-12 padding-0">
+    <div class="ui-toolbar-group-right">
+      <app-message-attachments  [showImageButton]="showImageButton"  (selectImage)="onFileUpload($event)"
+                               (selectEmoji)="addEmoji($event)" (selectSticker)="addSticker($event)"
+                               (selectGiphy)="addImage($event)"></app-message-attachments>
+    </div>
+  </div>
+</ng-container>

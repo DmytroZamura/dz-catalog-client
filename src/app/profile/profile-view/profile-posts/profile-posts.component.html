@@ -1,0 +1,46 @@
+<div class="ui-g ui-fluid main-component-layout">
+
+
+
+  <div class="ui-g-12 dashboard posts-list-size padding-left-right-0">
+
+    <ng-container *ngIf="admin && currentUserId">
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card padding-0">
+
+
+          <app-create-post [placeholder]="'POSTS.share_message' | translate "
+                           ></app-create-post>
+
+        </div>
+      </div>
+    </ng-container>
+
+
+    <div class="ui-g-12  padding-left-right-0">
+      <app-filter-navigator [filterType]="'feed'"></app-filter-navigator>
+
+    </div>
+    <app-filtered-posts-list [user]="user_id" [editable]="false"  [published]="!admin" [showAdd]="true"
+                             [itemsPerAdd]="10"
+                             #list></app-filtered-posts-list>
+
+
+  </div>
+
+   <ng-container *ngIf="isBrowser && !isMobile">
+    <div class="ui-g-6 info-item-size hide-mobile">
+      <div class="ui-g-12">
+        <div class="ui-g-12 padding-left-right-0">
+
+          <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="6825384377" [display]="'inline-block'"
+                      [width]="300" [height]="600"></ng-adsense>
+
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>
+

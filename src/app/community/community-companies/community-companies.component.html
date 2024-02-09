@@ -1,0 +1,50 @@
+<ng-container *ngIf="community">
+  <div class="ui-g ui-fluid  dashboard main-component-layout">
+
+
+    <div class="ui-g-12 info-search-list-size padding-left-right-0">
+
+
+      <div class="ui-g-12 padding-left-right-0">
+        <app-manage-items-list [itemsType]="'companies'"
+                               [showFilter]="true" [showCategories]="true" [showChildCategories]="false"
+                               [showSearch]="false" [showOrdering]="true"
+                               [showSearchLabel]="false"
+                               [appliedFilter]="{}"
+                               (newKeyword)="list.setKeyword($event)"
+                               (newOrdering)="list.changeOrdering($event)"></app-manage-items-list>
+      </div>
+      <div class="ui-g-12 padding-left-right-0">
+        <app-items-list-agile [endPoint]="'companies-by-page/'" [itemsPerPage]="10" [canManage]="community.admin_status"
+                              [itemsType]="'companies'" [initCurrency]="true" [published]="true"
+                              [orderingCode]="'popularity'"
+                              [community]="community.id"
+                              [addTimestampToFilter]="true" [addUserToFilter]="true"
+                              [currentUserId]="currentUserId"
+                              (itemDeletedEvent)="removeCompany($event)"
+                              #list>
+          <ng-template let-item let-i="index" #body>
+            <div class="ui-g-12 padding-left-right-0">
+              <app-company-feed-preview [user]="currentUserId" [company]="item" [locale]="locale"
+                                        [canManage]="community.admin_status"
+                                        (companyDeleted)="list.onItemDeletedEvent(i)"
+              ></app-company-feed-preview>
+            </div>
+
+          </ng-template>
+
+        </app-items-list-agile>
+      </div>
+
+
+    </div>
+
+
+  </div>
+</ng-container>
+
+
+<app-process-dialog [header]="'COMMUNITY.Member' | translate" [processName]="'GENERAL.The deletion process' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>
+

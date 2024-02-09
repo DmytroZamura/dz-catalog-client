@@ -1,0 +1,145 @@
+<ng-container *ngIf="profile">
+
+  <div class="card padding-left-right-0 padding-top-0">
+    <ng-container *ngIf="!profile.deleted">
+    <div *ngIf="canManage" class="ui-g-12 padding-0 profile-edit-panel" style="min-height: 29px">
+
+
+      <div class="ui-toolbar-group-right ql-color-white">
+        <ng-container *ngIf="profile.user_id!=user">
+          <button pButton class="ui-button-secondary flat" type="button"
+                  (click)="deleteProfile()"
+                  icon="pi pi-times"></button>
+        </ng-container>
+
+      </div>
+
+    </div>
+
+     <div class="ui-g-12 padding-bottom-0 border-bottom-primary-small">
+      <div class="ui-toolbar-group-left vertical-middle">
+    <p-rating [ngModel]="profile.eventsqty.rating" [cancel]="false" [disabled]="true"
+              [iconOnStyle]="{'color': '#FFC107', 'font-size': '1em'}"
+              [iconOffStyle]="{'color': '#757575','font-size': '1em'}"></p-rating>
+    <div><span
+      class="review-text">&nbsp;{{ 'GENERAL.Reviews' | translate }}
+      : {{profile.eventsqty.related_reviews | thousandSuffixes: 1 }}</span>
+    </div>
+  </div>
+    </div>
+    <div class="ui-g-12 padding-0 profile-card-header text-align-center">
+      <a  class="profile-card-name cursor-pointer" [routerLink]="['/user-profile/'+profile.slug]+'/'+locale" (click)="onItemClicked()">
+        <ng-container *ngIf="profile.first_name && profile.is_active">
+          <strong>{{profile.first_name}} {{profile.last_name}}</strong>
+        </ng-container>
+        <ng-container *ngIf="!profile.is_active">
+          {{ 'GENERAL.A used is deleted' | translate }}
+        </ng-container>
+
+          <br/>
+          <img *ngIf="profile.img_details && profile.is_active" name="avatar" alt="{{profile.nickname}}"
+               src="{{profile.img_details.small_image_url}}" class="card-image"/>
+          <img *ngIf="!profile.img_details || !profile.is_active" alt="{{profile.nickname}}"
+               src="static/assets/img/default-user.jpeg"
+               class="card-image"/>
+
+
+      </a>
+      <br/>
+      <span *ngIf="profile.is_active">@{{profile.slug}}</span>
+      <br/>
+      <ng-container *ngIf="profile.is_active">
+      <span *ngIf="profile.following_status"
+            class="info-box-following small-text"> &nbsp;{{ 'USERPROFILE.Follows you' | translate }}
+        &nbsp;</span>
+        <span *ngIf="!profile.following_status">
+            &nbsp;
+        &nbsp;</span>
+      </ng-container>
+
+    </div>
+    <div class="ui-g-12 profile-card-content padding-0">
+
+
+      <div class="ui-g-12" align="center" [class.follow-row]="greedView">
+        <ng-container *ngIf="!acceptButton">
+          <app-follow-profile-button *ngIf="user!==profile.user_id && profile.is_active" [userId]="user"
+                                     [profileId]="profile.id" (itemClicked)="onItemClicked()"
+                                     [followIcon]="'pi pi-check'" [followingIcon]="''"
+                                     [followStatus]="profile.follow_status"></app-follow-profile-button>
+        </ng-container>
+
+        <ng-container *ngIf="acceptButton">
+
+          <button pButton type="button" class="flat  ui-button-success width-auto" icon="pi pi-check"
+                  label="{{ 'BUTTONS.Accept' | translate }}"
+                  (click)="acceptUser()" ></button>
+          &nbsp;
+          <button pButton type="button" class="flat ui-button-secondary btn-block width-auto" icon="pi pi-ban"
+                  label="{{ 'BUTTONS.Reject' | translate }}"
+                  (click)="rejectUser()" ></button>
+
+
+        </ng-container>
+      </div>
+      <div class="ui-g-12" [class.headline-row]="greedView">
+
+
+        <span class="middle-text" *ngIf="profile.is_active">{{profile.headline| truncate:truncateNumber }}</span>
+      </div>
+
+
+      <div class="ui-g-12" [class.location-row]="greedView">
+        <ng-container *ngIf="profile.is_active">
+    <div class="ui-toolbar-group-left"> <app-location-preview [country]="profile.country_details"
+                                                     [city]="profile.city_details"></app-location-preview></div>
+        </ng-container>
+      </div>
+      <div class="ui-g-12 border-top-primary-small">
+        <a [routerLink]="['/user-profile/'+profile.slug+'/'+locale]" (click)="onItemClicked()">
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <ng-container *ngIf="profile.is_active">
+              <span class="small-text select-text">{{ 'GENERAL.Followers' | translate }}</span><br/>
+              <span class="title select-text">{{profile.eventsqty.followers | thousandSuffixes: 1 }}</span>
+            </ng-container>
+          </div>
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <ng-container *ngIf="profile.is_active">
+              <span class="small-text select-text">{{ 'POSTS.Posts' | translate }}</span><br/>
+              <span class="title select-text">{{publications_total | thousandSuffixes: 1 }}</span>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="!isMobile">
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <ng-container *ngIf="profile.is_active">
+              <span class="small-text select-text">{{ 'GENERAL.Products' | translate }}</span><br/>
+              <span class="title select-text">{{profile.eventsqty.products | thousandSuffixes: 1 }}</span>
+            </ng-container>
+          </div>
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <ng-container *ngIf="profile.is_active">
+              <span class="small-text select-text">{{ 'GENERAL.Jobs' | translate }}</span><br/>
+              <span class="title select-text">{{profile.eventsqty.jobposts | thousandSuffixes: 1 }}</span>
+            </ng-container>
+          </div>
+          </ng-container>
+
+        </a>
+      </div>
+
+    </div>
+    </ng-container>
+
+
+     <ng-container *ngIf="profile.deleted">
+        <div class="ui-g-12 text-align-center">
+                  <span class="post-title">{{ 'GENERAL.A user is deleted' | translate }}</span>
+        </div>
+                </ng-container>
+
+  </div>
+
+</ng-container>
+
+
+

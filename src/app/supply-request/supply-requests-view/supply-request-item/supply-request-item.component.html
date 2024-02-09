@@ -1,0 +1,447 @@
+<p-confirmDialog></p-confirmDialog>
+<div class="card padding-0">
+  <div class="ui-g">
+    <!--<div class="ui-g-12 padding-0 border-bottom-small bg-light">-->
+    <!--</div>-->
+    <div class="ui-g-12  vertical-middle  padding-0 border-bottom-small bg-light">
+      <div class="ui-md-12 ui-g-12">
+        <div class="ui-toolbar-group-left">
+          {{ 'GENERAL.Request' | translate }} №<span><b>{{request.id}}</b> </span>
+        </div>
+        <ng-container>
+          <div class="ui-toolbar-group-right">
+
+
+            <span
+              class="status-badge-{{request.status_details.code}}"> {{request.status_details.name}}</span>
+
+
+          </div>
+        </ng-container>
+      </div>
+
+
+    </div>
+    <div class="ui-g-8 padding-bottom-0">
+      <ng-container *ngIf="userType=='supplier'">
+
+        <ng-container *ngIf="!request.customer_company_details && request.customer_user">
+          <app-user-preview-short [userData]="request.customer_user_details" [currentUser]="currentUserId"
+                                  [showPreview]="true" [locale]="locale"
+                                  [truncate_number]="truncateNumber"></app-user-preview-short>
+        </ng-container>
+        <ng-container *ngIf="request.customer_company_details">
+          <ng-container *ngIf="request.customer_company_details.name">
+            <app-company-preview-short [truncate_number]="truncateNumber" [company]="request.customer_company_details"
+                                       [locale]="locale"
+                                       [showPreview]="true" [currentUser]="currentUserId"></app-company-preview-short>
+          </ng-container>
+          <ng-container *ngIf="!request.customer_company_details.name">
+            <app-company-preview-short [truncate_number]="truncateNumber"
+                                       [company]="request.customer_company_default_details"
+                                       [locale]="locale"
+                                       [showPreview]="true" [currentUser]="currentUserId"></app-company-preview-short>
+          </ng-container>
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngIf="userType=='customer'">
+
+        <ng-container *ngIf="!request.supplier_company_details">
+          <app-user-preview-short [userData]="request.supplier_user_details" [currentUser]="currentUserId"
+                                  [showPreview]="true" [locale]="locale"
+                                  [truncate_number]="truncateNumber"></app-user-preview-short>
+        </ng-container>
+        <ng-container *ngIf="request.supplier_company_details">
+          <ng-container *ngIf="request.supplier_company_details.name">
+            <app-company-preview-short [truncate_number]="truncateNumber" [company]="request.supplier_company_details"
+                                       [locale]="locale"
+                                       [showPreview]="true" [currentUser]="currentUserId"></app-company-preview-short>
+          </ng-container>
+          <ng-container *ngIf="!request.supplier_company_details.name">
+            <app-company-preview-short [truncate_number]="truncateNumber"
+                                       [company]="request.supplier_company_default_details"
+                                       [locale]="locale"
+                                       [showPreview]="true" [currentUser]="currentUserId"></app-company-preview-short>
+          </ng-container>
+        </ng-container>
+
+      </ng-container>
+
+    </div>
+
+    <div class="ui-g-4 padding-bottom-0 text-align-right">
+
+
+      <span class="date-time-text" style="float: right">{{request.create_date | dateAgo: locale}}</span> <br/>
+      <ng-container *ngIf="request.chat_details">
+      <span *ngIf="request.chat_details.chat_details.unread_messages>0" class="count-badge left-count-badge"><strong>&nbsp; {{request.chat_details.chat_details.unread_messages}}
+        &nbsp;</strong></span>
+
+        <button pButton type="button" icon="pi pi-envelope" (click)="onChatClick()"
+                class="ui-button-secondary flat"></button>
+      </ng-container>
+
+
+    </div>
+
+
+    <div class="ui-g-12 padding-top-0 padding-left-right-0 ">
+
+      <ng-container *ngIf="editMode && userType==='customer'">
+        <div class="ui-g-12 ui-fluid">
+          <label for="customerComment"><strong>{{ 'REQUEST.Inquiry Details' | translate }}:</strong> </label>
+          <div class="small-comment-box">
+            <app-inplace-text-editor id="customerComment" [currentUserId]="currentUserId"
+                                     [text]="request.customer_comment"
+                                     [placeholder]="'' | translate"
+                                     [writePlaceholder]="'GENERAL.Click to write text' | translate"
+                                     (textChange)="onSaveCustomerComment($event)"></app-inplace-text-editor>
+          </div>
+        </div>
+
+        <div class="ui-g-12 ui-fluid">
+          <label for="address"><strong>{{ 'REQUEST.Delivery address' | translate }}:</strong> </label>
+          <div class="small-comment-box">
+            <app-inplace-text-editor id="address" [currentUserId]="currentUserId" [text]="request.delivery_address"
+                                     [placeholder]="'' | translate"
+                                     [writePlaceholder]="'GENERAL.Click to write address' | translate"
+                                     (textChange)="onSaveDeliveryAddress($event)"></app-inplace-text-editor>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!editMode || userType==='supplier'">
+        <div class="ui-g-12 " *ngIf="request.customer_comment">
+          <label for="commentTest"><strong>{{ 'REQUEST.Inquiry Details' | translate }}:</strong> </label><br/>
+          <app-text-show-more id="commentTest" [text]="request.customer_comment" [richText]="false"
+                              [currentUserId]="currentUserId"
+                              [truncate_number]="50"></app-text-show-more>
+        </div>
+
+        <div class="ui-g-12" *ngIf="request.delivery_address">
+          <label for="addressText"><strong>{{ 'REQUEST.Delivery address' | translate }}:</strong> </label><br/>
+          <span id="addressText">{{request.delivery_address}} </span>
+        </div>
+
+      </ng-container>
+
+      <div *ngIf="request.documents[0] || (userType==='customer' && request.status_details.code==='new') "
+           class="ui-g-12">
+
+        <app-attached-documents [editMode]="editMode && userType==='customer'" [documents]="request.documents"
+                                (documentsChanged)="onDocumentsChanged($event)"
+        ></app-attached-documents>
+
+      </div>
+
+      <ng-container *ngIf="!editContactsMode">
+        <div class="ui-g-12 border-top-small border-bottom-small middle-text bg-supper-light ">
+          <div [class.small-comment-box]="userType==='customer' && request.status_details.code==='new'"
+               [class.cursor-pointer]="userType==='customer' && request.status_details.code==='new'"
+               [appHighlightborder]="highlightColor"
+               (click)="onEditContacts()">
+
+            <i
+              class="pi pi-envelope select-button-icon"></i>
+            <span> {{request.contact_email}}</span> <span
+            *ngIf="request.contact_phone"> | <i
+            class="pi pi-phone select-button-icon"></i>&nbsp;{{request.contact_phone}}</span> <span
+            *ngIf="request.skype"> | <b>Skype:</b> {{request.skype}}</span>
+          </div>
+
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="editContactsMode">
+        <div class="ui-g-12 padding-0">
+          <div class="ui-g-12">
+            <div class="ui-g form-group ui-fluid  small-comment-box">
+              <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-4">
+
+          <span class="md-inputfield">
+
+          <input id="email" name="email" type="text" pInputText
+                 [(ngModel)]="email" required
+                 pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" #emailField="ngModel"/>
+          <label for="email">{{ 'USERPROFILE.Email' | translate }}:</label>
+
+          <div [hidden]="emailField.valid ">
+
+          <div *ngIf="emailField.errors && emailField.errors.required"
+               class="ui-message ui-messages-error ui-corner-all">
+          {{ 'GENERAL.This field is required' | translate }}
+          </div>
+          <div *ngIf="emailField.errors && emailField.errors.pattern"
+               class="ui-message ui-messages-error ui-corner-all">
+          {{ 'GENERAL.This field is invalid' | translate }}
+          </div>
+          </div>
+          </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-4">
+
+          <span class="md-inputfield">
+          <input id="phone_number" name="phone_number"  type="text"
+                 pInputText
+                 [(ngModel)]="phone"/>
+
+          <label for="phone_number">{{ 'COMPANY.Phone Number' | translate }}:</label>
+
+          </span>
+
+
+                </div>
+                <div class="ui-g-12 ui-md-4">
+
+
+          <span class="md-inputfield">
+          <input id="skype" name="skype"  type="text"
+                 pInputText
+                 [(ngModel)]="skype"/>
+
+          <label for="skype">Skype:</label>
+
+          </span>
+
+
+                </div>
+              </div>
+              <div class="ui-g-12 padding-0 text-align-center">
+
+                <button pButton type="button" class="ui-button-secondary flat middle-button"
+                        label="{{ 'BUTTONS.Cancel' | translate }}"
+                        icon="pi pi-times" (click)="onCancelEditContacts()" style="width: auto"></button>
+
+                <button pButton type="button" class="middle-button"
+                        label="{{ 'BUTTONS.Save' | translate }}" (click)="updateSupplyRequest()"
+                        icon="pi pi-save" style="width: auto"></button>
+
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </ng-container>
+
+
+   <div class="ui-g-12 text-align-right">
+        <ng-container *ngIf="editMode && userType==='supplier'">
+
+          <p-inplace #inplaceCurrency>
+
+    <span pInplaceDisplay>
+
+      <ng-container *ngIf="request.currency_details">
+
+          <span> {{ 'GENERAL.Currency' | translate }}:  <strong>{{request.currency_details.name  }}</strong></span>
+
+
+      </ng-container>
+      <ng-container *ngIf="!request.currency_details">
+
+          <span> {{ 'GENERAL.Select a currency"' | translate }}</span>
+
+
+      </ng-container>
+
+    </span>
+            <span  pInplaceContent>
+
+        <app-select-common-item [(item)]="request.currency_details" [endpoint]="'currencies'"
+                                [showFilter]="true" [styleClass]="'select-currency'"
+                                [sortByName]="true" [showClear]="false" [placeholder]="''"
+
+                                (itemChange)="onCurrencyChange($event)"></app-select-common-item>
+
+
+
+
+    </span>
+
+          </p-inplace>
+        </ng-container>
+
+        <ng-container *ngIf="!editMode || userType!=='supplier'">
+          <ng-container *ngIf="request.currency_details">
+
+            <span> {{ 'GENERAL.Currency' | translate }}:  <strong>{{request.currency_details.name  }}</strong></span>
+
+
+          </ng-container>
+        </ng-container>
+   </div>
+
+
+
+      <ng-container *ngIf="request.positions">
+        <ng-container *ngIf="request.positions[0]">
+          <app-supply-request-positions [editMode]="editMode" [positions]="request.positions" [updateMode]="updateMode"
+                                        [userType]="userType"
+                                        [currency]="request.currency_details" (deleted)="calculateTotalAmount()"
+                                        (positionsChanged)="onPostionsChanged($event)"
+                                        #positions></app-supply-request-positions>
+
+        </ng-container>
+      </ng-container>
+
+      <ng-container>
+        <div class="ui-g-12 ui-fluid">
+          <ng-container *ngIf="userType=='supplier' && editMode">
+            <div class="small-comment-box">
+
+              <p-inplace #inplaceComment>
+
+    <span pInplaceDisplay>
+
+      <ng-container *ngIf="chargesComment ||  charges">
+        {{ 'REQUEST.Delivery' | translate }}:
+
+            <span><b>
+         <ng-container
+           *ngIf="request.currency_details"> <ng-container
+           *ngIf="charges>0">{{charges | currency:request.currency_details.code :'symbol-narrow'  }}</ng-container></ng-container>
+
+                  <ng-container *ngIf="!charges || charges == 0">
+
+                   {{ 'PRODUCT.For free' | translate }}
+
+                  </ng-container>
+              .</b> </span>
+
+      <app-text-show-more [text]="chargesComment" [richText]="false" [currentUserId]="currentUserId"
+                          [truncate_number]="50" [showSeeMore]="false"></app-text-show-more>
+
+
+      </ng-container>
+      <ng-container *ngIf="!chargesComment && !charges">
+        <i>{{ 'REQUEST.Click to enter the delivery terms' | translate }}</i>
+      </ng-container>
+
+    </span>
+                <span pInplaceContent>
+
+
+                <b>{{ 'REQUEST.Delivery terms' | translate }}:</b>
+         <textarea id="message" name="message" pInputTextarea
+                   [(ngModel)]="chargesComment" placeholder="{{ 'GENERAL.Comment placeholder' | translate }}"
+                   rows="2" [autoResize]="true" [maxlength]="1000" (input)="readySaveComment()"></textarea>
+                <b>{{ 'REQUEST.Delivery charges' | translate }}:</b>
+                <input id="charges" name="charges" title="{{ 'PRODUCT.Price' | translate }}" type="number"
+                       pInputText [(ngModel)]="charges" pKeyFilter="pnum" (input)="readySaveComment()"
+                       style="text-align: right"/>
+
+<span>
+      <button pButton type="button" class="ui-button-secondary flat middle-button"
+              label="{{ 'BUTTONS.Cancel' | translate }}"
+              icon="pi pi-times" (click)="onCancel()" style="width: auto"></button>
+
+    <button pButton type="button" class="middle-button" [disabled]="!readyToSaveComment"
+            label="{{ 'BUTTONS.Save' | translate }}" (click)="onSaveCharges()"
+            icon="pi pi-save" style="width: auto"></button>
+</span>
+
+
+    </span>
+
+              </p-inplace>
+
+
+            </div>
+          </ng-container>
+          <ng-container *ngIf="userType=='customer' || !editMode">
+
+            {{ 'REQUEST.Delivery' | translate }}:
+
+            <span><b>
+         <ng-container
+           *ngIf="request.currency_details"> <ng-container
+           *ngIf="charges>0">{{charges | currency:request.currency_details.code :'symbol-narrow'  }}</ng-container></ng-container>
+
+                  <ng-container *ngIf="!charges || charges == 0">
+
+                   {{ 'PRODUCT.For free' | translate }}</ng-container>.</b>&nbsp;</span>
+
+            <app-text-show-more *ngIf="request.charges_comment" [text]="chargesComment" [richText]="false"
+                                [currentUserId]="currentUserId"
+                                [truncate_number]="50" [showSeeMore]="false"></app-text-show-more>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="request.total_amount > 0 && request.currency_details">
+        <div class="ui-g-12 text-align-right">
+          <u> <strong> {{ 'REQUEST.Total Amount' | translate }}
+            : {{request.total_amount | currency:request.currency_details.code :'symbol-narrow' }}</strong></u>
+
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="request.status_details">
+        <div class="ui-g-12 ui-fluid">
+
+          <div
+            [class.ui-toolbar-group-left]="!isMobile"
+            [class.ui-g-12]="isMobile" [class.text-align-center]="isMobile">
+
+            <ng-container *ngIf="userType==='customer' && request.status_details.code==='new'">
+              <button class="ui-button ui-button-success" pButton type="button"
+                      label="{{ 'REQUEST.Send to a supplier' | translate }}" (click)="updateStatusByCustomer('posted')"
+                      icon="pi pi-send" style="width: auto"></button>
+            </ng-container>
+
+            <ng-container
+              *ngIf="userType==='supplier' && request.status_details.code==='posted' && request.need_confirmation">
+              <button class="ui-button orange-btn" pButton type="button"
+                      label="{{ 'REQUEST.Send to a customer for confirmation' | translate }}"
+                      (click)="updateStatus('confirm')"
+                      icon="pi pi-check-circle" style="width: auto"></button>
+            </ng-container>
+            <ng-container *ngIf="userType==='customer' && request.status_details.code==='confirm'">
+              <button class="ui-button orange-btn" pButton type="button"
+                      label="{{ 'BUTTONS.Confirm' | translate }}" (click)="updateStatusByCustomer('confirmed')"
+                      icon="pi pi-check-circle" style="width: auto"></button>
+            </ng-container>
+            <ng-container *ngIf="userType==='supplier' && (request.status_details.code==='confirmed' ||
+              (request.status_details.code==='posted' && !request.need_confirmation))">
+              <button class="ui-button blue-btn" pButton type="button"
+                      label="{{ 'REQUEST.Begin processing' | translate }}" (click)="updateStatus('processing')"
+                      icon="pi pi-spin pi-spinner" style="width: auto"></button>
+            </ng-container>
+            <ng-container *ngIf="userType==='supplier' && request.status_details.code==='processing'">
+              <button class="ui-button ui-button-success" pButton type="button"
+                      label="{{ 'REQUEST.Finish processing' | translate }}" (click)="updateStatus('completed')"
+                      icon="pi pi-info-circle" style="width: auto"></button>
+            </ng-container>
+          </div>
+
+          <ng-container
+            *ngIf="(userType==='supplier' && request.status_details.code!=='new'
+            && request.status_details.code!=='canceled' && request.status_details.code!=='confirm'
+            && request.status_details.code!=='c_canceled' && request.status_details.code!=='completed') ||
+            (userType==='customer' && (request.status_details.code==='new' || request.status_details.code==='posted' ||
+            request.status_details.code==='confirm'))">
+            <div [class.ui-toolbar-group-right]="!isMobile"
+                 [class.ui-g-12]="isMobile" [class.text-align-center]="isMobile">
+              <button pButton class="ui-button-secondary flat" type="button"
+                      label="{{ 'BUTTONS.Cancel' | translate }}"
+                      (click)="cancel()"
+                      icon="pi pi-times" style="width: auto"></button>
+            </div>
+          </ng-container>
+
+        </div>
+      </ng-container>
+
+
+    </div>
+  </div>
+</div>
+
+<app-process-dialog [header]="'GENERAL.Request' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

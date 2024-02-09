@@ -1,0 +1,45 @@
+
+<ng-container *ngIf="attributes && show">
+
+
+  <ng-container *ngIf="attributes[0]" >
+    <div class="ui-g ui-fluid">
+      <ng-container *ngIf="showPrice">
+        <div class="ui-g-12">
+          <span *ngIf="current_currency_details"><strong>{{ 'PRODUCT.Price' | translate }}, ({{current_currency_details.code}}):</strong> &nbsp;</span><br/>
+          <input id="priceFrom" title="{{ 'PRODUCT.Price from' | translate }}" type="number" pInputText pKeyFilter="pint"
+                   placeholder="{{ 'PRODUCT.Price from' | translate }}"
+                   [(ngModel)]="priceFrom"/>
+        </div>
+          <div class="ui-g-12">
+          <input id="priceTo" title="{{ 'PRODUCT.Price to' | translate }}" type="number" pInputText pKeyFilter="pint"
+                   placeholder="{{ 'PRODUCT.Price to' | translate }}"
+                   [(ngModel)]="priceTo"/>
+        </div>
+      </ng-container>
+
+      <ng-container *ngFor="let attribute of attributes; let i = index"  >
+
+        <ng-container *ngIf="attribute.attribute_details.type!=3">
+          <div class="ui-g-12">
+            <app-filter-attribute [attribute]="attribute.attribute_details" [max]="attribute.max"
+                                  [min]="attribute.min" [step]="attribute.step"
+                                  (valueChanged)="onValueChanged(i, $event)"></app-filter-attribute>
+          </div>
+        </ng-container>
+
+      </ng-container>
+
+      <div class="ui-g-12" align="center">
+
+        <button pButton type="button" label="{{ 'BUTTONS.Clear' | translate }}" (click)="onClearFilter()"
+                class="ui-button ui-button-secondary flat width-auto" [disabled]="disabled"
+                icon="pi pi-times-circle" ></button>&nbsp;
+        <button pButton type="button" class="width-auto" label="{{ 'BUTTONS.Apply' | translate }}" (click)="onFilter()"
+                 [disabled]="disabled"></button>
+      </div>
+
+  </div>
+
+</ng-container>
+</ng-container>

@@ -1,0 +1,82 @@
+<div class="ui-g-12 padding-left-right-0 box-border-small " style="min-height: 400px">
+  <ng-container *ngIf="galleryImages">
+    <div class="ui-g-12 padding-0">
+      <div class="container ">
+        <ng-container *ngIf="selected_product_image && edit_mode">
+
+          <button pButton class="flat ui-button-secondary galleria-image-delete-button" type="button"
+                  (click)="deleteImage()"
+                  icon="pi pi-times"></button>
+        </ng-container>
+        <ng-container *ngIf="galleryImages.length>0">
+          <ng-container *ngIf="showFirstGallery">
+        <p-galleria [value]="galleryImages" (activeIndexChange)="onImageChange($event)"
+                    [(activeIndex)]="index" [id]="'g1'" [containerClass]="'product-images'"
+                    [circular]="false" [showItemNavigators]="isMobile" [showThumbnails]="true"
+                    [numVisible]="3" (dblclick)="showFullScreen()" (click)="onGalleryClick()">
+
+          <ng-template pTemplate="item" let-item>
+            <img [src]="item.previewImageSrc" style="width: 100%; display: block;"/>
+          </ng-template>
+          <ng-template pTemplate="thumbnail" let-item>
+            <div class="p-grid p-nogutter p-justify-center">
+              <img [src]="item.thumbnailImageSrc" style="display: block;"/>
+            </div>
+          </ng-template>
+        </p-galleria>
+          </ng-container>
+           <ng-container *ngIf="!showFirstGallery">
+        <p-galleria [value]="galleryImages" (activeIndexChange)="onImageChange($event)"
+                    [(activeIndex)]="index" [id]="'g2'"
+                    [circular]="false" [showItemNavigators]="isMobile" [showThumbnails]="true"
+                    [numVisible]="3" (dblclick)="showFullScreen()" (click)="onGalleryClick()">
+
+          <ng-template pTemplate="item" let-item>
+            <img [src]="item.previewImageSrc" style="width: 100%; display: block;"/>
+          </ng-template>
+          <ng-template pTemplate="thumbnail" let-item>
+            <div class="p-grid p-nogutter p-justify-center">
+              <img [src]="item.thumbnailImageSrc" style="display: block;"/>
+            </div>
+          </ng-template>
+        </p-galleria>
+          </ng-container>
+        </ng-container>
+
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="edit_mode">
+  <div class="ui-g-12 padding-left-right-0 text-align-center">
+    <app-file id="file_upload" [cropImage]="true" [label]="'BUTTONS.Browse' | translate " [icon]="'pi pi-camera'"
+              [aspectRatio]="1"
+              [resizeToWidth]="1000" [cropperMinWidth]="600" (fileUpload)="onFileUpload($event)"></app-file>
+  </div>
+
+
+
+
+</ng-container>
+
+
+ <div class="full-screen-galleria">
+          <p-galleria [value]="galleryImages" [(visible)]="fullScreen"
+                      [containerClass]="'image-container-style'" [numVisible]="9"
+                      [circular]="true" [fullScreen]="true"
+
+                      [showItemNavigators]="true"
+                      [showThumbnails]="false"
+                        [showIndicators]="true"
+                      [baseZIndex]="100000">
+            <ng-template pTemplate="item" let-item>
+              <img [src]="item.previewImageSrc" style="width: 100%; display: block;"/>
+            </ng-template>
+            <ng-template pTemplate="thumbnail" let-item>
+              <div class="p-grid p-nogutter p-justify-center">
+                <img [src]="item.thumbnailImageSrc" style="display: block;"/>
+              </div>
+            </ng-template>
+          </p-galleria>
+</div>

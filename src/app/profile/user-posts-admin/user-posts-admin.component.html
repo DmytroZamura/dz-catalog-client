@@ -1,0 +1,29 @@
+<div class="ui-g ui-fluid main-component-layout">
+
+  <div class="ui-g-12 posts-list-size padding-left-right-0">
+
+    <ng-container *ngIf="isBrowser">
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card padding-0">
+          <app-create-post [placeholder]="'POSTS.share_message' | translate "></app-create-post>
+        </div>
+      </div>
+    </ng-container>
+
+     <ng-container *ngIf="paramsChecked">
+    <div class="ui-g-12  padding-left-right-0">
+       <app-filter-navigator [filterType]="'feed'"  [showChildCategories]="false"
+                              [childCategoriesCarouselView]="false"></app-filter-navigator>
+
+    </div>
+
+    <app-filtered-posts-list [user]="user_id" [editable]="true" [published]="false" [check_filter]="true"
+                             #list></app-filtered-posts-list>
+
+     </ng-container>
+
+  </div>
+
+
+</div>
+

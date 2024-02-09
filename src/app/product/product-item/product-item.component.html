@@ -1,0 +1,213 @@
+<ng-container *ngIf="!product.published">
+  <div class="ui-g-12 padding-0">
+    <div class="ui-toolbar-group-right ql-color-white">
+
+
+      <span class="info-box-unpublished">&nbsp;{{ 'GENERAL.Inactive' | translate }}&nbsp;</span> &nbsp;&nbsp;
+
+
+    </div>
+  </div>
+</ng-container>
+
+<div class="ui-g-12 padding-bottom-0">
+
+  <div class="ui-toolbar-group-left vertical-middle">
+    <p-rating [ngModel]="product.eventsqty.rating" [cancel]="false" [disabled]="true"
+              [iconOnStyle]="{'font-size': '1em'}"
+              [iconOffStyle]="{'color': '#757575', 'font-size': '1em'}"></p-rating>
+    <div><span
+      class="review-text">&nbsp;{{ 'GENERAL.Reviews' | translate }}
+      : {{product.eventsqty.related_reviews | thousandSuffixes: 1 }}</span>
+    </div>
+  </div>
+  <ng-container *ngIf="company">
+    <div class="ui-toolbar-group-right ql-color-white">
+      <app-location-preview [country]="product.company_details.country_details"
+                            [flagOnly]="true"></app-location-preview>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!company && product.user_data">
+    <div class="ui-toolbar-group-right ql-color-white">
+      <app-location-preview [country]="product.user_data.user_profile_default.country_details"
+                            [flagOnly]="true"></app-location-preview>
+    </div>
+  </ng-container>
+
+</div>
+
+<div class="ui-g-12 padding-0">
+  <ng-container *ngIf="!company && product.user_data">
+    <div class="ui-toolbar-group-left ql-color-white">
+      <app-user-preview-short [userData]="product.user_data" [size]="'small'" [locale]="locale"
+                              [truncate_number]="truncateNumber" [showPreview]="true"
+                              [currentUser]="currentUserId"></app-user-preview-short>
+
+    </div>
+
+
+  </ng-container>
+  <ng-container *ngIf="company">
+    <div class="ui-toolbar-group-left ql-color-white">
+      <app-company-preview-short [company]="company"  [locale]="locale"
+                                 [size]="'small'"
+                                 [truncate_number]="truncateNumber" [showPreview]="true"
+                                 [currentUser]="currentUserId"></app-company-preview-short>
+
+
+    </div>
+
+
+  </ng-container>
+
+
+</div>
+
+<ng-container *ngIf="product.images[0]">
+  <div class="ui-g-12 padding-0">
+        <ng-container *ngIf="!adminMode">
+    <a
+      [routerLink]="[productLink]">
+      <img *ngIf="product.images[0].image_details" src="{{product.images[0].image_details.medium_image_url}}"
+           alt="{{product.name}}"
+           width="100%"></a>
+        </ng-container>
+     <ng-container *ngIf="adminMode">
+    <a
+      [routerLink]="['/product-admin/'+product.id]">
+      <img *ngIf="product.images[0].image_details" src="{{product.images[0].image_details.medium_image_url}}"
+           alt="{{product.name}}"
+           width="100%"></a>
+        </ng-container>
+
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!product.images[0]">
+  <div class="ui-g-12 padding-0">
+    <ng-container *ngIf="!adminMode">
+    <a
+      [routerLink]="[productLink]">
+      <img src="static/assets/img/default_product.png"
+           alt="{{product.name}}"
+           width="100%"></a>
+    </ng-container>
+
+     <ng-container *ngIf="adminMode">
+    <a
+      [routerLink]="['/product-admin/'+product.id]">
+      <img src="static/assets/img/default_product.png"
+           alt="{{product.name}}"
+           width="100%"></a>
+    </ng-container>
+
+  </div>
+</ng-container>
+
+
+<div class="ui-g-12">
+        <span *ngIf="!adminMode" ><a class="product-item-name"
+          [routerLink]="[productLink]">{{product.name| truncate : 90}}</a></span>
+  <span *ngIf="adminMode"><a  class="product-item-name"
+    [routerLink]="['/product-admin/'+product.id]">{{product.name| truncate : 90}}</a></span>
+
+</div>
+<ng-container *ngIf="!product.discount_price_to">
+  <div class="ui-g-12 padding-top-0 text-align-right">
+    <ng-container *ngIf="product.one_price && product.price_to">
+
+          <span
+            class="price-text"><strong>{{product.price_to_current_currency | currency:currencyCode :'symbol-narrow'  }}</strong></span>
+
+    </ng-container>
+    <ng-container *ngIf="product.one_price && !product.price_to">
+
+      <span class="price-text"><strong>{{ 'PRODUCT.By request' | translate }}</strong></span>
+
+    </ng-container>
+
+    <ng-container *ngIf="!product.one_price && product.price_from">
+
+          <span
+            class="price-text"><strong>{{product.price_from_current_currency | currency:currencyCode:'symbol-narrow'}}
+            - {{product.price_to_current_currency | currency:currencyCode:'symbol-narrow'}}</strong></span>
+
+    </ng-container>
+
+    <ng-container *ngIf="product.unit_type_details">
+
+      <span class="price-text"> / {{product.unit_type_details.code}}</span>
+
+    </ng-container>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="product.discount_price_to">
+  <div class="ui-md-12 ui-g-12 padding-top-0 text-align-right">
+
+
+    <div class="ui-toolbar-group-right">
+      <ng-container *ngIf="product.one_price && price">
+
+          <span
+            class="price-text"><strong>{{price | currency:currencyCode :'symbol-narrow'  }}</strong></span>
+
+      </ng-container>
+
+      <ng-container *ngIf="!product.one_price && priceFrom && price">
+
+          <span
+            class="price-text"><strong>{{priceFrom | currency:currencyCode:'symbol-narrow'}}
+         - {{price | currency:currencyCode:'symbol-narrow'}}</strong></span>
+
+      </ng-container>
+
+      <ng-container *ngIf="product.unit_type_details && price">
+
+        <span class="price-text"> / {{product.unit_type_details.code}}</span>
+
+      </ng-container>
+ <ng-container *ngIf="(product.discount && product.discount_price_to) || product.deadline">
+  <br/>
+      <ng-container *ngIf="product.discount && product.discount_price_to">
+
+        <span class="discount-text discount-color"><strong>{{product.discount}}
+          % {{ 'PRODUCT.Discount OFF' | translate }}</strong></span>
+      </ng-container>
+      <ng-container *ngIf="product.deadline">
+        &nbsp;<span
+        class="text-muted discount-text">{{ 'PRODUCT.Discount ends date' | translate }}&nbsp;{{product.deadline | date: 'd'}}&nbsp;{{product.deadline | date: 'LLL'}}</span>
+        <!--<span>&nbsp;{{post.deadline | date: 'LLL'}}</span>-->
+      </ng-container>
+
+ </ng-container>
+      <ng-container *ngIf="oldPrice">
+        <br/>
+        <ng-container *ngIf="product.one_price && oldPrice">
+
+          <span
+            class="text-muted discount-text"><s>{{oldPrice | currency:currencyCode :'symbol-narrow'  }}</s></span>
+
+        </ng-container>
+
+        <ng-container *ngIf="!product.one_price && oldPriceFrom && oldPrice">
+
+          <span
+            class="text-muted discount-text"><s>{{oldPriceFrom | currency:currencyCode:'symbol-narrow'}} - {{oldPrice | currency:currencyCode:'symbol-narrow'}}</s></span>
+
+        </ng-container>
+      </ng-container>
+    </div>
+
+  </div>
+</ng-container>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,133 @@
+<ng-container *ngIf="viewType==1">
+
+  <ng-container *ngIf="label">
+<span class="md-inputfield">
+
+<p-dropdown id="{{componentId}}" [options]="items" [dataKey]="dataKey"
+            [optionLabel]="optionLabel" [(ngModel)]="item" [filter]="showFilter"
+            [showClear]="showClear" [styleClass]="styleClass"
+            (onChange)="onSelect($event)" [disabled]="disabled" [autoDisplayFirst]="false" #selectItem></p-dropdown>
+
+
+
+
+   <label class="ui-float-label" for="{{componentId}}">{{label}}:</label>
+
+         </span>
+  </ng-container>
+
+  <ng-container *ngIf="!label">
+
+
+    <p-dropdown id="{{componentId}}-p" [options]="items" [dataKey]="dataKey"
+                [optionLabel]="optionLabel" [(ngModel)]="item" [filter]="showFilter"
+                [showClear]="showClear" [placeholder]="placeholder" [styleClass]="styleClass"
+                (onChange)="onSelect($event)" [disabled]="disabled" [autoDisplayFirst]="false"></p-dropdown>
+
+  </ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="viewType==2">
+  <p-selectButton [options]="items" [(ngModel)]="item" [disabled]="disabled" (onChange)="onSelect($event)"
+                  [styleClass]="styleClass"
+                  optionLabel="name" dataKey="id">
+    <ng-template let-item>
+      <div style="padding: .5em 1em">
+
+        <ng-container *ngIf="item.value.icon"><span class="hide-mobile"><i
+          class="pi {{item.value.icon}} select-button-icon {{item.value.color_class}}"
+          [class.middle-text]="middleText"></i>&nbsp;</span></ng-container>
+        <span [class.middle-text]="middleText">{{item.value.name}}</span>
+      </div>
+    </ng-template>
+
+  </p-selectButton>
+</ng-container>
+
+
+<ng-container *ngIf="viewType==3">
+  <ng-container *ngIf="showClear">
+    <ng-container *ngIf="item">
+     <span [appHighlightborder]="highlightColor" class="{{buttonBadgeClass}} cursor-pointer"
+           (click)="onSelectItem(null)">{{ 'GENERAL.All' | translate }}</span>
+    </ng-container>
+
+    <ng-container *ngIf="!item">
+     <span class="{{selectedButtonBadgeClass}} cursor-pointer"
+           (click)="onSelectItem(null)">{{ 'GENERAL.All' | translate }}</span>
+    </ng-container>
+    &nbsp;
+  </ng-container>
+
+  <ng-container *ngFor="let buttonItem of items; let i = index" >
+
+    <ng-container *ngIf="!item">
+     <span [appHighlightborder]="highlightColor" class="{{buttonBadgeClass}} cursor-pointer"
+           (click)="onSelectItem(i)">
+       <ng-container *ngIf="!namePlural">{{buttonItem.name}}</ng-container>
+        <ng-container *ngIf="namePlural">{{buttonItem.name_plural}}</ng-container>
+      </span>&nbsp;
+    </ng-container>
+
+    <ng-container *ngIf="item">
+      <ng-container *ngIf="item.id != buttonItem.id">
+     <span [appHighlightborder]="highlightColor" class="{{buttonBadgeClass}} cursor-pointer"
+           (click)="onSelectItem(i)">
+          <ng-container *ngIf="!namePlural">{{buttonItem.name}}</ng-container>
+        <ng-container *ngIf="namePlural">{{buttonItem.name_plural}}</ng-container>
+      </span>&nbsp;
+      </ng-container>
+
+      <ng-container *ngIf="item.id == buttonItem.id">
+     <span class="{{selectedButtonBadgeClass}} cursor-pointer"
+           (click)="onSelectItem(i)">
+          <ng-container *ngIf="!namePlural">{{buttonItem.name}}</ng-container>
+        <ng-container *ngIf="namePlural">{{buttonItem.name_plural}}</ng-container>
+       </span>&nbsp;
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="viewType==4">
+  <span *ngIf="label" class="md-inputfield">
+ <p-autoComplete id="{{componentId}}-item-label" [styleClass]="styleClass"
+                 (onSelect)="onAutoCompleteSelect($event)"
+                 [suggestions]="items" (completeMethod)="getFilteredItems($event)"
+                 field="name" [(ngModel)]="item" (onClear)="onClear()" [forceSelection]="true"
+                 [minLength]="1" [disabled]="disabled" [dropdown]="true" [delay]="debounceTime" [dropdownIcon]="'pi pi-chevron-down'">
+   <ng-container *ngIf="endpoint==='countries'">
+     <ng-template let-item pTemplate="item">
+        <div class="image-item">
+          <ng-container *ngIf="item.flag_url">
+            <img src="{{item.flag_url}}" class="flag-img"/>
+            &nbsp;
+          </ng-container>
+            {{item.name}}
+        </div>
+    </ng-template>
+   </ng-container>
+
+ </p-autoComplete>
+ <label *ngIf="!label" for="{{componentId}}-item-label">{{ 'USERPROFILE.Country' | translate }}:</label>
+   <label *ngIf="label" for="{{componentId}}-item-label">{{label}}:</label>
+    <ng-container *ngIf="itemNotExists && checkEnteredName">
+  <p-message severity="error" text="{{ 'ALERTS.Please select an existing value' | translate }}"></p-message>
+</ng-container>
+         </span>
+
+  <ng-container *ngIf="!label">
+  <p-autoComplete  id="{{componentId}}-auto-complete-item" [styleClass]="styleClass"
+                  (onSelect)="onAutoCompleteSelect($event)" (onClear)="onClear()"
+                  [suggestions]="items" (completeMethod)="getFilteredItems($event)"
+                  field="name" [(ngModel)]="item" [forceSelection]="true" [delay]="debounceTime"
+                  [minLength]="1" [disabled]="disabled" [dropdown]="true" [dropdownIcon]="'pi pi-chevron-down'"></p-autoComplete>
+    <ng-container *ngIf="itemNotExists && checkEnteredName">
+  <p-message severity="error" text="{{ 'ALERTS.Please select an existing value' | translate }}"></p-message>
+    </ng-container>
+</ng-container>
+
+
+</ng-container>

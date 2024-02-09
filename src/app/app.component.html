@@ -1,0 +1,126 @@
+<ng-container *ngIf="isBrowser">
+  <div id="loader" class="splash-screen">
+    <div class="splash-loader">
+      <img src="static/assets/img/uafine-logo-circle-colored.svg" alt="UaFine logo">
+    </div>
+  </div>
+  <ng-container *ngIf="appService.signedIn && appService.userProfile">
+    <ng-container *ngIf="appService.userProfile.user_id">
+      <app-notification-lazy *ngxLazyEl (selectedChat)="onShowChat($event.detail)"
+                             (newNotificationItem)="addNotificationToFeed($event.detail)"></app-notification-lazy>
+    </ng-container>
+  </ng-container>
+
+</ng-container>
+
+<div class="layout-wrapper" [ngClass]="{'layout-wrapper-menu-active':appService.sidebarActive,
+                                        'layout-overlay-menu':overlay}" (click)="onLayoutClick()">
+  <app-topbar #topbar></app-topbar>
+
+
+  <div class="layout-sidebar " [ngStyle]="{'overflow':appService.sidebarActive ? 'hidden' : 'visible'}"
+       [ngClass]="{'layout-sidebar-dark':appService.darkMenu}" (click)="appService.onSidebarClick($event)">
+    <div class="layout-tabmenu">
+
+      <ul class="layout-tabmenu-nav" [class.onboarding-container]="appService.onboarding">
+        <li [ngClass]="{'active-item':appService.activeTabIndex === 0}" joyrideStep="filter"
+            title="{{ 'ONBOARDING.filterTitle' | translate }}"
+            text="{{ 'ONBOARDING.filterText' | translate }}" stepPosition="right">
+          <a href="#" class="ripplelink tabmenuitem-link" (click)="appService.onTabClick($event, 0)">
+
+            <i
+              class="pi pi-sliders-h"></i></a>
+          <div class="layout-tabmenu-tooltip">
+            <div class="layout-tabmenu-tooltip-arrow"></div>
+            <div class="layout-tabmenu-tooltip-text">{{ 'GENERAL.Navigation' | translate }}</div>
+          </div>
+        </li>
+        <ng-container *ngIf="appService.isAuthenticated()">
+          <li [ngClass]="{'active-item':appService.activeTabIndex === 1}">
+            <a href="#" class="ripplelink tabmenuitem-link" (click)="appService.onTabClick($event, 1)">
+              <i
+                class="pi pi-inbox"></i>
+              <ng-container *ngIf="appService.totalEventsQty.new_messages>0">
+                <span class="sidebar-icon-badge ">{{appService.totalEventsQty.new_messages}}</span>
+              </ng-container>
+            </a>
+
+            <div class="layout-tabmenu-tooltip">
+              <div class="layout-tabmenu-tooltip-arrow"></div>
+              <div class="layout-tabmenu-tooltip-text">{{ 'GENERAL.Messaging' | translate }}</div>
+            </div>
+          </li>
+        </ng-container>
+
+        <li [ngClass]="{'active-item':appService.activeTabIndex === 2}">
+          <a href="#" class="ripplelink tabmenuitem-link" (click)="appService.onTabClick($event, 2)">
+
+            <i class="pi pi-question-circle"></i>
+
+          </a>
+          <div class="layout-tabmenu-tooltip">
+            <div class="layout-tabmenu-tooltip-arrow"></div>
+            <div class="layout-tabmenu-tooltip-text">{{ 'GENERAL.About UaFine' | translate }}</div>
+          </div>
+        </li>
+
+      </ul>
+      <ng-container *ngIf="appService.sideBarLoad">
+        <app-sidebar-lazy *ngxLazyEl (selectedChat)="showSelectedChat($event.detail)"></app-sidebar-lazy>
+      </ng-container>
+
+    </div>
+  </div>
+
+
+  <div class="layout-main">
+    <div class="layout-main-content">
+      <ng-container *ngIf="isBrowser || (!isBrowser && !appService.isAuthenticated())">
+        <ng-container *ngIf="appService.routeReady">
+        <router-outlet></router-outlet>
+          </ng-container>
+      </ng-container>
+    </div>
+
+  </div>
+  <ng-container *ngIf="isBrowser && appService.isAuthenticated() && appService.userProfile">
+
+    <ng-container *ngIf="appService.userProfile.user_id">
+      <app-notification-feed-lazy *ngxLazyEl [currentUserId]="appService.userProfile.user_id"
+                                  (selectedChat)="onShowChat($event.detail)"
+                                  (seenNotifications)="onSeenNotifications($event.detail)"
+                                  #notificationsFeed></app-notification-feed-lazy>
+
+      <app-wizards-lazy *ngxLazyEl #wizards></app-wizards-lazy>
+    </ng-container>
+
+
+  </ng-container>
+
+  <div class="ui-g-12">
+    <p> &nbsp;</p>
+  </div>
+
+  <ng-container *ngIf="translate">
+    <app-footer *ngIf="translate.currentLang"></app-footer>
+  </ng-container>
+
+
+</div>
+
+<ng-container *ngIf="appService.showAuthDialog">
+  <app-show-auth-dialog-lazy *ngxLazyEl></app-show-auth-dialog-lazy>
+
+</ng-container>
+
+<ng-container *ngIf="appService.startAuth && isBrowser">
+  <app-app-auth-lazy *ngxLazyEl (deleteSession)="deleteSessionData()"
+                (signedin)="setAuthState('signedin', $event.detail)" #authComp></app-app-auth-lazy>
+
+</ng-container>
+
+
+<ng-container *ngIf="appService.showWelcomeDialog">
+  <app-welcome-dialog-lazy *ngxLazyEl (startTour)="startFirstTour($event.detail)"></app-welcome-dialog-lazy>
+
+</ng-container>

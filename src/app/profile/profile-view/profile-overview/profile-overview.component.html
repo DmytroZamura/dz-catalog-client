@@ -1,0 +1,215 @@
+<ng-container *ngIf="profile && userWithProfile">
+  <div class="ui-g ui-fluid main-component-layout">
+
+
+    <div class="ui-g-9 info-profile-size padding-left-right-0">
+
+
+      <div class="ui-g-12 padding-left-right-0">
+
+        <div class="card">
+
+          <div class="ui-g">
+
+            <div class="ui-g-12 padding-bottom-0 padding-top-0">
+
+              <div class="ui-toolbar-group-left vertical-middle">
+
+
+              <p-rating [ngModel]="profile.eventsqty.rating" [cancel]="false" [disabled]="true"
+                          [iconOnStyle]="{'color': '#FFC107',  'font-size': '1em'}"  [iconOffStyle]="{'color': '#757575', 'font-size': '1em'}"></p-rating>
+
+
+
+              <div><span
+                        class="review-text">&nbsp;{{ 'GENERAL.Reviews' | translate }}: {{profile.eventsqty.related_reviews | thousandSuffixes: 1 }}</span>
+                      </div>
+                 </div>
+            </div>
+
+            <div class="ui-md-2 ui-g-12">
+
+
+              <img *ngIf="profile.img_details" name="avatar" alt="{{profile.first_name}} {{profile.last_name}}"
+                   src="{{profile.img_details.file_url}}" class="ui-icon-broken-image img-fluid"/>
+              <img *ngIf="!profile.img_details" alt="{{profile.first_name}} {{profile.last_name}}"
+                   src="static/assets/img/default-user.jpeg"
+                    class="ui-icon-broken-image img-fluid"/>
+
+
+            </div>
+            <div class="ui-md-10 ui-g-12">
+
+
+              <div class="ui-g-12">
+
+                <ng-container *ngIf="profile.first_name">
+                    <h1 class="title">
+                         <strong>{{profile.first_name}} {{profile.last_name}}</strong>
+
+                    </h1>
+
+                  <span class="text-muted"> @{{profile.slug}}</span>
+                  <ng-container *ngIf="profile.following_status">
+                    &nbsp;<span class="info-box-following"> &nbsp;{{ 'USERPROFILE.Follows you' | translate }}
+                    &nbsp;</span>
+                  </ng-container>
+
+
+                </ng-container>
+
+
+                <br/>
+                <span *ngIf="profile.headline" class="info-text"><strong>{{profile.headline}}</strong> </span><br/><br/>
+                <!--<span *ngIf="profile.job_title" class="info-text">{{profile.job_title}}</span><br/>-->
+
+                <i *ngIf="profile.country_details" class="pi pi-map-marker info-text"></i>
+                <span *ngIf="profile.country_details" class="info-text">{{profile.country_details.name}}</span>
+                <span *ngIf="profile.city_details" class="info-text">, {{profile.city_details.name}}</span>
+
+
+              </div>
+              <div class="ui-g-12">
+                <ng-container *ngIf="admin">
+                  <button pButton type="button" class="flat width-auto" label="{{ 'USERPROFILE.Edit profile' | translate }}"
+                          (click)="onEditProfile()" ></button> &nbsp;
+                </ng-container>
+                <ng-container *ngIf="currentUserId!==profile.user_id">
+                  <app-follow-profile-button [userId]="currentUserId" [profileId]="profile.id"
+                                             [followStatus]="profile.follow_status"></app-follow-profile-button> &nbsp;
+                </ng-container>
+
+                <app-message-profile-button [contactUserId]="profile.user_id" [currentUserId]="currentUserId"
+                                            [followingStatus]="profile.following_status"></app-message-profile-button>
+
+
+
+
+                <app-supply-request-button *ngIf="!admin"
+                                           [supplier_user]="userWithProfile"></app-supply-request-button>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ui-g-12 padding-left-right-0">
+        <p-panel>
+          <p-header>
+            <div class="ui-g-12">
+              <span class="title">{{ 'USERPROFILE.About me' | translate }}:</span>
+            </div>
+          </p-header>
+          <div class="ui-g">
+            <div *ngIf="profile.short_description" class="ui-g-12">
+
+              <app-text-show-more [text]="profile.short_description" [richText]="true" [calcTruncateWords]="false"
+              [truncateWords]="1000"
+              ></app-text-show-more>
+
+
+            </div>
+            <div *ngIf="profile.website" class="ui-g-12">
+              <strong>{{ 'COMPANY.Website' | translate }}:</strong><br/>
+              <a href="{{profile.website}}" target="_blank" rel="noopener">{{profile.website}}</a>
+            </div>
+            <ng-container *ngIf="currentUserId">
+
+
+            <div *ngIf="profile.contact_email" class="ui-g-12">
+              <strong>{{ 'USERPROFILE.Email' | translate }}:</strong><br/>
+              {{profile.contact_email}}
+            </div>
+            </ng-container>
+            <div *ngIf="profile.tags.length>0" class="ui-g-12">
+              <label for="tags"><strong>{{ 'GENERAL.Hashtags' | translate }}:</strong></label>
+              <p-chips [(ngModel)]="profile.tags" id="tags" name="tags" [disabled]="true"
+                       title="{{ 'GENERAL.Hashtags' | translate }}">
+
+                <ng-template let-item pTemplate="item">
+
+                              <span class="ui-chips-token-label ng-star-inserted"> <a class="text-white"
+                                                                                      [routerLink]="'/hashtag/'+item+'/'+language">
+                                <strong class="cursor-pointer"><u>#{{item}} </u></strong> </a>
+                              </span>
+
+
+                </ng-template>
+              </p-chips>
+
+
+            </div>
+
+
+          </div>
+        </p-panel>
+      </div>
+
+
+      <div class="ui-g-12 ui-md-12 padding-left-right-0">
+        <app-user-employment [profile]="profile.id" [edit_mode]="false" [education]="false"
+                             [language_code]="profile.language_code" [currentUserId]="currentUserId"
+                             ></app-user-employment>
+      </div>
+
+
+      <div class="ui-g-12 ui-md-12 padding-left-right-0">
+        <app-user-employment [profile]="profile.id" [edit_mode]="false" [education]="true"
+                             [language_code]="profile.language_code" [currentUserId]="currentUserId"
+                             ></app-user-employment>
+      </div>
+
+
+      <div class="ui-g-12 ui-md-12 padding-left-right-0">
+        <p-panel>
+          <p-header>
+            <div class="ui-g-12 ui-md-12">
+              <span class="interests-text" >{{ 'USERPROFILE.User Interests' | translate }}</span>
+            </div>
+          </p-header>
+          <div class="ui-g">
+            <div class="ui-g-12">
+              <span class="interests-text">{{ 'USERPROFILE.Countries' | translate }}</span>
+            </div>
+            <div class="ui-g-12">
+              <app-profile-counties-interest [profile]="profile.id" [disabled]="true"
+                                             ></app-profile-counties-interest>
+            </div>
+
+            <div class="ui-g-12">
+              <span class="interests-text">{{ 'CATEGORY.Categories' | translate }}</span>
+            </div>
+            <div class="ui-g-12">
+              <app-profile-categories [interest]="true" [profile]="profile.id" [disabled]="true"
+                                      ></app-profile-categories>
+            </div>
+          </div>
+
+        </p-panel>
+      </div>
+
+      <ng-container *ngIf="isBrowser">
+
+        <div class="ui-g-12 padding-left-right-0">
+          <div class="ui-g-12 padding-left-right-0 text-align-center">
+            <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="1513385937" [adFormat]="'auto'"
+                        [fullWidthResponsive]="true" [display]="'block'"></ng-adsense>
+          </div>
+
+        </div>
+
+
+      </ng-container>
+
+    </div>
+
+
+
+  </div>
+
+
+</ng-container>
+

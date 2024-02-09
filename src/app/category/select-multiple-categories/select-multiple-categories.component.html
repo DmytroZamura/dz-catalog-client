@@ -1,0 +1,7 @@
+<p-autoComplete [(ngModel)]="categories" [suggestions]="filteredCategories" field="name"
+                (completeMethod)="getFilteredCategories($event)" [multiple]="true"  [disabled]="disabled"
+                [dropdown]="dropdown" [dropdownIcon]="'pi pi-folder-open'"
+                 (onDropdownClick)="dialog.showCategoryDialog(null)"
+                (onSelect)="onCategorySelect($event)" (onUnselect)="onCategoryUnselect($event)" #selectCategory></p-autoComplete>
+<!--[dataKey]="id"-->
+<app-select-category-dialog (categorySelect)="onDialogCategorySelect($event)" (dialogHide)="stopSpinner()" #dialog></app-select-category-dialog>

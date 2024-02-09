@@ -1,0 +1,163 @@
+<ng-container *ngIf="position.product">
+  <div class="ui-g-12 padding-0 ui-fluid">
+    <div class="ui-g-6 ui-md-2 request-position-item">
+      <ng-container *ngIf="position.product_details.images.length>0">
+        <img *ngIf="position.product_details.images[0]" alt="{{position.product_details.name}}"
+             src="{{position.product_details.images[0].image_details.file_url}}"
+             class="product-image-small"/>
+      </ng-container>
+      <ng-container *ngIf="!(position.product_details.images.length>0)">
+        <img alt=" {{ 'GENERAL.А product is deleted' | translate }}"
+             src="static/assets/img/default_product.png"
+             class="product-image-small"/>
+      </ng-container>
+    </div>
+    <div class="ui-g-6 ui-md-10 request-position-item-name">
+      <div class="ui-g-12 padding-0">
+        <ng-container *ngIf="!position.product_details.deleted">
+          <ng-container *ngIf="position.product_details.name">
+            <span> {{position.product_details.name| truncate: truncate}}</span>
+          </ng-container>
+          <ng-container *ngIf="!position.product_details.name">
+            <span> {{position.product_default_details.name| truncate: truncate}}</span>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="position.product_details.deleted">
+          {{ 'GENERAL.А product is deleted' | translate }}
+        </ng-container>
+      </div>
+
+
+      <div class="ui-g-4">
+        <ng-container *ngIf="position.product_details.published && !position.product_details.deleted">
+          <ng-container *ngIf="userType=='supplier' && editMode">
+            <p-inplace (onActivate)="onInplaceActive()" #inplacePrice>
+
+    <span pInplaceDisplay>
+
+    <span>
+         <ng-container
+           *ngIf="price && currency"> {{price | currency:currency.code :'symbol-narrow'  }}</ng-container>
+
+                  <ng-container *ngIf="!price">
+
+                   {{ 'PRODUCT.By request' | translate }}
+
+                  </ng-container>
+       </span>
+
+    </span>
+              <span pInplaceContent>
+
+         <input id="price" name="price" title="{{ 'PRODUCT.Price' | translate }}" type="number"
+                pInputText [(ngModel)]="price" pKeyFilter="pnum" (input)="readyToSavePosition()"
+                style="text-align: right"/>
+
+
+
+
+    </span>
+
+            </p-inplace>
+          </ng-container>
+          <ng-container *ngIf="userType=='customer' || !editMode">
+       <span>
+         <ng-container
+           *ngIf="price && currency"> {{price | currency:currency.code :'symbol-narrow'  }}</ng-container>
+
+                  <ng-container *ngIf="!price">
+
+                   {{ 'PRODUCT.By request' | translate }}
+
+                  </ng-container>
+       </span>
+
+          </ng-container>
+        </ng-container>
+
+
+      </div>
+
+
+      <div class="ui-g-4">
+        <ng-container *ngIf="position.product_details.published && !position.product_details.deleted">
+          <ng-container *ngIf="position.product_details.published">
+            <ng-container
+              *ngIf="(userType=='supplier' && editMode && updateMode) || (userType=='customer' && editMode)">
+              <p-inplace (onActivate)="onInplaceActive()" #inplaceQty>
+
+    <span pInplaceDisplay>
+
+      <ng-container *ngIf="quantity">
+        {{quantity}}
+        <ng-container
+          *ngIf="position.product_details.unit_type_details">{{position.product_details.unit_type_details.code}}</ng-container>
+      </ng-container>
+
+    </span>
+                <span pInplaceContent>
+
+        <input id="qty" name="qty" title="{{ 'GENERAL.Quantity' | translate }}" type="number"
+               pInputText [(ngModel)]="quantity" pKeyFilter="pnum"
+               style="text-align: right" (input)="readyToSavePosition()"/>
+
+
+
+
+
+    </span>
+
+              </p-inplace>
+            </ng-container>
+            <ng-container *ngIf="!editMode && updateMode">
+              <ng-container *ngIf="quantity">
+                {{quantity}}
+                <ng-container
+                  *ngIf="position.product_details.unit_type_details">{{position.product_details.unit_type_details.code}}</ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="ui-g-4 text-align-right">
+        <ng-container *ngIf="position.product_details.published">
+ <span><b>
+         <ng-container
+           *ngIf="total && currency"> {{total | currency:currency.code :'symbol-narrow'  }}</ng-container>
+
+                  <ng-container *ngIf="!total">
+
+                   {{ 'PRODUCT.By request' | translate }}
+
+                  </ng-container>
+ </b>
+       </span>
+        </ng-container>
+
+        <ng-container *ngIf="editMode">
+          <br/>
+          <span class="dushboard-text">
+
+                  <a class="cursor-pointer delete-item-text"
+                     (click)="deletePosition()">{{ 'BUTTONS.Delete' | translate }}</a>
+     </span>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="position.product_details.published">
+        <ng-container *ngIf="inplaceActive">
+          <div class="ui-g-12 text-align-center">
+            <button pButton type="button" class="ui-button-secondary flat middle-button"
+                    label="{{ 'BUTTONS.Cancel' | translate }}"
+                    icon="pi pi-times" (click)="onCancel()" style="width: auto"></button>
+
+            <button pButton type="button" class="middle-button" [disabled]="!readyToSave"
+                    label="{{ 'BUTTONS.Save' | translate }}" (click)="onSave()"
+                    icon="pi pi-save" style="width: auto"></button>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+  </div>
+
+</ng-container>

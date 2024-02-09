@@ -1,0 +1,29 @@
+<ng-container *ngIf="statuses">
+
+  <ng-container *ngFor="let respond of responds; let i = index"  >
+    <div class="ui-g-12 padding-left-right-0">
+      <app-post-respond [respond]="respond" [postType]="postType" [userType]="userType" [statusesList]="statuses" [locale]="locale"
+                        [currentUserId]="currentUserId" (chatSelected)="onShowChat($event)" (newMinus)="onNewMinus()"></app-post-respond>
+
+      <ng-container *ngIf="i == responds.length-2">
+        <ng-container *ngIf="isBrowser">
+          <div pDefer (onLoad)="onItemFocus()" class="padding-0">
+            <ng-template>
+              &nbsp;
+            </ng-template>
+
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="loading">
+  <app-empty-post></app-empty-post>
+  <app-empty-post></app-empty-post>
+</ng-container>
+
+
+

@@ -1,0 +1,67 @@
+<ng-container *ngIf="urlPreview && !isVideoUrl">
+  <ng-container *ngIf="size==2">
+    <ng-container *ngIf="showImage">
+      <div *ngIf="urlPreview.image" class="ui-g-12 padding-0 {{bgClass}}">
+
+        <img src="{{urlPreview.image}}" alt="{{urlPreview.title}}" class="img-fluid">
+      </div>
+    </ng-container>
+    <div *ngIf="urlPreview.title" class="ui-g-12 padding-0 {{bgClass}}">
+
+      <div class="ui-g-12">
+        <ng-container *ngIf="externalLink">
+        <a target="_blank" href="{{urlPreview.url}}" rel="nofollow noopener" (click)="onLinkClicked()">
+          <ng-container *ngIf="urlPreview.site_name"><h5
+            class="text-muted site-name text-uppercase">{{urlPreview.site_name}}</h5></ng-container>
+          <h2 class="url-title"> {{urlPreview.title| truncate : 100}}</h2>
+          <ng-container *ngIf="showDescription">
+
+            <p class="url-description"> {{urlPreview.description| truncate : 150}}</p>
+          </ng-container>
+        </a>
+        </ng-container>
+         <ng-container *ngIf="!externalLink">
+        <div class="cursor-pointer" (click)="goToLink()">
+          <ng-container *ngIf="urlPreview.site_name"><h5
+            class="text-muted site-name text-uppercase">{{urlPreview.site_name}}</h5></ng-container>
+          <h2 class="url-title"> {{urlPreview.title| truncate : 100}}</h2>
+          <ng-container *ngIf="showDescription">
+
+            <p class="url-description"> {{urlPreview.description| truncate : 150}}</p>
+          </ng-container>
+        </div>
+        </ng-container>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngIf="size==1">
+    <div class="ui-g">
+      <div class=" ui-g-12 box-border-small url-preview-radius {{bgClass}}">
+        <div *ngIf="urlPreview.image" class="ui-g-3 padding-0 ">
+
+          <img src="{{urlPreview.image}}" alt="{{urlPreview.title}}" class="img-fluid">
+        </div>
+        <div *ngIf="urlPreview.title" class="ui-g-9 padding-0">
+          <div class="ui-g-12 margin-top-minus-1rem">
+            <div class="ui-g-12">
+              <a target="_blank"
+                 href="{{urlPreview.url}}" (click)="onLinkClicked()"><span><strong>{{urlPreview.title| truncate : 100}}</strong></span></a>
+              <ng-container *ngIf="showDescription">
+                <br/>
+                <span class="description-text">  {{urlPreview.description| truncate : 150}}</span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+
+
+
+

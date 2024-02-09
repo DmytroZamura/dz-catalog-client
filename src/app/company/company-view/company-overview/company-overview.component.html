@@ -1,0 +1,196 @@
+<ng-container *ngIf="company">
+  <div class="ui-g ui-fluid main-component-layout">
+
+
+    <div class="ui-g-12 info-profile-size padding-left-right-0">
+
+
+      <div class="ui-g-12 padding-left-right-0">
+
+        <div class="card">
+
+          <div class="ui-g">
+
+            <div class="ui-g-12 padding-bottom-0 padding-top-0">
+              <div class="ui-toolbar-group-left vertical-middle">
+
+                <p-rating [ngModel]="company.eventsqty.rating" [cancel]="false" [disabled]="true"
+                          [iconOnStyle]="{'color': '#FFC107', 'font-size': '1em'}"
+                          [iconOffStyle]="{'color': '#757575', 'font-size': '1em'}"></p-rating>
+                <div><span
+                  class="review-text">&nbsp;{{ 'GENERAL.Reviews' | translate }}
+                  : {{company.eventsqty.related_reviews | thousandSuffixes: 1 }}</span>
+                </div>
+
+              </div>
+              <div class="ui-toolbar-group-right">
+                <ng-container *ngIf="currentUserId">
+
+                  <app-favorite-button [currentUserId]="currentUserId" [id]="company.id"
+                                       [favoriteStatus]="company.favorite_status"
+                                       [objectType]="'company'"></app-favorite-button>
+
+                </ng-container>
+              </div>
+            </div>
+            <div class="ui-md-2 ui-g-12 padding-top-0">
+
+
+              <img *ngIf="company.logo_details" name="avatar" alt="{{company.name}}"
+                   src="{{company.logo_details.file_url}}" class="ui-icon-broken-image img-fluid"/>
+              <img *ngIf="!company.logo_details" alt="{{company.name}}"
+                   src="static/assets/img/company-default.png"
+                   class="ui-icon-broken-image img-fluid"/>
+
+
+            </div>
+            <div class="ui-md-10 ui-g-12 padding-top-0">
+
+
+              <div class="ui-g-12">
+                <h1 class="title"><strong>{{company.name}}</strong></h1>
+                <span *ngIf="company.headline" class="info-text"><strong>{{company.headline}}</strong> </span><br/><br/>
+                <span *ngIf="company.company_type_details"
+                      class="info-text">{{company.company_type_details.name}}</span>
+                <span *ngIf="company.company_industry_details"
+                      class="info-text">, {{company.company_industry_details.name}}</span><br/>
+
+                <i *ngIf="company.country_details" class="pi pi-map-marker info-text"></i>
+                <span *ngIf="company.country_details" class="info-text">{{company.country_details.name}}</span>
+                <span *ngIf="company.city_details" class="info-text">, {{company.city_details.name}}</span>
+
+
+              </div>
+
+              <div class="ui-g-12">
+                <ng-container *ngIf="admin">
+                  <button pButton type="button" class="flat width-auto"
+                          label="{{ 'COMPANY.Edit company page' | translate }}"
+                          (click)="onEditCompany()"></button> &nbsp;
+                </ng-container>
+                <ng-container>
+                  <app-follow-company-button [user_id]="user_id" [company_id]="company.id"
+                                             [follow_status]="company.follow_status"></app-follow-company-button>
+                  &nbsp;<app-supply-request-button [supplier_company]="company"></app-supply-request-button>
+                </ng-container>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card card-w-title">
+          <h2>{{ 'COMPANY.About Company' | translate }}:</h2>
+          <div class="ui-g">
+            <div *ngIf="company.short_description" class="ui-g-12 text-pre-line">
+
+
+              <app-text-show-more [currentUserId]="currentUserId" [text]="company.short_description"
+                                  [calcTruncateWords]="false" [truncateWords]="1000"
+                                  [richText]="true"></app-text-show-more>
+
+
+            </div>
+            <div *ngIf="company.website" class="ui-g-12">
+              <strong>{{ 'COMPANY.Website' | translate }}:</strong><br/>
+              <a href="{{company.website}}" target="_blank" rel="noopener">{{company.website}}</a>
+            </div>
+
+            <div *ngIf="company.country_details" class="ui-g-12">
+              <strong>{{ 'COMPANY.Headquarters' | translate }}:</strong><br/>
+              {{company.country_details.name}} <span
+              *ngIf="company.city_details">, {{company.city_details.name}} </span>
+            </div>
+
+            <div *ngIf="company.foundation_year" class="ui-g-12">
+              <strong>{{ 'COMPANY.Year founded' | translate }}:</strong><br/>
+              {{company.foundation_year}}
+            </div>
+            <div *ngIf="company.company_type_details" class="ui-g-12">
+              <strong>{{ 'COMPANY.Company type' | translate }}:</strong><br/>
+              {{company.company_type_details.name}}
+            </div>
+            <div *ngIf="company.company_industry_details" class="ui-g-12">
+              <strong>{{ 'COMPANY.Company industry' | translate }}:</strong><br/>
+              {{company.company_industry_details.name}}
+            </div>
+            <div *ngIf="company.company_size_details" class="ui-g-12">
+              <strong>{{ 'COMPANY.Company size' | translate }}:</strong><br/>
+              {{company.company_size_details.name}}
+            </div>
+
+            <ng-container *ngIf="currentUserId">
+              <div *ngIf="company.sales_email" class="ui-g-12">
+                <strong>{{ 'COMPANY.Sales Email' | translate }}:</strong><br/>
+                {{company.sales_email}}
+              </div>
+              <div *ngIf="company.business_email" class="ui-g-12">
+                <strong>{{ 'COMPANY.Business Email' | translate }}:</strong><br/>
+                {{company.business_email}}
+              </div>
+
+              <div *ngIf="company.phone_number" class="ui-g-12">
+                <strong>{{ 'COMPANY.Phone Number' | translate }}:</strong><br/>
+                {{company.phone_number}}
+              </div>
+
+
+              <div *ngIf="company.address" class="ui-g-12">
+                <strong>{{ 'COMPANY.Address' | translate }}:</strong><br/>
+                {{company.address}}
+              </div>
+            </ng-container>
+
+
+            <div *ngIf="company.tags.length>0" class="ui-g-12">
+              <label for="tags">{{ 'GENERAL.Hashtags' | translate }}:</label>
+              <p-chips [(ngModel)]="company.tags" id="tags" name="tags" [disabled]="true"
+                       title="{{ 'GENERAL.Hashtags' | translate }}">
+
+                <ng-template let-item pTemplate="item">
+
+                              <span class="ui-chips-token-label ng-star-inserted"> <a class="text-white"
+                                                                                      [routerLink]="'/hashtag/'+item+'/'+language">
+                                <strong class="cursor-pointer"><u>#{{item}} </u></strong> </a>
+                              </span>
+
+
+                </ng-template>
+              </p-chips>
+
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <ng-container *ngIf="isBrowser">
+
+        <div class="ui-g-12 padding-left-right-0">
+          <div class="ui-g-12 padding-left-right-0 text-align-center">
+            <ng-container *ngIf="appService.loadingLazyElements">
+              <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="1513385937" [adFormat]="'auto'"
+                          [fullWidthResponsive]="true" [display]="'block'"></ng-adsense>
+            </ng-container>
+          </div>
+
+        </div>
+
+
+      </ng-container>
+
+
+    </div>
+
+
+  </div>
+
+
+</ng-container>
+

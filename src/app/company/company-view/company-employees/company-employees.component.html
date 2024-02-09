@@ -1,0 +1,56 @@
+
+<ng-container *ngIf="company_id">
+  <div class="ui-g ui-fluid  dashboard main-component-layout">
+
+
+
+
+      <div class="ui-g-12 product-list-size padding-0">
+
+
+
+        <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'people'"
+                                    [showFilter]="true" [showCategories]="false" [showChildCategories]="false"
+                                   [showSearch]="false" [showOrdering]="true" [showSearchLabel]="false"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="list.setKeyword($event)"
+                                   (newOrdering)="list.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'profiles-by-page/'" [itemsPerPage]="20"
+                               [itemsType]="'people'" [initCurrency]="true" [published]="true" [company]="company_id"
+                                  #list>
+              <ng-template let-item let-i="index" #body>
+
+                <div class="ui-g-6 ui-md-3 profile-item-size padding-left-0">
+
+                  <app-user-feed-preview [profile]="item" [user]="currentUserId" [isMobile]="isMobile"
+                                         [greedView]="true"
+                                         [locale]="locale">
+
+                  </app-user-feed-preview>
+
+                </div>
+
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+
+
+      </div>
+
+
+
+
+  </div>
+
+
+</ng-container>
+
+
+
+

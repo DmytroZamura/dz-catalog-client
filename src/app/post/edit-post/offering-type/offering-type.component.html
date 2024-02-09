@@ -1,0 +1,17 @@
+<p-selectButton [options]="types" [(ngModel)]="type" (onChange)="onTypeChange()" >
+  <ng-template let-item>
+    <div class="type-select-button">
+
+      <ng-container *ngIf="item.value==1">
+        <img class="offering-type-image" src="static/assets/img/sale.png" height="20px"/>
+        <span>{{ 'POSTS.Sale' | translate }}</span></ng-container>
+
+      <span *ngIf="item.value==2"> <img class="offering-type-image"
+                                        src="static/assets/img/rent.png"
+                                        height="20px"/>{{ 'POSTS.Rent' | translate }}</span>
+      <span *ngIf="item.value==3"> <img class="offering-type-image"
+                                        src="static/assets/img/promotion.png"
+                                        height="20px"/>{{ 'GENERAL.Promotions and discounts' | translate }}</span>
+    </div>
+  </ng-template>
+</p-selectButton>

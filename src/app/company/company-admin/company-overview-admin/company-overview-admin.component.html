@@ -1,0 +1,340 @@
+<p-confirmDialog></p-confirmDialog>
+<ng-container *ngIf="company && language">
+  <ng-container *ngIf="company.admin_status">
+    <div class="ui-g ui-fluid main-component-layout">
+
+
+      <div class="ui-g-12 info-profile-size padding-left-right-0">
+
+        <div class="ui-g-12 padding-left-right-0">
+          <ng-container *ngIf="language">
+            <div class="card card-w-title">
+          <span style="font-size: 1.5rem"><b>{{ 'GENERAL.Language' | translate }}:</b>
+
+
+          </span><br/>
+              <span style="font-size: 11px"> {{ 'GENERAL.Full Edit in English' | translate }} </span>
+
+              <div class="ui-g">
+                <div class="ui-md-6 ui-g-12">
+
+                  <app-select-common-item [(item)]="language" [endpoint]="'languages'"
+                                          [showFilter]="false"
+                                          [sortByName]="true" [showClear]="false"
+
+                                          (itemChange)="onLanguageSelect($event)"></app-select-common-item>
+
+
+                </div>
+              </div>
+
+            </div>
+
+
+          </ng-container>
+        </div>
+
+        <div class="ui-g-12 padding-left-right-0">
+          <form #companyForm="ngForm" (input)="ready_to_save()" (ngSubmit)="checkAndSaveCompany()">
+            <div class="card">
+
+              <div class="ui-g">
+                <div class="ui-g-12" align="right">
+
+
+                  <button pButton class="ui-button-secondary flat" type="submit"
+                          [disabled]="disabled_save || !companyForm.form.valid "
+                          icon="pi pi-save"></button>
+                  <!--<button pButton class="ui-button-secondary flat" type="button"-->
+                  <!--(click)="deleteCompany()"-->
+                  <!--icon="pi pi-times"></button>-->
+
+                </div>
+                <div class="ui-md-3 ui-g-12" align="center">
+
+
+                  <img *ngIf="company.logo_details" name="avatar" style="width: 100%; height: auto"
+                       alt="{{company.name}}"
+                       src="{{company.logo_details.file_url}}" class="ui-icon-broken-image"/>
+                  <img *ngIf="!company.logo_details" alt="{{company.name}}"
+                       src="static/assets/img/company-default.png"
+                       style="width: 100%; height: auto" class="ui-icon-broken-image"/>
+
+                  <!--<app-file *ngIf="!disabled" id="file_upload"-->
+                  <!--(fileUpload)="onFileUpload($event)"></app-file>-->
+                  <app-file id="file_upload" [cropImage]="true" [resizeToWidth]="600" [cropperMinWidth]="600"
+                            (fileUpload)="onFileUpload($event)" [onlyIcon]="false"
+                            [label]="'BUTTONS.Browse' | translate "
+                            [icon]="'pi pi-image'"></app-file>
+
+
+                </div>
+                <div class="ui-md-9 ui-g-12">
+
+                  <ng-container>
+                    <div class="ui-g-12 padding-0">
+                      <div class="ui-g form-group ui-fluid">
+
+                        <div class="ui-g-12 ui-md-6">
+
+         <span class="md-inputfield translation-mark">
+
+        <input id="name" name="company_name" type="text" pInputText [(ngModel)]="company.name" required
+               #company_name="ngModel"/>
+        <label for="name">{{ 'COMPANY.Company name' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>:</label>
+            <div [hidden]="company_name.valid || company_name.pristine">
+<div *ngIf="company_name.errors && company_name.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+
+         <span class="md-inputfield">
+
+
+        <input id="slug" name="slug" type="text" pInputText [(ngModel)]="company.slug" required
+               pattern="^[0-9a-zA-Z_.-]*"
+               #slug="ngModel"/>
+
+        <label for="slug">{{ 'GENERAL.Public URL' | translate }} / @:</label>
+            <div [hidden]="slug.valid || slug.pristine">
+<div *ngIf="slug.errors && slug.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+               <div *ngIf="slug.errors && slug.errors.pattern" class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+
+
+         </span>
+                        </div>
+
+
+                        <div class="ui-g-12">
+
+         <span class="md-inputfield translation-mark">
+
+        <input id="headline" name="headline" type="text" pInputText [(ngModel)]="company.headline"/>
+        <label for="headline">{{ 'COMPANY.Headline' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>:</label>
+         </span>
+                        </div>
+
+
+                        <div class="ui-g-12">
+
+         <span class="md-inputfield">
+
+        <input id="website" name="website" type="url" pInputText
+               [(ngModel)]="company.website" pattern="^https?://.+"
+               #website="ngModel"/>
+        <label for="website">{{ 'COMPANY.Website' | translate }}:</label>
+
+           <div [hidden]="website.valid || website.pristine">
+
+           <div *ngIf="website.errors && website.errors.pattern"
+                class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}. {{ 'GENERAL.It should look like' | translate }}
+             https://mysite.com
+            </div>
+           </div>
+         </span>
+                        </div>
+
+
+                        <div class="ui-g-12">
+
+                          <label for="description">{{ 'COMPANY.Company description' | translate }}
+                            <span>&nbsp;<b>({{language.code}})</b></span>: </label>
+                          <div class="translation-mark  text-editor">
+                            <app-text-editor id="description" [(text)]="company.short_description" [showBorder]="true"
+                                             (textChange)="ready_to_save()" [mentions]="false" [showAttachments]="true"
+                                             [styles]="{'min-height': '220px'}" #textEditor></app-text-editor>
+                          </div>
+
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+
+
+                          <app-select-common-item [item]="company.company_size_details" [endpoint]="'get-company-sizes'"
+                                                  [showFilter]="false"
+                                                  [sortByName]="false" [showClear]="false"
+                                                  [label]="'COMPANY.Company size' | translate"
+                                                  (itemChange)="onCompanySizeSelect($event)"></app-select-common-item>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+
+                       <span class="md-inputfield">
+        <p-inputMask id="year" name="year" (ngModelChange)="ready_to_save()"
+                     [(ngModel)]="company.foundation_year"
+                     mask="9999"></p-inputMask>
+
+        <label for="year">{{ 'COMPANY.Foundation Year' | translate }}:</label>
+         </span>
+
+                        </div>
+
+
+                        <div class="ui-g-12 ui-md-6">
+
+                          <app-select-common-item [item]="company.company_type_details" [endpoint]="'get-company-types'"
+                                                  [showFilter]="false"
+                                                  [sortByName]="true" [showClear]="false"
+                                                  [label]=" 'COMPANY.Company type' | translate"
+                                                  (itemChange)="onCompanyTypeSelect($event)"></app-select-common-item>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+
+
+                          <app-select-common-item [item]="company.company_industry_details"
+                                                  [endpoint]="'get-company-industries'"
+                                                  [showFilter]="true"
+                                                  [sortByName]="true" [showClear]="false"
+                                                  [label]=" 'COMPANY.Company industry' | translate"
+                                                  (itemChange)="onCompanyIndustrySelect($event)"></app-select-common-item>
+
+
+                        </div>
+
+
+                        <div class="ui-g-12 padding-0">
+                          <app-select-location [city]="company.city_details" [country]="company.country_details"
+                                               [initGeo]="false" [checkEnteredName]="true"
+                                               (selectedLocation)="onLocationSelect($event)"
+                                               #location></app-select-location>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+
+                       <span class="md-inputfield">
+                         <input id="postal_code" name="postal_code" type="text" pInputText
+                                [(ngModel)]="company.postal_code"/>
+
+
+        <label for="postal_code">{{ 'COMPANY.Postal Code' | translate }}:</label>
+         </span>
+
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                      <span class="md-inputfield">
+
+        <input id="address" name="address" type="text" pInputText [(ngModel)]="company.address"/>
+        <label for="address">{{ 'COMPANY.Address' | translate }}:</label>
+         </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+
+                       <span class="md-inputfield">
+        <input id="phone_number" name="phone_number" type="text"
+               pInputText
+               [(ngModel)]="company.phone_number"
+        />
+
+        <label for="phone_number">{{ 'COMPANY.Phone Number' | translate }}:</label>
+
+         </span>
+
+
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                      <span class="md-inputfield">
+
+        <input id="sales_email" name="sales_email" type="text" pInputText
+               [(ngModel)]="company.sales_email"
+               email #sales_email="ngModel"/>
+        <label for="sales_email">{{ 'COMPANY.Sales Email' | translate }}:</label>
+                          <div [hidden]="sales_email.valid || sales_email.pristine">
+
+           <div *ngIf="sales_email.errors && sales_email.errors.required"
+                class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           <div *ngIf="sales_email.errors && sales_email.errors.email"
+                class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+         </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                      <span class="md-inputfield">
+
+        <input id="business_email" name="business_email" type="text" pInputText
+               [(ngModel)]="company.business_email"
+               email #business_email="ngModel"/>
+        <label for="business_email">{{ 'COMPANY.Business Email' | translate }}:</label>
+                        <div [hidden]="business_email.valid || business_email.pristine">
+
+           <div *ngIf="business_email.errors && business_email.errors.required"
+                class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           <div *ngIf="business_email.errors && business_email.errors.email"
+                class="ui-message ui-messages-error ui-corner-all">
+                {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+         </span>
+                        </div>
+
+                        <div class="ui-g-12">
+                          <label for="tags">{{ 'GENERAL.Hashtags' | translate }}:</label>
+                          <p-chips [(ngModel)]="company.tags" id="tags" name="tags"
+                                   title="{{ 'GENERAL.Hashtags' | translate }}" (onRemove)="ready_to_save()">
+
+                            <ng-template let-item pTemplate="item">
+                              <a class="text-white" [routerLink]="'/hashtag/'+item">
+                              <span
+                                class="ui-chips-token-label ng-star-inserted"><strong><u>#{{item}} </u></strong></span>
+                              </a>
+
+
+                            </ng-template>
+                          </p-chips>
+
+
+                        </div>
+
+                      </div>
+
+
+                    </div>
+
+
+                  </ng-container>
+                </div>
+                <div class="ui-g-12 border-top-primary-small" align="center">
+
+                  <button pButton class="ui-button-secondary flat" type="button"
+                          label="{{ 'BUTTONS.Delete' | translate }}"
+                          (click)="deleteCompany()"
+                          icon="pi pi-times" style="width: auto"></button> &nbsp;&nbsp;
+                  <button pButton type="submit" label="{{ 'BUTTONS.Save' | translate }}"
+                          [disabled]="disabled_save || !companyForm.form.valid "
+                          icon="pi pi-save" style="width: auto"></button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!--<app-mention-preview [currentUserId]="currentUserId" #mention></app-mention-preview>-->
+
+    </div>
+  </ng-container>
+
+</ng-container>
+
+<app-process-dialog [header]="'GENERAL.Deletion' | translate" [processName]="'GENERAL.The deletion process' | translate"
+                    [processComment]="'GENERAL.This may take several minutes' | translate"
+                    #deleteDialog></app-process-dialog>

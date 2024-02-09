@@ -1,0 +1,305 @@
+
+
+<ng-container *ngIf="navigationObject && appService.showSidebarContent">
+
+  <ng-container
+    *ngIf="navigationObject==1 || navigationObject == 2 || navigationObject == 3 || navigationObject == 4 ||
+    navigationObject == 5 || navigationObject == 21 || navigationObject == 61 || navigationObject == 71 ||
+    navigationObject == 81 || navigationObject == 82 || navigationObject == 83 || navigationObject == 91 ||
+    navigationObject == 92 || navigationObject == 93 || navigationObject == 95 || navigationObject == 10 ||
+    navigationObject == 11 || navigationObject == 12">
+
+
+    <ng-container
+      *ngIf="navigationObject==1 || navigationObject == 2 || navigationObject == 3 || navigationObject == 4
+    || navigationObject == 5 || navigationObject == 21  || navigationObject == 61 || navigationObject == 71
+    || navigationObject == 81 || navigationObject == 82
+    || navigationObject == 83 || navigationObject == 91
+    || navigationObject == 92 || navigationObject == 93 || navigationObject == 95">
+
+      <div class="ui-g-12 sidebar-panel-header">
+        <b>{{ 'CATEGORY.Categories' | translate }}</b>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+
+            <app-select-category [category]="selectedCategory" [label_text]="'CATEGORY.SelectCategory' | translate"
+                                 [label]="false" [filter]="contentTypeFilter" [disabled]="loading"
+                                 (categorySelect)="onCategorySelected($event);"></app-select-category>
+          </div>
+        </div>
+        <ng-container *ngIf="items">
+          <div class="ui-g-12 padding-0">
+
+            <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}"></p-tabMenu>
+            <ng-container *ngIf="activeTab==0">
+              <app-categories-tree [parent]="selectedCategory.id" [filter]="contentTypeFilter"
+                                   (categorySelected)="onCategorySelected($event)" [disabled]="loading"
+                                   #categoruestree></app-categories-tree>
+            </ng-container>
+            <ng-container *ngIf="activeTab==1 && profile">
+              <app-user-categories-info [profile]="profile.id" [interest]="true" [disabled]="loading"
+                                        (categorySelected)="onCategorySelected($event);"></app-user-categories-info>
+            </ng-container>
+          </div>
+        </ng-container>
+
+
+      </div>
+
+    </ng-container>
+
+
+    <div class="ui-g-12 sidebar-panel-header">
+      <b>{{ 'GENERAL.Navigation' | translate }}</b>
+    </div>
+
+    <div class="ui-g-12">
+      <div class="ui-g ui-fluid">
+
+
+        <ng-container *ngIf="navigationObject == 10">
+          <div class="ui-g-12 ui-md-12">
+            <span><strong>{{ 'GENERAL.Status' | translate }}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [(item)]="applicantStatus" [endpoint]="'applicant-statuses'" [showFilter]="false"
+                                    [sortByName]="false" [showClear]="true" [placeholder]="''" [disabled]="loading"
+                                    (itemChange)="onApplicantStatusSelected($event)"></app-select-common-item>
+          </div>
+
+          <div class="ui-g-12 ui-md-12">
+            <span><strong>{{ 'POSTS.Employment Type' | translate }}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [(item)]="jobType" [endpoint]="'job-types'" [showFilter]="false"
+                                    [sortByName]="false" [showClear]="true" [placeholder]="''" [disabled]="loading"
+                                    (itemChange)="jobTypeSelected($event)"></app-select-common-item>
+          </div>
+
+          <div class="ui-g-12 ui-md-12">
+            <span><strong>{{ 'POSTS.Seniority Level' | translate}}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [(item)]="seniorityLabel" [endpoint]="'seniority-labels'"
+                                    [showFilter]="false" [disabled]="loading"
+                                    [sortByName]="false" [showClear]="true" [placeholder]="''"
+                                    (itemChange)="seniorityLevelSelected($event)"></app-select-common-item>
+          </div>
+
+          <div class="ui-g-12 ui-md-12">
+            <span><strong>{{ 'POSTS.Job Function' | translate }}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [(item)]="jobFunction" [endpoint]="'job-functions'"
+                                    [showFilter]="true" [disabled]="loading"
+                                    [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                    (itemChange)="jobFunctionSelected($event)"></app-select-common-item>
+          </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="navigationObject == 11">
+          <div class="ui-g-12 ui-md-12">
+            <span><strong>{{ 'GENERAL.Status' | translate }}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [(item)]="respondStatus" [endpoint]="'post-respond-statuses'" [showFilter]="false"
+                                    [sortByName]="false" [showClear]="true" [placeholder]="''" [disabled]="loading"
+                                    (itemChange)="onPostRespondStatusSelected($event)"></app-select-common-item>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="navigationObject == 12">
+          <div class="ui-g-12 ui-md-12">
+            <span><strong>{{ 'GENERAL.Status' | translate }}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [(item)]="respondStatus" [endpoint]="'supply-request-statuses'" [showFilter]="false"
+                                    [sortByName]="false" [showClear]="true" [placeholder]="''" [disabled]="loading"
+                                    (itemChange)="onRequestStatusSelected($event)"></app-select-common-item>
+          </div>
+        </ng-container>
+
+        <ng-container
+          *ngIf="navigationObject==1 || navigationObject == 21  || navigationObject == 61 || navigationObject == 71 || navigationObject == 81 || navigationObject == 91">
+          <div class="ui-g-12">
+            <span><strong>{{ 'POSTS.Post type' | translate }}:</strong> &nbsp;</span><br/>
+
+            <ng-container *ngIf="navigationObject != 21">
+              <app-select-common-item [item]="postType" [endpoint]="'post-types'" [showFilter]="false"
+                                      [sortByName]="false" [showClear]="true" [placeholder]="''" [disabled]="loading"
+                                      (itemChange)="onPostTypeChange($event)"></app-select-common-item>
+            </ng-container>
+            <ng-container *ngIf="navigationObject == 21">
+              <app-select-common-item [item]="postType" [endpoint]="'post-types'"
+                                      [defaultFilter]="'?object_related=True'"
+                                      [showFilter]="false" [disabled]="loading"
+                                      [sortByName]="false" [showClear]="true" [placeholder]="''"
+                                      (itemChange)="onPostTypeChange($event)"></app-select-common-item>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="postType">
+            <ng-container *ngIf="postType.code=='job'">
+
+              <div class="ui-g-12 ui-md-12">
+                <span><strong>{{ 'POSTS.Employment Type' | translate }}:</strong> &nbsp;</span><br/>
+                <app-select-common-item [(item)]="jobType" [endpoint]="'job-types'" [showFilter]="false"
+                                        [sortByName]="false" [showClear]="true" [placeholder]="''" [disabled]="loading"
+                                        (itemChange)="jobTypeSelected($event)"></app-select-common-item>
+              </div>
+
+              <div class="ui-g-12 ui-md-12">
+                <span><strong>{{ 'POSTS.Seniority Level' | translate}}:</strong> &nbsp;</span><br/>
+                <app-select-common-item [(item)]="seniorityLabel" [endpoint]="'seniority-labels'"
+                                        [showFilter]="false" [disabled]="loading"
+                                        [sortByName]="false" [showClear]="true" [placeholder]="''"
+                                        (itemChange)="seniorityLevelSelected($event)"></app-select-common-item>
+              </div>
+
+              <div class="ui-g-12 ui-md-12">
+                <span><strong>{{ 'POSTS.Job Function' | translate }}:</strong> &nbsp;</span><br/>
+                <app-select-common-item [(item)]="jobFunction" [endpoint]="'job-functions'"
+                                        [showFilter]="true" [disabled]="loading"
+                                        [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                        (itemChange)="jobFunctionSelected($event)"></app-select-common-item>
+              </div>
+
+
+            </ng-container>
+
+
+          </ng-container>
+
+        </ng-container>
+
+
+
+        <ng-container *ngIf="filterLoactionsNavigationTypes.includes(navigationObject)">
+          <div class="ui-g-12">
+            <span><strong>{{ 'USERPROFILE.Country' | translate }}:</strong> &nbsp;</span><br/>
+
+            <app-select-common-item [item]="selectedCountry" [endpoint]="'existed-countries'"
+                                    [showFilter]="false" [viewType]="4" [navigationObject]="navigationObject"
+                                    [disabled]="loading"
+                                    [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                    (itemChange)="onCountrySelected($event)" #selectCountry></app-select-common-item>
+
+
+          </div>
+          <div class="ui-g-12">
+            <span><strong>{{ 'GENERAL.Region' | translate }}:</strong> &nbsp;</span><br/>
+
+            <app-select-common-item [item]="selectedRegion" [endpoint]="'existed-regions'" [disabled]="loading"
+                                    [showFilter]="false" [viewType]="4" [debounceTime]="800"
+                                    [navigationObject]="navigationObject"
+                                    [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                    (itemChange)="onRegionSelected($event)" [filter]="locationFilter"
+                                    #selectRegion></app-select-common-item>
+
+
+          </div>
+          <div class="ui-g-12">
+            <span><strong>{{ 'USERPROFILE.City' | translate }}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [item]="selectedCity" [endpoint]="'existed-cities'" [disabled]="loading"
+                                    [showFilter]="false" [viewType]="4" [navigationObject]="navigationObject"
+                                    [sortByName]="true" [showClear]="true" [placeholder]="''" [filter]="locationFilter"
+                                    (itemChange)="onCitySelected($event)"
+                                    #selectcity></app-select-common-item>
+
+          </div>
+        </ng-container>
+
+        <ng-container
+          *ngIf="navigationObject == 2 || navigationObject == 5 || navigationObject == 83
+          || navigationObject == 92 || navigationObject == 95">
+
+          <div class="ui-g-12">
+            <span><strong>{{ 'COMPANY.Company size' | translate }}:</strong> &nbsp;</span><br/>
+
+
+            <app-select-common-item [item]="companySize" [endpoint]="'get-company-sizes'" [disabled]="loading"
+                                    [showFilter]="false"
+                                    [sortByName]="false" [showClear]="true"
+                                    [placeholder]=" 'COMPANY.Select a company size' | translate "
+                                    (itemChange)="onCompanySizeSelect($event)"></app-select-common-item>
+          </div>
+          <div class="ui-g-12">
+            <span><strong>{{ 'COMPANY.Company type' | translate }}:</strong> &nbsp;</span><br/>
+
+            <app-select-common-item [item]="companyType" [endpoint]="'get-company-types'" [disabled]="loading"
+                                    [showFilter]="false"
+                                    [sortByName]="true" [showClear]="true"
+                                    [placeholder]=" 'COMPANY.Select a company type' | translate"
+                                    (itemChange)="onCompanyTypeSelect($event)"></app-select-common-item>
+          </div>
+          <div class="ui-g-12">
+            <span><strong>{{ 'COMPANY.Company industry' | translate }}:</strong> &nbsp;</span><br/>
+            <app-select-common-item [item]="companyIndustry" [endpoint]="'get-company-industries'" [disabled]="loading"
+                                    [showFilter]="true"
+                                    [sortByName]="true" [showClear]="true"
+                                    [placeholder]=" 'COMPANY.Select an industry' | translate"
+                                    (itemChange)="onCompanyIndustrySelect($event)"></app-select-common-item>
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+  </ng-container>
+
+
+  <ng-container
+    *ngIf="navigationObject == 62 || navigationObject == 72 || navigationObject == 621 || navigationObject == 721">
+
+    <div class="ui-g-12 sidebar-panel-header">
+      <ng-container *ngIf="navigationObject == 62 || navigationObject == 72">
+        <b>{{ 'PRODUCT.Product groups' | translate }}</b>
+      </ng-container>
+      <ng-container *ngIf="navigationObject == 621 || navigationObject == 721">
+        <b>{{ 'PRODUCT.Products/Services' | translate }}</b>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="navigationObject == 621 || navigationObject == 721">
+      <div class="ui-g-12">
+        <div class="ui-g ui-fluid">
+          <button pButton type="button" class="ui-button-secondary" label="{{ 'PRODUCT.Create product' | translate }}"
+                  (click)="onCreateProduct()"></button>
+        </div>
+      </div>
+    </ng-container>
+    <div class="ui-g-12 padding-0 border-top-small">
+      <ng-container *ngIf="navigationObject == 62">
+        <app-product-groups [company_id]="companyId"
+                            (groupSelected)="onGroupSelected($event)"></app-product-groups>
+      </ng-container>
+      <ng-container *ngIf="navigationObject == 621">
+
+        <app-product-group-admin [company_id]="companyId" [editable]="true"
+                                 (groupSelected)="onGroupSelected($event)"></app-product-group-admin>
+
+      </ng-container>
+
+      <ng-container *ngIf=" navigationObject == 72">
+        <app-product-groups [user_id]="profileUserId"
+                            (groupSelected)="onGroupSelected($event)"></app-product-groups>
+      </ng-container>
+      <ng-container *ngIf="navigationObject == 721">
+
+        <app-product-group-admin [user_id]="profileUserId" [editable]="true"
+                                 (groupSelected)="onGroupSelected($event)"></app-product-group-admin>
+
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-container
+    *ngIf="navigationObject==1 || navigationObject == 61 || navigationObject == 71 || navigationObject == 81  ||
+    navigationObject == 3  || navigationObject == 82">
+    <div class="ui-g-12 sidebar-panel-header">
+      <b>{{ 'GENERAL.Attributes' | translate }}</b>
+    </div>
+    <div class="ui-g-12 border-top-small">
+      <div class="ui-g-12 ">
+        <app-filter-attributes [showPrice]="true" [show]="isProductsList" [category]="selectedCategory.id"
+                               [postType]="postType" (seletedFilter)="onFilterAttributes($event)"
+                               [disabled]="loading"
+                               #filterwidget></app-filter-attributes>
+        <br/>
+        <br/>
+        <br/>
+
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+

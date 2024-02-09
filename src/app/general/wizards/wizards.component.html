@@ -1,0 +1,90 @@
+<p-dialog header="{{ 'MESSAGING.Messaging' | translate }}" [(visible)]="appService.showChat"
+          [styleClass]="'mobile-dialog'" [appendTo]="'body'" [closeOnEscape]="true"
+          [resizable]="false"
+          [blockScroll]="true" (onHide)="onHideChat()">
+  <div class="ui-g ui-fluid  dashboard">
+    <div class="ui-g-12 padding-top-0 posts-list-size box-border-small">
+      <ng-container *ngIf="appService.showChat">
+
+        <app-chat-lazy *ngxLazyEl [currentUserId]="appService.userProfile.user_id"
+                       [chat_id]="appService.currentChatId"
+                       [selectedChat]="appService.selectedChat" #chat></app-chat-lazy>
+      </ng-container>
+    </div>
+  </div>
+</p-dialog>
+
+
+<p-dialog header="{{appService.postTypeName}}" [(visible)]="appService.showCreatePostDialog"
+          [modal]="true" [styleClass]="'mobile-dialog'" [appendTo]="'body'" [maximizable]="false"
+          [blockScroll]="false" (onHide)="createPostDialog.clearPost()">
+  <div class="ui-g ui-fluid  dashboard">
+    <div class="ui-g-12 padding-top-0 posts-list-size">
+      <p-scrollPanel [styleClass]="'dialog-scroll'">
+        <app-create-post [dialog]="true" (postCreated)="onPostCreated($event); onDialogPostCreated()"
+                         [postTypes]="appService.postTypes"
+                         (postNotPublished)="onPostNotPublished()"
+                         #createPostDialog></app-create-post>
+
+        <div class="ui-g-12">
+          &nbsp;
+        </div>
+      </p-scrollPanel>
+
+      <div class="ui-g-12 text-align-center buttons-row">
+        <ng-container *ngIf="!isMobile">
+          <button pButton class="ui-button-secondary flat width-auto" type="button"
+                  label="{{ 'BUTTONS.Cancel' | translate }}"
+                  (click)="onPostCancel()"
+                  icon="pi pi-times"></button>
+          &nbsp;
+        </ng-container>
+        <button class="width-auto" pButton type="button" label="{{ 'BUTTONS.Publish' | translate }}"
+                (click)="publishPost()"
+                [disabled]="appService.publishButtonDisabled"
+                icon="pi pi-share-alt"></button>
+      </div>
+
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog [(visible)]="appService.showRoleDialog" [responsive]="true" [positionTop]="150"
+          [modal]="true" [style]="{'width': '350px'}">
+
+
+  <p-header>
+    <strong>{{ 'GENERAL.User' | translate }}</strong>
+
+  </p-header>
+
+
+  <app-select-user-or-company [viewType]="2" [clearAfterSelection]="true" [profile]="appService.userProfile"
+                              (selectedRole)="onRoleSelected($event)" #selectRole></app-select-user-or-company>
+
+
+</p-dialog>
+
+
+<p-dialog header="{{ 'PRODUCT.Create product' | translate }}" [(visible)]="appService.showProductDialog" [responsive]="true"
+          [modal]="false" [style]="{'width': '600px'}" [appendTo]="'body'">
+
+  <app-product-wizard *ngIf="appService.showProductDialog" [company]="appService.selectedCompany"
+                      (productCreated)="onProductCreated($event)" #createProduct></app-product-wizard>
+
+
+</p-dialog>
+
+<p-dialog header="{{ 'COMPANY.Create company' | translate }}" [(visible)]="appService.showCompanyDialog"
+          [modal]="true" [style]="{'max-width': '800px'}" [appendTo]="'body'">
+
+  <app-company-wizard *ngIf="appService.showCompanyDialog" [currentUserId]="appService.userProfile.user_id"
+                      (canceled)="onCancelCompanyDialog()"
+
+                      (companyCreated)="onCompanyCreated($event)"></app-company-wizard>
+
+
+</p-dialog>
+
+
+

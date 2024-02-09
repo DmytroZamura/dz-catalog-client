@@ -1,0 +1,275 @@
+<div class="ui-g">
+  <div class="ug-12 padding-0">
+    <div class="layout-top">
+      <div class="card">
+        <div class="ui-g">
+          <div class="ui-g-12 padding-0">
+
+
+            <div class="ui-toolbar-group-left align-items-center">
+              &nbsp;&nbsp;<i class="favorites pi pi-bookmark"></i> &nbsp; &nbsp;
+              <div>
+  <span class="title">
+
+          <strong> {{ 'GENERAL.Favorites' | translate }}</strong></span><br/>
+
+              </div>
+            </div>
+
+
+            <div class="ui-g-12 padding-12 padding-0">
+              <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}"></p-tabMenu>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ui-g-12 layout-work-95 padding-left-right-0">
+    <div class="ui-g ui-fluid dashboard main-component-layout">
+
+
+      <ng-container *ngIf="activeTab==0">
+
+        <div class="ui-g-12 posts-list-size padding-left-right-0">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'favorite-posts'"
+                                   [showFilter]="true" [showCategories]="true"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="postsList.setKeyword($event)"
+                                   (newOrdering)="postsList.changeOrdering($event)"
+                                   #postsManagePanel></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'favorite-posts-by-page/'" [deleteEndpoint]="'delete-post/'"
+                                  [itemsPerPage]="10"
+                                  [itemsType]="'favorite-posts'" [typesEndPoint]="'post-types'" [initCurrency]="true"
+                                  [showAdd]="true"
+                                  [adClient]="'ca-pub-4091968257038599'" [adSlot]="4219526045" [adFormat]="'fluid'"
+                                  [layoutKey]="'-6h+ed+1d-6a+ak'"
+                                  [display]="'block'" [itemsPerAdd]="8"
+                                  #postsList>
+              <ng-template let-item let-i="index" #body>
+
+                <div class="ui-g-12 padding-left-right-0">
+                  <div class="ui-g-12 border-bottom-small">
+                    <ng-container *ngIf="!item.post_details.published">
+          <span class="info-badge-black"
+                style="float: left">&nbsp;<b>{{'POSTS.Unpublished' | translate}}</b>&nbsp;</span>
+                    </ng-container>
+                    <span class="date-time-text"
+                          style="float: right">{{item.post_details.create_date | dateAgo: language }}</span>
+                  </div>
+                  <app-post-item [post]="item.post_details" [currentUserId]="currentUserId" [index]="i"
+                                 [locale]="language"
+                                 [isMobile]="isMobile" [truncateNumber]="truncateNumber" [showCommunity]="true"
+                                 [siteUrl]="siteUrl" [isBrowser]="isBrowser"
+                                 (categorySelect)="postsList.onSelectCategory($event)"
+                                 (showLikes)="postsManagePanel.onShowLikes($event)"
+                                 (postDeleted)="postsList.onDeleted($event)"
+                                 (sendRespond)="onSendRespond($event, i , 2)"
+                                 (copyPostLink)="postsList.onCopyLink($event)"></app-post-item>
+                </div>
+
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+          <ng-container *ngIf="isBrowser">
+            <ng-container *ngIf="currentUserId">
+
+              <app-send-post-respond (responded)="postsList.onResponded($event)"
+                                     #respond></app-send-post-respond>
+            </ng-container>
+          </ng-container>
+
+        </div>
+
+        <ng-container *ngIf="isBrowser && !isMobile">
+          <div class="ui-g-6 info-item-size hide-mobile">
+            <div class="ui-g-12">
+
+
+              <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="6825384377" [display]="'inline-block'"
+                          [width]="300" [height]="600"></ng-adsense>
+
+
+            </div>
+          </div>
+
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==1">
+
+        <div class="ui-g-12 product-list-size padding-left-right-0">
+
+          <ng-container *ngIf="currentCurrencyDetails">
+
+            <div class="ui-g-12 padding-left-right-0">
+              <app-manage-items-list [itemsType]="'favorite-products'"
+                                     [showOrdering]="true"
+                                     [showFilter]="true" [showCategories]="true"
+                                     [appliedFilter]="{}"
+                                     (newKeyword)="productsList.setKeyword($event)"
+                                     (newOrdering)="productsList.changeOrdering($event)"></app-manage-items-list>
+            </div>
+            <div class="ui-g-12 padding-left-right-0">
+
+              <app-items-list-agile [endPoint]="'favorite-products-by-page/'" [itemsPerPage]="20"
+                                    [itemsType]="'favorite-products'" [initCurrency]="true"
+                                    #productsList>
+                <ng-template let-item let-i="index" #body>
+
+                  <div class="ui-g-6 ui-md-3 product-item-size padding-left-0">
+
+                    <div class="card padding-0 ">
+
+                      <app-product-item [product]="item.product_details" [truncateNumber]="15"
+                                        [currentUserId]="currentUserId"
+                                        [currencyCode]="currentCurrencyDetails?.code" [isMobile]="isMobile"
+                                        [showPreview]="true" [locale]="language"></app-product-item>
+
+
+                    </div>
+                  </div>
+
+
+                </ng-template>
+
+              </app-items-list-agile>
+
+            </div>
+          </ng-container>
+
+
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==2">
+
+        <div class="ui-g-12 info-search-list-size padding-left-right-0">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'favorite-companies'"
+                                   [showOrdering]="true"
+                                   [showFilter]="true" [showCategories]="true"
+
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="companiesList.setKeyword($event)"
+                                   (newOrdering)="companiesList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'favorite-companies-by-page/'" [itemsPerPage]="10"
+                                  [itemsType]="'favorite-companies'"
+
+                                  [showAdd]="true"
+                                  [adClient]="'ca-pub-4091968257038599'" [adSlot]="2347723942" [adFormat]="'fluid'"
+                                  [layoutKey]="'-fb+5w+4e-db+86'"
+                                  [display]="'block'" [itemsPerAdd]="10"
+                                  #companiesList>
+              <ng-template let-item let-i="index" #body>
+                <div class="ui-g-12 padding-left-right-0">
+                  <app-company-feed-preview [user]="currentUserId" [company]="item.company_details" [locale]="language"
+                  ></app-company-feed-preview>
+                </div>
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==3">
+        <div class="ui-g-12">
+          <div class="ui-g-12 info-profile-size padding-left-right-0">
+
+            <div class="ui-g-12 padding-left-right-0">
+              <app-manage-items-list [itemsType]="'communities'"
+                                     [showSearch]="false" [showSearchLabel]="false"
+                                     [showFilter]="true" [showCategories]="true"
+                                     [showOrdering]="false"
+                                     [appliedFilter]="{}"
+                                     (newKeyword)=" communitiesList.setKeyword($event)"
+                                     (newOrdering)="communitiesList.changeOrdering($event)"></app-manage-items-list>
+            </div>
+            <div class="ui-g-12 padding-left-right-0">
+              <app-items-list-agile [endPoint]="'communities-by-page/'" [itemsPerPage]="10" [itemsType]="'communities'"
+                                    [showAdd]="true"
+                                    [orderingCode]="'popularity'"
+                                    [user]="currentUserId" #communitiesList>
+                <ng-template let-item let-i="index" #body>
+                  <div class="ui-g-12 padding-left-right-0">
+                    <app-community-item [community]="item" [currentUserId]="currentUserId" [index]="i"
+                    ></app-community-item>
+                  </div>
+
+                </ng-template>
+
+              </app-items-list-agile>
+            </div>
+
+
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==4">
+        <div class="ui-g-12 product-list-size">
+
+
+          <div class="ui-g-12 info-profile-size padding-left-right-0">
+
+            <div class="ui-g-12 padding-left-right-0">
+              <app-manage-items-list [itemsType]="'favorite-tags'"
+                                     [showSearch]="true" [showOrdering]="true"
+                                     [appliedFilter]="{}"
+                                     (newKeyword)=" tagsList.setKeyword($event)"
+                                     (newOrdering)="tagsList.changeOrdering($event)"></app-manage-items-list>
+            </div>
+            <div class="ui-g-12 padding-left-right-0">
+              <app-items-list-agile [endPoint]="'favorites-tags-by-page/'" [itemsPerPage]="20"
+                                    [itemsType]="'favorite-tags'"
+                                    [user]="currentUserId"
+                                    [orderingCode]="'popularity'"
+                                    #tagsList>
+                <ng-template let-item let-i="index" #body>
+                  <div class="ui-g-12 ui-md-6">
+                    <div class="card padding-0">
+
+                      <app-tag-preview [tag]="item.tag_details" [currentUserId]="currentUserId"
+                                       [buttonPosition]="'right'"
+                      ></app-tag-preview>
+
+                    </div>
+                  </div>
+
+                </ng-template>
+
+              </app-items-list-agile>
+            </div>
+
+
+          </div>
+
+
+        </div>
+      </ng-container>
+
+
+    </div>
+  </div>
+</div>
+
+

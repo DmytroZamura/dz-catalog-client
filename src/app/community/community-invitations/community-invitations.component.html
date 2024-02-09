@@ -1,0 +1,52 @@
+<div class="main-component-layout">
+
+
+  <div class="ui-g-12 padding-left-right-0 items-list-size">
+
+
+    <div class="ui-g dashboard ui-fluid">
+
+      <ng-container *ngFor="let invitation of invitations; let i = index"  >
+         <ng-container *ngIf="!invitation.company">
+        <div class="ui-g-6 ui-md-3 profile-item-size" style="padding-left: 0">
+
+
+          <ng-container *ngIf="invitation.user_details.user_profile.first_name">
+            <app-user-feed-preview [profile]="invitation.user_details.user_profile" [acceptButton]="true" [greedView]="true"
+                                   (accepted)="acceptRequest(i)" (rejected)="rejectRequest(i)"
+                                   ></app-user-feed-preview>
+          </ng-container>
+          <ng-container *ngIf="!invitation.user_details.user_profile.first_name">
+            <app-user-feed-preview [profile]="invitation.user_details.user_profile_default" [acceptButton]="true"
+                                    (accepted)="acceptRequest(i)" [greedView]="true"
+                                   (rejected)="rejectRequest(i)"></app-user-feed-preview>
+          </ng-container>
+
+
+
+        </div>
+        </ng-container>
+
+        <ng-container *ngIf="invitation.company">
+            <div class="ui-g-12 ui-md-9">
+              <ng-container *ngIf="invitation.company_details.name">
+              <app-company-feed-preview [acceptButton]="true" (accepted)="acceptRequest(i)" (rejected)="rejectRequest(i)" [company]="invitation.company_details"></app-company-feed-preview>
+              </ng-container>
+                <ng-container *ngIf="!invitation.company_details.name">
+              <app-company-feed-preview [acceptButton]="true" (accepted)="acceptRequest(i)" (rejected)="rejectRequest(i)" [company]="invitation.company_default_details"></app-company-feed-preview>
+              </ng-container>
+            </div>
+        </ng-container>
+      </ng-container>
+
+
+    </div>
+
+
+  </div>
+
+</div>
+
+<app-process-dialog [header]="'COMMUNITY.Community' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

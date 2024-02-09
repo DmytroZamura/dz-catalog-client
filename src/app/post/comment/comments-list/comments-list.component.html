@@ -1,0 +1,71 @@
+<ng-container *ngIf="isBrowser">
+  <p-confirmDialog></p-confirmDialog>
+</ng-container>
+
+
+<ng-container *ngIf="activityComments && !showComments">
+
+
+  <div class="ui-g-12 padding-top-0">
+    <ng-container *ngFor="let comment of activityComments; let i = index">
+      <ng-container *ngIf="comment.object">
+        <ng-container *ngIf="comment.object.text">
+
+          <app-comment [user]="user" [postComment]="comment.object" [postCommentsPreview]="true"
+                       [editable]="false"
+                       [locale]="locale" (updatePostCommentQty)="onUpdatePostCommentQty($event)"></app-comment>
+
+        </ng-container>
+
+      </ng-container>
+    </ng-container>
+  </div>
+
+
+</ng-container>
+
+
+<ng-container *ngIf="showComments">
+
+  <div class="ui-g-12 padding-top-0">
+    <ng-container *ngIf="showCreateCommentPanel">
+      <app-create-comment-lazy *ngxLazyEl [user]="user" [post]="post" [parentComment]="parentComment"
+                          (commentPublished)="onCommentPublished($event.detail)"></app-create-comment-lazy>
+    </ng-container>
+
+    <ng-container *ngIf="this.comments">
+      <ng-container *ngIf="comments[0]">
+
+
+        <ng-container *ngFor="let comment of comments; let i = index">
+          <app-comment [user]="user" [postComment]="comment" (commentDeleted)="onCommentDeleted($event, i)"
+                       (commentCreated)="onCommentPublished($event)" [locale]="locale"
+
+                       (updatePostCommentQty)="onUpdatePostCommentQty($event)"></app-comment>
+
+        </ng-container>
+
+
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="loading">
+      <div class="ui-g-12 text-center loading-small" align="center">
+        <p-progressSpinner strokeWidth="2" fill="#EEEEEE"
+                           animationDuration=".5s"></p-progressSpinner>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="showLoadComments">
+      <div class="ui-g-12">
+      <span class="select-text" (click)="getComments()"><strong> {{'POSTS.View more comments' | translate}}
+        .....</strong></span>
+      </div>
+    </ng-container>
+  </div>
+  <app-process-dialog [header]="'GENERAL.Deletion' | translate"
+                      [processName]="'GENERAL.The deletion process' | translate"
+                      [processComment]="'GENERAL.This may take several seconds' | translate"
+                      #processDialog></app-process-dialog>
+</ng-container>
+
+

@@ -1,0 +1,13 @@
+.layout-top {
+    position: fixed;
+    top: 59px;
+    z-index: 2;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.layout-work {
+
+    margin-top: 70px;
+
+}

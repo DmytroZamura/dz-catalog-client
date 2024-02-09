@@ -1,0 +1,146 @@
+<ng-container *ngIf="post">
+
+
+  <div class="ui-md-12 ui-g-12 padding-top-0 padding-bottom-0 text-pre-line " >
+    <h1 class="post-title">{{post.post_title}}</h1>
+
+  </div>
+
+  <ng-container *ngIf="post.post_offering.type!=3">
+    <ng-container *ngIf="post.post_offering.price && post.post_offering.price_currency_details">
+      <div class="ui-md-12 ui-g-12 text-align-right padding-top-0 padding-bottom-0">
+
+
+        <span
+          class="big-price-badge"><strong>{{post.post_offering.price | currency:post.post_offering.price_currency_details.code :'symbol-narrow'  }}</strong></span>
+        <ng-container *ngIf="post.post_offering.unit_type_details">
+
+          <span class="title"> / {{post.post_offering.unit_type_details.code}}</span>
+
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="post.post_offering.type==3 && price">
+    <div class="ui-md-12 ui-g-12 text-align-right padding-top-0 padding-bottom-0">
+
+      <div class="ui-toolbar-group-left">
+         <ng-container *ngIf="post.post_offering.discount && price">
+
+        <span class="discount-color"><strong>{{post.post_offering.discount}}% {{ 'PRODUCT.Discount OFF' | translate }}</strong></span>
+      </ng-container>
+      <ng-container *ngIf="post.deadline">
+        <ng-container *ngIf="!post.post_offering.discount">
+          <br/>
+        </ng-container>
+        &nbsp;<span class="value-badge-deadline">{{ 'PRODUCT.Discount ends date' | translate }}&nbsp;{{post.deadline | date: 'd'}}&nbsp;{{post.deadline | date: 'LLL'}}</span>
+
+      </ng-container>
+      </div>
+
+   <div class="ui-toolbar-group-right">
+      <ng-container *ngIf="post.post_offering.one_price && price">
+
+          <span
+            class="big-price-badge">{{price | currency:post.post_offering.price_currency_details.code :'symbol-narrow'  }}</span>
+
+      </ng-container>
+
+      <ng-container *ngIf="!post.post_offering.one_price && priceFrom && price">
+
+          <span
+            class="big-price-badge">{{priceFrom | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</span>
+        <span class="title"> - </span><span
+        class="big-price-badge">{{price | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</span>
+
+      </ng-container>
+
+      <ng-container *ngIf="post.post_offering.unit_type_details && price">
+
+        <span class="title"> / {{post.post_offering.unit_type_details.code}}</span>
+
+      </ng-container>
+
+      <ng-container *ngIf="oldPrice">
+        <br/>
+        <ng-container *ngIf="post.post_offering.one_price && oldPrice">
+
+          <span
+            class="text-muted"><s>{{oldPrice | currency:post.post_offering.price_currency_details.code :'symbol-narrow'  }}</s></span>
+
+        </ng-container>
+
+        <ng-container *ngIf="!post.post_offering.one_price && oldPriceFrom && oldPrice">
+
+          <span
+            class="text-muted"><s>{{oldPriceFrom | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</s></span>
+          <span> - </span><span
+          class="text-muted"><s>{{oldPrice | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</s></span>
+
+        </ng-container>
+      </ng-container>
+   </div>
+
+    </div>
+  </ng-container>
+
+  <div *ngIf="this.comment" class="ui-g-12">
+
+    <app-text-show-more [currentUserId]="currentUserId" [text]="comment" [calcTruncateWords]="false"
+                        [richText]="true" [truncateWords]="truncateWords" (showMoreClicked)="onShowMoreClicked()"></app-text-show-more>
+  </div>
+
+  <ng-container *ngIf="post.post_offering && post.attributes.length>0">
+    <div *ngIf="!show_details" class="ui-g-12 padding-top-0 text-align-center">
+        <span class="cursor-pointer color-primary"  [appHighlightborder]="'#ebe7ef'"
+         (click)="showDetails()">{{ 'GENERAL.Attributes' | translate }}...<b>
+        </b></span>
+    </div>
+
+    <ng-container *ngIf="show_details">
+
+      <ng-container>
+        <div class="ui-g-12">
+          <app-object-attributes [show]="true" [attributes]="post.attributes"
+                                 [editMode]="false"></app-object-attributes>
+        </div>
+      </ng-container>
+
+
+    </ng-container>
+  </ng-container>
+
+
+  <ng-container *ngIf="post.images[0]">
+
+    <app-images-list [isMobile]="isMobile" [isBrowser]="isBrowser" [editMode]="false" [viewMode]="true" [images]="post.images" (previewOpened)="onImagePreview()"></app-images-list>
+  </ng-container>
+
+  <ng-container>
+
+    <app-url-preview [urlPreview]="urlPreview" [showImage]="showUrlImage" [showDescription]="false" [checkDescription]="false" (linkClicked)="onLinkClicked()"></app-url-preview>
+
+
+  </ng-container>
+
+  <ng-container *ngIf="post.post_offering.type!=3">
+    <ng-container *ngIf="post.admin_status">
+      <div class="ui-g-12 border-top-small text-align-center">
+        <a [routerLink]="['/post/'+post.id]">
+          <span>{{ 'GENERAL.New responses' | translate }} - {{post.eventsqty.new_responds}}.</span>
+          <span> {{ 'GENERAL.Total responded' | translate }} - {{post.eventsqty.responds}}</span>
+        </a>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="currentUserId && post.responder_status">
+      <div class="ui-g-12 border-top-small text-align-center">
+        <span class="text-muted">{{ 'GENERAL.You have already responded to this request' | translate }}</span>
+      </div>
+    </ng-container>
+  </ng-container>
+
+</ng-container>
+
+
+

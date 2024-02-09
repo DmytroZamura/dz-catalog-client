@@ -1,0 +1,38 @@
+<ng-container *ngIf="attribute">
+
+
+  <span><strong>{{attribute.name}}:</strong> &nbsp;</span>
+  <ng-container *ngIf="attribute.type==1 && !attribute.multiple && values">
+    <br/>
+    <p-dropdown  id="attr-{{attribute.id}}"  [options]="values" [(ngModel)]="value_list" [filter]="values.length>7" [dataKey]="'id'"
+                [placeholder]="'GENERAL.Select' | translate "
+                optionLabel="name" [showClear]="true" (onChange)="onValueChanged($event)"
+               ></p-dropdown>
+
+  </ng-container>
+  <ng-container *ngIf="attribute.type==2 || attribute.type==5">
+    <div align="center">
+    <span>{{value_range[0] + ' - ' + value_range[1]}}</span>
+    </div>
+    <p-slider [(ngModel)]="value_range" [style]="{'width':'100%'}" [range]="true" [step]="step" [min]="min"  [max]="max" (onSlideEnd)="onValueChanged($event)"></p-slider>
+
+  </ng-container>
+  <ng-container *ngIf="attribute.type==4">
+
+            <p-checkbox [(ngModel)]="value_boolean" binary="true" (onChange)="onValueChanged($event)"></p-checkbox>
+          </ng-container>
+
+   <ng-container *ngIf="attribute.multiple">
+        <ng-container *ngIf="attribute.type==1">
+           <br/>
+
+          <p-multiSelect [options]="values" [(ngModel)]="value_multiple" optionLabel="name" (onChange)="onValueChanged($event)"
+                         [dataKey]="'id'" [maxSelectedLabels]="4"
+                         [defaultLabel]="'GENERAL.Choose' | translate" [selectedItemsLabel]="'{0} - ' + ('GENERAL.items selected' | translate)"></p-multiSelect>
+
+
+        </ng-container>
+      </ng-container>
+
+
+</ng-container>

@@ -1,0 +1,50 @@
+<ng-container *ngIf="!product">
+  <div class="ui-g-12 text-center loading" align="center">
+    <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                       animationDuration=".5s"></p-progressSpinner>
+  </div>
+</ng-container>
+
+
+<div *ngIf="product" class="ui-g ui-fluid">
+  <ng-container *ngIf="product.admin_status">
+    <div class="ui-g-12 padding-0">
+      <div class="layout-top">
+        <div class="card">
+
+          <div style="display : flex; align-items: center ">
+            <img *ngIf="product.images[0]" alt="{{product.name}}"
+                 src="{{product.images[0].image_details.small_image_url}}"
+                 class="top-tab-image "/>
+            <img *ngIf="!product.images[0]" alt="{{product.name}}"
+                 src="static/assets/img/default_product.png"
+                 class="top-tab-image "/>
+            &nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}"></p-tabMenu>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g-12 layout-work">
+      <ng-container *ngIf="activeTab==0 && product">
+        <app-product-overview-admin [product]="product"
+                                    (productDeleted)="onProductDeleted()"></app-product-overview-admin>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==1 && product">
+
+
+        <app-product-posts-admin [product]="product" [currentCurrencyId]="currentCurrency"
+                                 [currentUserId]="currentUserId" [isMobile]="isMobile" [locale]="language"
+                                 [isBrowser]="isBrowser"></app-product-posts-admin>
+
+      </ng-container>
+
+
+    </div>
+  </ng-container>
+</div>

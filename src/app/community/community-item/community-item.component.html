@@ -1,0 +1,71 @@
+<div class="ui-g-12 padding-left-right-0">
+  <div class="card padding-left-right-0">
+    <div class="ui-g">
+      <div class="ui-g-12">
+      <div class="ui-g-12 ui-md-8">
+        <div class="ui-toolbar-group-left ql-color-white flex-center">
+
+          <a [routerLink]="['/community/'+community.id]">
+            <img *ngIf="community.image_details" alt="{{community.name}}"
+                 src="{{community.image_details.small_image_url}}"
+                class="small-squared-image"/>
+            <img *ngIf="!community.image_details" alt="{{community.name}}"
+                 src="static/assets/img/community.png"
+                 class="small-squared-image"/>
+            &nbsp;&nbsp;&nbsp; </a>
+          <h2>   <a [routerLink]="['/community/'+community.id]"
+                                                class="link-color">{{community.name}}</a> </h2>
+
+
+        </div>
+      </div>
+      <div class="ui-g-12 ui-md-4">
+        <div class="ui-toolbar-group-right flex-center">
+
+          <app-community-buttons [community]="community" [currentUserId]="currentUserId"
+                                  [showLeaveCommunity]="true"
+                                 [joinButtonClass]="'flat ui-button-secondary border-primary-small'"
+                                 [buttonsClass]="'flat'"></app-community-buttons>
+
+
+        </div>
+      </div>
+    </div>
+      <div class="ui-g-12 padding-left-right-0 padding-bottom-0 border-top-primary-small">
+        <a [routerLink]="['/community/'+community.id]">
+          <div class="ui-md-2 ui-g-4 padding-0 text-align-center">
+            <span class="small-text select-text">{{ 'COMMUNITY.Members' | translate }}</span><br/>
+            <span class="title select-text">{{community.eventsqty.members | thousandSuffixes: 1 }}</span>
+          </div>
+
+          <div class="ui-md-2 ui-g-4 padding-0 text-align-center" >
+            <span class="small-text select-text">{{ 'GENERAL.Companies' | translate }}</span><br/>
+            <span class="title select-text">{{community.eventsqty.companies | thousandSuffixes: 1 }}</span>
+          </div>
+
+          <div class="ui-md-2 ui-g-4 padding-0 text-align-center">
+            <span class="small-text select-text">{{ 'POSTS.Posts' | translate }}</span><br/>
+            <span class="title select-text">{{community.eventsqty.publications | thousandSuffixes: 1 }}</span>
+          </div>
+
+          <div class="ui-md-2 ui-g-4 padding-0 text-align-center" >
+            <span class="small-text select-text">{{ 'GENERAL.Requests' | translate }}</span><br/>
+            <span class="title select-text">{{community.eventsqty.requests | thousandSuffixes: 1 }}</span>
+          </div>
+          <div class="ui-md-2 ui-g-4 padding-0 text-align-center" >
+            <span class="small-text select-text">{{ 'GENERAL.Offering' | translate }}</span><br/>
+            <span class="title select-text">{{community.eventsqty.offerings | thousandSuffixes: 1 }}</span>
+          </div>
+
+          <div class="ui-md-2 ui-g-4 padding-0 text-align-center">
+            <span class="small-text select-text">{{ 'GENERAL.Jobs' | translate }}</span><br/>
+            <span class="title select-text">{{community.eventsqty.jobposts | thousandSuffixes: 1 }}</span>
+          </div>
+
+        </a>
+      </div>
+
+
+    </div>
+  </div>
+</div>

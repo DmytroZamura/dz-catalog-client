@@ -1,0 +1,67 @@
+<ng-container *ngIf="company || community">
+  <div class="ui-g ui-fluid main-component-layout">
+
+
+    <div class="ui-g-12 padding-0">
+      <p-toolbar>
+
+        <app-select-profile [company]="company" [community]="community"
+                            [label_text]=" 'GENERAL.Add new admin by name' | translate " [label]="false"
+                            (porfileSelected)="onProfileSelected($event)" #selectProfile></app-select-profile>
+
+
+      </p-toolbar>
+
+
+      <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'people'"
+                                  [showFilter]="true" [showCategories]="false" [showChildCategories]="false"
+                           [showSearch]="false" [showOrdering]="false" [showSearchLabel]="false"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="usersList.setKeyword($event)"
+                                   (newOrdering)="usersList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'profiles-by-page/'" [itemsPerPage]="20"
+                           [itemsType]="'people'" [initCurrency]="true" [published]="true" [companyAdmin]="company"
+                           [communityAdmin]="community" [canManage]="true"
+                                  (itemDeletedEvent)="onUserDelete($event)"
+                                  #usersList>
+              <ng-template let-item let-i="index" #body>
+
+                <div class="ui-g-6 ui-md-3 profile-item-size padding-left-0">
+
+                  <app-user-feed-preview [profile]="item" [user]="currentUserId" [isMobile]="isMobile"
+                                         [greedView]="true" [canManage]="true"
+                                         [locale]="locale" (profileDeleted)="usersList.onItemDeletedEvent(i)">
+
+                  </app-user-feed-preview>
+
+                </div>
+
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+      <!--<app-items-list-view [endPoint]="'profiles-by-page/'" [itemsPerPage]="20"-->
+                           <!--[itemsType]="'people'" [initCurrency]="true" [published]="true" [companyAdmin]="company"-->
+                           <!--[communityAdmin]="community" [canManage]="true"-->
+                     <!---->
+                           <!--(itemDeletedEvent)="onUserDelete($event)" #userList></app-items-list-view>-->
+
+
+    </div>
+
+
+  </div>
+
+  <app-add-user [company]="company" [community]="community" #adduser></app-add-user>
+
+</ng-container>
+
+<app-process-dialog [header]="'GENERAL.Access rights' | translate"
+                    [processName]="'GENERAL.The access permissions applying' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

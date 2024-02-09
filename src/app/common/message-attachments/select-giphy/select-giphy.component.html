@@ -1,0 +1,49 @@
+<div class="select-overlap-panel">
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <app-search-box [showRightButton]="true" [placeholder]="'GENERAL.Search' | translate"
+                      (searchKeyword)="onSearch($event)"></app-search-box>
+
+    </div>
+
+    <div class="ui-g-12 ">
+
+      <div class="giphy-scroll" appInfscroll (scroll)="onScrolled($event)">
+
+        <ng-container *ngFor="let result of giphyResults;"  >
+
+
+          <ng-container *ngIf="result.images.fixed_width && result.images.preview_gif && result.images.downsized">
+
+            <ng-container *ngIf="stickers">
+              <div class="cursor-pointer text-center ui-g-6"
+                   (click)="sendGif(result.title, result.images.fixed_width.url)">
+
+                <img class="user-image" src="{{ result.images.preview_gif.url }}" alt="{{result.title}}">
+              </div>
+            </ng-container>
+
+             <ng-container *ngIf="!stickers">
+              <div class="cursor-pointer text-center ui-g-6"
+                   (click)="sendGif(result.title, result.images.downsized.url)">
+
+                <img class="user-image" src="{{ result.images.fixed_width.url }}" alt="{{result.title}}">
+              </div>
+            </ng-container>
+          </ng-container>
+
+
+        </ng-container>
+
+
+        <ng-container *ngIf="loading">
+          <div class="ui-g-12 text-center" align="center">
+            <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+                               animationDuration=".5s"></p-progressSpinner>
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<ng-container *ngIf="label">
+
+
+<span class="md-inputfield">
+ <p-autoComplete id="select-category-label"
+                 (onSelect)="onCategorySelect($event)"
+                 [ngModel]="category"
+                 [suggestions]="filteredCategories" (completeMethod)="getFilteredCategories($event)"
+                 (onDropdownClick)="dialog.showCategoryDialog(category)" [forceSelection]="true"
+                 field="name" [dropdownIcon]="'pi pi-folder-open'" (onClear)="onClear()"
+                 [minLength]="1" [disabled]="disabled" [dropdown]="true" #selectCategory></p-autoComplete>
+  <label for="select-category-label">{{ label_text}}
+    <ng-container *ngIf="required"> *:</ng-container><ng-container *ngIf="suggestedCategory"><span
+      class="badge-suggested">{{ 'ALERTS.In review' | translate }}</span></ng-container></label>
+                    </span>
+<ng-container *ngIf="categoryNotExists">
+  <p-message severity="error" text="{{ 'CATEGORY.Please enter an existing category' | translate }}"></p-message>
+</ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="!label">
+
+  <p-autoComplete *ngIf="!label" id="select-category"
+                  (onSelect)="onCategorySelect($event)" [dropdownIcon]="'pi pi-folder-open'" [dropdown]="true"
+
+                  (onDropdownClick)="dialog.showCategoryDialog(category)" (onClear)="onClear()"
+                  [ngModel]="category" [placeholder]="label_text" [forceSelection]="true"
+                  [suggestions]="filteredCategories" (completeMethod)="getFilteredCategories($event)"
+                  field="name"
+                  [minLength]="1" [disabled]="disabled" #selectCategory2></p-autoComplete>
+
+</ng-container>
+
+<app-select-category-dialog [showSuggestCategory]="showSuggestCategory" [filter]="filter"
+                            (categorySelect)="onCategorySelect($event)" (dialogHide)="stopSpinner()"
+                            (categorySuggested)="onCategorySuggested($event)" #dialog></app-select-category-dialog>

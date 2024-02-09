@@ -1,0 +1,68 @@
+<ng-container *ngIf="isBrowser">
+  <ng-container *ngIf="viewType == 1">
+    <p-dropdown [options]="items" [(ngModel)]="selectedItem" (onChange)="onSelectItem($event)"
+                [style]="{'width': '100%'}" [disabled]="disabled">
+      <ng-template let-item pTemplate="selectedItem">
+        <img *ngIf="item.value.image"
+             src="{{item.value.image.small_image_url}}"
+             style="width: 15px; height: 15px; border-radius: 50%"/>
+        <img *ngIf="!item.value.image"
+             src="static/assets/img/company-default.png"
+             style="width: 15px; height: 15px; border-radius: 50%;"/>
+        <span>&nbsp;&nbsp;&nbsp;{{item.value.name}}</span>
+      </ng-template>
+      <ng-template let-item pTemplate="item">
+        <div style="display : flex; align-items: center ">
+          <img *ngIf="item.value.image"
+               src="{{item.value.image.small_image_url}}"
+               style="width: 30px; height: 30px; border-radius: 50%"/>
+          <img *ngIf="!item.value.image"
+               src="static/assets/img/company-default.png"
+               style="width: 30px; height: 30px; border-radius: 50%;"/>
+          <span>&nbsp;&nbsp;&nbsp;
+     {{item.value.name}}</span>
+        </div>
+      </ng-template>
+    </p-dropdown>
+  </ng-container>
+
+  <ng-container *ngIf="viewType == 2">
+    <p-listbox [options]="items" [ngModel]="selectedItem"
+                [style]="{'width': '100%'}">
+      <ng-template let-item pTemplate="item" >
+
+        <div style="display : flex; align-items: center" (click)="onSelectItem(item)">
+          <img *ngIf="item.value.image"
+               src="{{item.value.image.small_image_url}}" alt="{{item.value.name}}"
+               style="width: 30px; height: 30px; border-radius: 50%"/>
+          <img *ngIf="!item.value.image"
+               src="static/assets/img/company-default.png"
+               style="width: 30px; height: 30px; border-radius: 50%;"/>
+          <span>&nbsp;&nbsp;&nbsp;
+     {{item.value.name}}</span>
+        </div>
+      </ng-template>
+    </p-listbox>
+  </ng-container>
+
+
+  <ng-container *ngIf="viewType == 3">
+    <p-tabMenu [model]="menuItems" [activeItem]="menuItems[activeTab]" [style]="{'border': 'none'}">
+      <ng-template pTemplate="item" let-item let-i="index" >
+        <div style="display : flex; align-items: center">
+          <img *ngIf="items[i].value.image"
+               src="{{items[i].value.image.small_image_url}}"
+               style="width: 30px; height: 30px; border-radius: 50%"/>
+          <img *ngIf="!items[i].value.image"
+               src="static/assets/img/company-default.png"
+               style="width: 30px; height: 30px; border-radius: 50%;"/>
+          <span>&nbsp;&nbsp;&nbsp;
+     {{item.label}}</span>
+          <ng-container *ngIf="items[i].value.unreadCount>0">
+            &nbsp;-&nbsp;<span class="value-badge">&nbsp;&nbsp;{{items[i].value.unreadCount}}&nbsp;&nbsp;</span>
+          </ng-container>
+        </div>
+      </ng-template>
+    </p-tabMenu>
+  </ng-container>
+</ng-container>

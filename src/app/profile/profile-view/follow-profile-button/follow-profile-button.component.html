@@ -1,0 +1,10 @@
+
+
+  <button *ngIf="!followStatus" pButton type="button" class="flat ui-button-success width-auto" icon="{{followIcon}}" label="{{ 'BUTTONS.Follow' | translate }}"
+              (click)="followProfile()"  [disabled]="loading" ></button>
+
+  <button *ngIf="followStatus"   pButton type="button" class="flat ui-button-secondary following-btn width-auto" icon="{{followingIcon}}" label="{{ 'BUTTONS.Following' | translate }}"
+              (click)="unfollowProfile()" [disabled]="loading" ></button>
+
+
+

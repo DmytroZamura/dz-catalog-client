@@ -1,0 +1,70 @@
+<ng-container *ngIf="post">
+  <ng-container *ngIf="post.post_job">
+
+    <ng-container *ngIf="post.post_title">
+
+      <div class="ui-g-12 padding-top-0 padding-bottom-0">
+        <h1 class="post-title">{{post.post_title}} </h1>
+
+
+        <ng-container *ngIf="post.post_job.salary && post.post_job.salary_currency_details">
+          <span
+            class="value-badge-price">{{post.post_job.salary | currency:post.post_job.salary_currency_details.code :'symbol-narrow'  }}</span>&nbsp;
+        </ng-container>
+
+        <ng-container *ngIf="post.post_job.job_type_details">
+          <span class="value-badge-attributes">{{post.post_job.job_type_details.name}}</span>&nbsp;
+        </ng-container>
+        <ng-container *ngIf="post.post_job.seniority_details">
+          <span class="value-badge-attributes">{{post.post_job.seniority_details.name}}</span>&nbsp;
+        </ng-container>
+        <ng-container *ngIf="post.post_job.job_function_details">
+          <span class="value-badge-attributes">{{post.post_job.job_function_details.name}}</span>
+        </ng-container>
+
+
+      </div>
+
+    </ng-container>
+
+
+
+
+    <ng-container >
+      <div *ngIf="comment" class="ui-g-12">
+
+
+        <app-text-show-more [currentUserId]="currentUserId" [text]="comment" [calcTruncateWords]="false" (showMoreClicked)="onShowMoreClicked()"
+                            [showSeeMore]="true" [richText]="true" [truncateWords]="truncateWords"></app-text-show-more>
+
+      </div>
+
+
+    </ng-container>
+
+    <ng-container *ngIf="post.images[0]">
+
+      <app-images-list [isMobile]="isMobile" [isBrowser]="isBrowser" [editMode]="false" [viewMode]="true" [images]="post.images"
+                       (previewOpened)="onImagePreview()"></app-images-list>
+    </ng-container>
+
+    <app-url-preview [urlPreview]="urlPreview" [showImage]="showUrlImage" (linkClicked)="onLinkClicked()"></app-url-preview>
+
+    <ng-container *ngIf="post.admin_status">
+      <div class="ui-g-12 border-top-small text-align-center">
+        <a [routerLink]="['/post/'+post.id]">
+          <span> {{ 'GENERAL.New applicants' | translate }} - {{post.eventsqty.new_applicants}}.</span>
+          <span> {{ 'GENERAL.Total responded' | translate }} - {{post.eventsqty.applicants}}</span>
+        </a>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="currentUserId && post.applicant_status">
+      <div class="ui-g-12 border-top-small text-align-center">
+        <span class="text-muted">{{ 'GENERAL.You have already responded' | translate }}</span>
+      </div>
+    </ng-container>
+
+
+  </ng-container>
+</ng-container>
+

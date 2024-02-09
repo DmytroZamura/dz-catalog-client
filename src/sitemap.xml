@@ -1,0 +1,46 @@
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-pages.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-articles.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-articles-ru.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-articles-uk.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-offerings.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-companies.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-companies-ru.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-companies-uk.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-people.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-people-ru.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-people-uk.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-products.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-products-ru.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://api.uafine.com/sitemap-products-uk.xml</loc>
+  </sitemap>
+
+
+</sitemapindex>

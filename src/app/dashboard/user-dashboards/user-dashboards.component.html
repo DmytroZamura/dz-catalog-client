@@ -1,0 +1,15 @@
+ <ng-container *ngFor="let userCompany of userCompanies; let i = index">
+            <div class="ui-g-12 padding-left-right-0 padding-top-0">
+
+              <app-general-details-board [company]="userCompany.company_details" [companyId]="userCompany.company"
+                                         [postTypes]="appService.postTypes" [locale]="locale"
+                                         (createPost)="onCreatePost($event)"></app-general-details-board>
+            </div>
+
+          </ng-container>
+          <div class="ui-g-12 padding-left-right-0 padding-top-0">
+
+            <app-general-details-board [userId]="userId" [postTypes]="appService.postTypes"
+                                       [locale]="locale"
+                                       (createPost)="onCreatePost($event)"></app-general-details-board>
+          </div>

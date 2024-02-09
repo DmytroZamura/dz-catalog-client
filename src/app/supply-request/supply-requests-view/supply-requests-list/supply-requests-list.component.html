@@ -1,0 +1,43 @@
+
+
+
+<ng-container *ngIf="statuses">
+
+  <ng-container *ngFor="let request of requests; let i = index"  >
+    <div class="ui-g-12 padding-left-right-0">
+
+      <app-supply-request-item [request]="request" [userType]="userType" [currentUserId]="currentUserId" [updateMode]="true"
+                               [statusesList]="statuses" [isMobile]="isMobile" (chatSelected)="onShowChat($event)"
+                               [locale]="locale"
+                               ></app-supply-request-item>
+
+      <ng-container *ngIf="i == requests.length-2">
+        <ng-container *ngIf="isBrowser">
+          <div pDefer (onLoad)="onItemFocus()" class="padding-0">
+            <ng-template>
+              &nbsp;
+            </ng-template>
+
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="loading">
+  <app-empty-post></app-empty-post>
+  <app-empty-post></app-empty-post>
+</ng-container>
+
+
+<!--<p-dialog header="{{ 'MESSAGING.Messaging' | translate }}" [(visible)]="showChat" [resizable]="false"-->
+          <!--[modal]="false" [styleClass]="'mobile-dialog'" [appendTo]="'body'" [maximizable]="false"-->
+          <!--[blockScroll]="false">-->
+  <!--<div class="ui-g ui-fluid  dashboard">-->
+    <!--<div class="ui-g-12 padding-top-0 posts-list-size">-->
+      <!--<app-chat-lazy *ngxLazyEl [currentUserId]="currentUserId" [locale]="locale"  #chat></app-chat-lazy>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</p-dialog>-->

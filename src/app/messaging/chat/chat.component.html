@@ -1,0 +1,86 @@
+<ng-container *ngIf="chat_id">
+
+  <ng-container *ngIf="messages">
+    <div class="ui-g-12  chat-container padding-top-0">
+      <as-split direction="vertical" [unit]="'percent'" (gutterClick)="maxMessageSize()" id="main-split"
+                (dragEnd)="onChangeSizes($event)" #chatSpliter>
+        <as-split-area [size]="chatSize" id="chat-view">
+          <!--<div *ngIf="messages" class="ui-g-12 box-border padding-top-0">-->
+          <div #scrollMe style="height: 100%" class="chat-view" appInfscroll [completedFetching]="loading"
+               (scrolled)="onLazyLoad()">
+            <ng-container *ngIf="loading">
+              <div class="ui-g-12  loading-small padding-top-0  padding-bottom-0 text-align-center">
+                <p-progressSpinner strokeWidth="2"
+                                   fill="#EEEEEE"
+                                   animationDuration=".5s"></p-progressSpinner>
+              </div>
+            </ng-container>
+            <ng-container *ngFor="let message of messages">
+              <div class="ui-g-12">
+                <app-chat-message [message]="message" [user_id]="currentUserId" [isMobile]="isMobile"
+                                  [locale]="locale"
+                                  ></app-chat-message>
+              </div>
+
+            </ng-container>
+
+
+            <ng-container *ngIf="sendingMessage">
+              <div class="ui-g-12  loading-small padding-top-0  padding-bottom-0 text-align-center">
+
+                <p-progressSpinner strokeWidth="2"
+                                   fill="#EEEEEE"
+                                   animationDuration=".5s"></p-progressSpinner>
+
+              </div>
+            </ng-container>
+
+            <div class="ui-g-12  padding-top-0  padding-bottom-0">
+              <p>&nbsp;</p>
+            </div>
+          </div>
+
+
+        </as-split-area>
+
+        <as-split-area [size]="messageSize" [minSize]="10" id="text-area">
+
+       <span [appHighlightborder]="'#ebe7ef'" class="chatSizeButton" (click)="maxMessageSize()">
+
+
+         <ng-container *ngIf="expandMore"><i class="pi pi-chevron-up"></i></ng-container>
+         <ng-container *ngIf="!expandMore"><i class="pi pi-chevron-down"></i></ng-container>
+       </span>
+
+
+          <div class="ui-g-12" id="chat-text-container">
+
+
+            <app-text-editor  [(text)]="new_message" [theme]="'bubble'" [className]="'ql-resizable'"
+                             [bounds]="'self'" [showAttachments]="false" [showBorder]="false"
+                             [mentions]="true" [placeholder]="'GENERAL.A personal message' | translate "
+                             #textEditor></app-text-editor>
+          </div>
+
+
+        </as-split-area>
+      </as-split>
+
+    </div>
+  </ng-container>
+  <div class="ui-g-12 padding-0">
+    <div class="ui-toolbar-group-right">
+      <app-message-attachments  (selectImage)="onFileUpload($event)"
+                               (selectEmoji)="addEmoji($event)" (selectSticker)="addStickerGiphy($event)"
+                               (selectGiphy)="addGiphy($event)"></app-message-attachments>
+
+    </div>
+  </div>
+
+  <div class="ui-g-12 message-box ">
+    <button pButton type="button" label="{{ 'BUTTONS.Send' | translate }}"
+            (click)="onSendMessage()" [disabled]="!new_message || sendingMessage"></button>
+  </div>
+
+
+</ng-container>

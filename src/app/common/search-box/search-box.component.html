@@ -1,0 +1,117 @@
+<div class="search-group" #searchGroup>
+</div>
+<div class="ui-inputgroup {{inputgroupClass}}">
+
+  <ng-container *ngIf="showSearchLabel">
+<span class="search-label">
+     <ng-container *ngIf="itemsType &&  userType">
+       <ng-container *ngIf="itemsType=='job' && userType=='owner'">{{ 'GENERAL.Applicants' | translate }}:
+            </ng-container>
+            <ng-container *ngIf="itemsType=='job' && userType=='responder'">{{ 'GENERAL.Jobs' | translate }}:
+            </ng-container>
+            <ng-container *ngIf="itemsType=='offering' && userType=='owner'">{{ 'GENERAL.Responds' | translate }}:
+            </ng-container>
+            <ng-container *ngIf="itemsType=='offering' && userType=='responder'">{{ 'GENERAL.Offering' | translate }}:
+            </ng-container>
+            <ng-container *ngIf="itemsType=='request' && userType=='owner'">{{ 'GENERAL.Responds' | translate }}:
+            </ng-container>
+            <ng-container *ngIf="itemsType=='request' && userType=='responder'">{{ 'GENERAL.Requests' | translate }}:
+            </ng-container>
+     </ng-container>
+       <ng-container *ngIf="itemsType">
+            <ng-container *ngIf="itemsType=='communities'">{{ 'COMMUNITY.Communities' | translate }}:</ng-container>
+             <ng-container *ngIf="itemsType=='products'">{{ 'GENERAL.Products' | translate }}:</ng-container>
+       </ng-container>
+</span>
+  </ng-container>
+
+  <ng-container *ngIf="showLeftButton">
+    <button pButton type="button" icon="pi pi-search"
+            (click)="onSearch()"></button>
+  </ng-container>
+
+
+  <input id="{{searchId}}" title="Type search term here" placeholder="{{placeholder}}" class="{{inputClass}}" type="text"
+         [formControl]="queryField" pInputText [value]="keyword" [autocomplete]="'off'" (keyup)="onKeyUp($event)"/>
+  <ng-container *ngIf="showRightButton">
+    <button *ngIf="showRightButton" pButton type="button" icon="pi pi-search" class="ui-button-secondary"
+            (click)="onSearch()"></button>
+  </ng-container>
+  <ng-container *ngIf="showRightIcon">
+    <span [appHighlightborder]="'#e2dee6'" class="ui-inputgroup-addon cursor-pointer {{rightIconClass}}"
+          (click)="onSearch()"><i class="pi pi-search"></i></span>
+  </ng-container>
+</div>
+
+
+
+  <ng-container *ngIf="suggestions">
+    <p-overlayPanel (onHide)="onPanelHide()" (onShow)="onPanelShown()" [appendTo]="'body'"
+                    #suggestionsPanel>
+      <ng-container *ngIf="suggestions && suggestionItems">
+        <div class="ui-g dashboard padding-0">
+          <div class="ui-g-12 padding-0">
+            <div class="padding-0 suggestions-list-size">
+
+              <ng-container *ngFor="let suggestion of suggestionItems; let i = index"  >
+                <div [appHighlightborder]="'#ebe7ef'" class="ui-g-12 padding-bottom-0 padding-top-0">
+
+
+                  <div class="contacts cursor-pointer" (click)="applySuggestion(suggestion)">
+                    <ul>
+                      <li class="clearfix ">
+                        <a class="link-color cursor-pointer">
+                          <img *ngIf="suggestion.image"
+                               src="{{suggestion.image}}" class="user-preview-image-small"
+                               alt="{{suggestion.name}}"/>
+
+                          <ng-container *ngIf="!suggestion.image">
+                            <img *ngIf="suggestion.type=='company'"
+                                 src="static/assets/img/company-default.png" alt="{{suggestion.name}}"
+                                 class="user-preview-image-small"/>
+                            <img *ngIf="suggestion.type=='user'"
+                                 src="static/assets/img/default-user.jpeg" alt="{{suggestion.name}}"
+                                 class="user-preview-image-small"/>
+                            <img *ngIf="suggestion.type=='product'"
+                                 src="static/assets/img/default_product.png" alt="{{suggestion.name}}"
+                                 class="user-preview-image-small"/>
+                            <img *ngIf="suggestion.type=='community'"
+                                 src="static/assets/img/community.png" alt="{{suggestion.name}}"
+                                 class="user-preview-image-small"/>
+                            <img *ngIf="suggestion.type=='category'"
+                                 src="static/assets/img/categories.jpg" alt="{{suggestion.name}}"
+                                 class="user-preview-image-small"/>
+                            <img *ngIf="suggestion.type=='tag'"
+                                 src="static/assets/img/tag-min.jpg" alt="{{suggestion.name}}"
+                                 class="user-preview-image-small"/>
+                          </ng-container>
+                        </a>
+                        <div class="contact-info">
+           <span class="user-preview-name-small">{{suggestion.name| truncate : truncateNumber}}
+                      </span>
+                          <span class="user-preview-info-small">{{ 'GENERAL.' + suggestion.type | translate }}</span>
+                        </div>
+
+                      </li>
+
+                    </ul>
+
+
+                  </div>
+
+
+                </div>
+
+              </ng-container>
+
+
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+
+
+    </p-overlayPanel>
+
+  </ng-container>

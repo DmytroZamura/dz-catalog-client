@@ -1,0 +1,302 @@
+<ng-container *ngIf="profile">
+ <div class="ui-g ui-fluid main-component-layout">
+
+
+    <div class="ui-g-12 padding-left-right-0 info-profile-size">
+      <div class="ui-g-12 padding-left-right-0">
+        <ng-container *ngIf="language">
+          <div class="card card-w-title">
+          <span class="big-title"><b>{{ 'GENERAL.Language' | translate }}:</b>
+
+
+          </span><br/>
+            <span class="middle-text"> {{ 'GENERAL.Full Edit in English' | translate }} </span>
+
+            <div class="ui-g">
+              <div class="ui-md-6 ui-g-12">
+
+                <app-select-common-item [(item)]="language" [endpoint]="'languages'"
+                                          [showFilter]="false"
+                                          [sortByName]="true" [showClear]="false"
+
+                                          (itemChange)="onLanguageSelect($event); employments.refreshEmploymnets($event.code); education.refreshEmploymnets($event.code);"></app-select-common-item>
+
+
+              </div>
+            </div>
+
+          </div>
+
+
+        </ng-container>
+      </div>
+
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card">
+          <form #profileForm="ngForm" (input)="ready_to_save()" (ngSubmit)="checkAndSaveProfile()">
+            <div class="ui-g">
+              <div class="ui-g-12" align="right">
+
+
+                <button pButton type="submit" class="ui-button-secondary flat"
+
+                        icon="pi pi-save" [disabled]="disabled_save || !profileForm.form.valid "></button>
+
+
+              </div>
+
+
+              <div class="ui-md-3 ui-g-12" align="center">
+
+
+                <img *ngIf="profile.img_details" name="avatar" style="width: 100%; height: auto"
+                     alt="{{profile.first_name}} {{profile.last_name}}"
+                     src="{{profile.img_details.file_url}}" class="ui-icon-broken-image"/>
+                <img *ngIf="!profile.img_details" alt="{{profile.first_name}} {{profile.last_name}}"
+                     src="static/assets/img/default-user.jpeg"
+                     style="width: 100%; height: auto"/>
+
+                <app-file id="file_upload" [cropImage]="true"
+                          (fileUpload)="onFileUpload($event)" [onlyIcon]="false" [label]="'BUTTONS.Browse' | translate "
+                          [icon]="'pi pi-camera'"></app-file>
+
+              </div>
+              <div class="ui-md-9 ui-g-12">
+
+                <ng-container>
+
+                  <div class="ui-g-12">
+                    <div class="ui-g form-group ui-fluid">
+
+                      <div class="ui-g-6">
+
+         <span class="md-inputfield translation-mark">
+
+        <input id="first_name" name="first_name" type="text" pInputText [(ngModel)]="profile.first_name"
+                required #first_name="ngModel"/>
+           <label for="first_name">{{ 'USERPROFILE.First_Name' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>:</label>
+           <div [hidden]="first_name.valid || first_name.pristine">
+<div *ngIf="first_name.errors && first_name.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+
+                      </div>
+                      <div class="ui-g-6">
+
+         <span class="md-inputfield translation-mark">
+
+        <input id="last_name" name="last_name" type="text" pInputText [(ngModel)]="profile.last_name"
+                required #last_name="ngModel"/>
+        <label for="last_name">{{ 'USERPROFILE.Last_Name' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>:</label>
+
+                     <div [hidden]="last_name.valid || last_name.pristine">
+<div *ngIf="last_name.errors && last_name.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+
+                      </div>
+
+                      <div class="ui-g-12 ui-md-12">
+
+         <span class="md-inputfield translation-mark">
+
+        <input id="headline" name="headline" type="text" pInputText [maxLength]="150" [(ngModel)]="profile.headline"/>
+        <label for="headline">{{ 'USERPROFILE.Headline' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>:</label>
+         </span>
+                      </div>
+
+ <div class="ui-g-12 padding-0">
+      <app-select-location [city]="profile.city_details" [country]="profile.country_details"
+                                       [initGeo]="false" [checkEnteredName]="true"
+                                       (selectedLocation)="onLocationSelect($event)" #location></app-select-location>
+</div>
+
+                      <div class="ui-g-12 ui-md-6">
+
+         <span class="md-inputfield">
+
+        <input id="website" name="website" type="url" pInputText
+               [(ngModel)]="profile.website" pattern="^https?://.+"
+               #website="ngModel"/>
+        <label for="website">{{ 'COMPANY.Website' | translate }}:</label>
+
+           <div [hidden]="website.valid || website.pristine">
+
+           <div *ngIf="website.errors && website.errors.pattern"
+                class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}. {{ 'GENERAL.It should look like' | translate }}
+             https://mysite.com
+            </div>
+           </div>
+         </span>
+                      </div>
+                      <div class="ui-g-12 ui-md-6">
+
+         <span class="md-inputfield">
+
+        <input id="email" name="email" type="text" pInputText
+               [(ngModel)]="profile.contact_email"
+               pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" #email="ngModel"/>
+        <label for="email">{{ 'GENERAL.Contact Email' | translate }}:</label>
+
+           <div [hidden]="email.valid || email.pristine">
+
+           <div *ngIf="email.errors && email.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           <div *ngIf="email.errors && email.errors.pattern" class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+         </span>
+                      </div>
+
+                      <div class="ui-g-12 ui-md-6">
+
+                       <span class="md-inputfield">
+        <input id="phone_number" name="phone_number"  type="text"
+               pInputText
+               [(ngModel)]="profile.contact_phone"/>
+
+        <label for="phone_number">{{ 'GENERAL.Contact Phone Number' | translate }}:</label>
+
+         </span>
+
+
+                      </div>
+                      <div class="ui-g-12 ui-md-6">
+
+                       <span class="md-inputfield">
+        <input id="skype" name="skype"  type="text"
+               pInputText
+               [(ngModel)]="profile.skype"/>
+
+        <label for="skype">Skype:</label>
+
+         </span>
+
+
+                      </div>
+
+
+                      <div class="ui-g-12">
+
+                        <label for="description">{{ 'USERPROFILE.Summary' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>: </label>
+                        <div class="translation-mark text-editor">
+
+                          <app-text-editor id="description" [(text)]="profile.short_description" [showBorder]="true"
+                                          [showAttachments]="true" [showImageButton]="true"
+                                           [mentions]="false"
+                                           [styles]="{'min-height': '220px'}"></app-text-editor>
+                        </div>
+
+                      </div>
+                      <div class="ui-g-12">
+                        <label for="tags">{{ 'GENERAL.Hashtags' | translate }}:</label>
+                        <p-chips [(ngModel)]="profile.tags" id="tags" name="tags"
+                                 title="{{ 'GENERAL.Hashtags' | translate }}" (onRemove)="ready_to_save()">
+
+                          <ng-template let-item pTemplate="item">
+                            <a class="text-white" [routerLink]="'/hashtag/'+item">
+                              <span
+                                class="ui-chips-token-label ng-star-inserted"><strong><u>#{{item}} </u></strong></span>
+                            </a>
+
+
+                          </ng-template>
+                        </p-chips>
+
+
+                      </div>
+
+
+                    </div>
+
+
+                  </div>
+
+
+                </ng-container>
+              </div>
+              <div class="ui-g-12 border-top-primary-small text-align-center">
+
+
+                <button pButton type="submit" label="{{ 'BUTTONS.Save' | translate }}"
+                        [disabled]="disabled_save || !profileForm.form.valid "
+                        icon="pi pi-save" style="width: auto"></button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+      <div class="ui-g-12 ui-md-12 padding-left-right-0">
+        <app-user-employment [profile]="profile.id" [edit_mode]="true" [education]="false"
+                             [language_code]="language.code"
+                              #employments></app-user-employment>
+      </div>
+
+      <div class="ui-g-12 ui-md-12 padding-left-right-0">
+        <app-user-employment [profile]="profile.id" [edit_mode]="true" [education]="true"
+                             [language_code]="language.code"
+                              #education></app-user-employment>
+      </div>
+
+      <div class="ui-g-12 ui-md-12 padding-left-right-0">
+
+        <p-panel>
+          <p-header>
+            <div class="ui-g-12 ui-md-12">
+              <span style="font-size:18px; color: #424242;">{{ 'CATEGORY.Your interests' | translate }}</span>
+            </div>
+          </p-header>
+          <div class="ui-g">
+            <div class="ui-g-12">
+              <span style="font-size:16px; color: #424242;">{{ 'USERPROFILE.Countries' | translate }}</span>
+            </div>
+            <div class="ui-g-12">
+              <app-profile-counties-interest [profile]="profile.id"
+                                           ></app-profile-counties-interest>
+            </div>
+
+            <div class="ui-g-12">
+              <span style="font-size:16px; color: #424242;">{{ 'CATEGORY.Categories' | translate }}</span>
+            </div>
+            <div class="ui-g-12">
+              <app-profile-categories [interest]="true" [profile]="profile.id"
+                                    ></app-profile-categories>
+            </div>
+          </div>
+
+        </p-panel>
+
+      </div>
+
+
+      <div class="ui-g-12 ui-md-12 padding-left-right-0">
+        <p-panel>
+          <p-header>
+            <div class="ui-g-12 ui-md-12">
+              <span style="font-size:18px; color: #424242;">{{ 'USERPROFILE.Resume' | translate }}</span>
+            </div>
+          </p-header>
+          <div class="ui-g">
+            <app-resume [profile]="profile.id"></app-resume>
+          </div>
+        </p-panel>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+</ng-container>
+

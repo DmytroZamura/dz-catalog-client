@@ -1,0 +1,29 @@
+<ng-container *ngIf="tag">
+  <div class="ui-g-12 tag-preview">
+
+    <div class="ui-toolbar-group-left align-items-center">
+      <img class="small-rounded-image"
+        src="static/assets/img/tag-min.jpg" alt="{{tag.name}}"/>
+      <div class="margin-left-10px">
+        <a [routerLink]="'/hashtag/'+tag.name"> <span class="normal-text">
+
+   <strong>{{tag.name}}</strong></span></a><br/>
+        <ng-container *ngIf="tag">
+                  <span class="text-muted small-text" *ngIf="tag.qty">({{tag.qty.followers}} {{ 'GENERAL.Followers' | translate }}
+                    )</span>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="ui-toolbar-group-{{buttonPosition}} align-items-center">
+      <ng-container *ngIf="currentUserId">
+
+        <div  class="padding-left-20px">
+          <app-follow-tag-button [followStatus]="tag.follow_status" [tagId]="tag.id" [userId]="currentUserId"
+                                 (followStastusChanged)="onFollowStatusChanged($event)"
+                                 ></app-follow-tag-button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,33 @@
+
+  <p-inplace #inplaceText>
+
+    <span pInplaceDisplay>
+
+      <ng-container *ngIf="text">
+      <app-text-show-more [text]="text" [richText]="false" [currentUserId]="currentUserId"
+                          [truncate_number]="50" [showSeeMore]="false"></app-text-show-more>
+      </ng-container>
+      <ng-container *ngIf="!text">
+        <i>{{ writePlaceholder }}</i>
+      </ng-container>
+
+    </span>
+    <span pInplaceContent>
+
+         <textarea id="text" name="text" pInputTextarea
+                   [(ngModel)]="text" placeholder="{{ placeholder }}"
+                   rows="2" [autoResize]="true" [maxlength]="1000" (input)="readySaveText()"></textarea>
+
+      <button pButton type="button" class="ui-button-secondary flat middle-button"
+              label="{{ 'BUTTONS.Close' | translate }}"
+              icon="pi pi-times" (click)="onCancel()" style="width: auto"></button>
+
+    <button pButton type="button" class="middle-button" [disabled]="!readyToSave"
+            label="{{ 'BUTTONS.Save' | translate }}" (click)="onSave()"
+            icon="pi pi-save" style="width: auto"></button>
+
+
+    </span>
+
+  </p-inplace>
+

@@ -1,0 +1,42 @@
+<span *ngIf="label" class="md-inputfield">
+ <p-autoComplete id="select-company-label"  name="company" required #companyF="ngModel"
+                 (onSelect)="onCompanySelect($event)"
+                 [suggestions]="filteredCompanies" (completeMethod)="getFilteredCompanies($event)"
+                 [(ngModel)]="company" field="name" (onClear)="onClear()"
+                 [minLength]="1" [disabled]="disabled">
+
+
+   <ng-template let-company pTemplate="item">
+
+      <div style="display : flex; align-items: center ">
+     <img *ngIf="company.logo_details"
+          src="{{company.logo_details.small_image_url}}"
+          style="width: 30px; height: 30px; border-radius: 50%"/>
+      <img *ngIf="!company.logo_details"
+           src="static/assets/img/company-default.png"
+           style="width: 30px; height: 30px; border-radius: 50%;"/>
+    <span>&nbsp;&nbsp;&nbsp;
+      {{company.name}}</span>
+      </div>
+    </ng-template>
+
+
+ </p-autoComplete>
+ <label *ngIf="!label_text" for="select-company-label">{{ 'COMPANY.Company' | translate }}:</label>
+   <label *ngIf="label_text" for="select-company-label">{{label_text}}:</label>
+<ng-container *ngIf="requred">
+   <div [hidden]="companyF.valid">
+<div *ngIf="companyF.errors && companyF.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+</ng-container>
+         </span>
+
+<p-autoComplete *ngIf="!label" id="select-company"
+                (onSelect)="onCompanySelect($event)"
+                [suggestions]="filteredCompanies" (completeMethod)="getFilteredCompanies($event)"
+                [(ngModel)]="company" field="name"
+                [minLength]="1" [disabled]="disabled"></p-autoComplete>
+
+

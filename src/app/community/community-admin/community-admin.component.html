@@ -1,0 +1,60 @@
+<ng-container *ngIf="isBrowser">
+
+
+  <div class="ui-g">
+    <ng-container *ngIf="!community">
+      <div class="ui-g-12 text-center loading" align="center">
+        <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                           animationDuration=".5s"></p-progressSpinner>
+      </div>
+    </ng-container>
+    <div class="ui-g-12 padding-0">
+      <div class="layout-top">
+        <div class="card" *ngIf="community">
+          <div style="display : flex; align-items: center ">
+            <ng-container *ngIf="!isMobile">
+              <a [routerLink]="['/community/'+community.id]">
+
+                <img *ngIf="community.image_details" alt="{{community.name}}"
+                     src="{{community.image_details.small_image_url}}"
+                     class="top-tab-image "/>
+                <img *ngIf="!community.image_details" alt="{{community.name}}"
+                     src="static/assets/img/community.png"
+                     class="top-tab-image "/></a>
+              &nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </ng-container>
+            <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}"></p-tabMenu>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g-12 layout-work padding-left-right-0">
+      <ng-container *ngIf="activeTab==0 && community">
+        <app-community-overview-admin [community]="community"></app-community-overview-admin>
+
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==1 && community">
+        <app-community-members *ngIf="community && member" [community]="community"></app-community-members>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==2 && community">
+        <app-community-companies *ngIf="community && member" [community]="community"></app-community-companies>
+
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==3 && community">
+        <app-community-invitations *ngIf="community && member" [community]="community"></app-community-invitations>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==4 && community">
+        <app-admins-management [community]="community.id" [currentUserId]="currentUserId" [isMobile]="isMobile"
+                               [locale]="language"></app-admins-management>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

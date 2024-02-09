@@ -1,0 +1,19 @@
+
+
+
+
+<p-tree [value]="lazyNodes" (onNodeExpand)="nodeExpand($event)"
+        selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)"
+        [style]="{'width':'100%', 'border': 'none', 'margin-left':'-10px'}">
+  <ng-template let-node pTemplate="default">
+
+
+
+    <span *ngIf="(node!=selectedNode || node.data.id == null)"
+          class="category-tree-label"> {{node.data.name}}</span>
+
+
+  </ng-template>
+</p-tree>
+
+

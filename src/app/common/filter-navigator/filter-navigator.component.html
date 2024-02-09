@@ -1,0 +1,263 @@
+<ng-container *ngIf="showFilter">
+
+  <ng-container *ngIf="showCategories">
+    <div class="ui-g-12 padding-left-right-0">
+      <div class="card">
+        <div class="ui-g">
+
+          <div class="ui-g-12 ui-md-12 padding-0" (click)="onShowCategoryDialog()">
+            <span class="select-title" [appHighlightborder]="'#ebe7ef'">
+              <ng-container *ngIf="app.appService.loadingIcons">
+              <i class="pi pi-list select-button-icon"></i>
+              </ng-container>
+              <span
+              class="select-button-icon"><ng-container *ngIf="app.lang"> {{ 'CATEGORY.Categories' | translate }}</ng-container></span></span>
+          </div>
+          <div class="ui-g-12 ui-md-12 padding-0">
+
+            <app-categories-navigator [showChildCategories]="showChildCategories" [filter]="contentTypeFilter"
+                                      (categorySelect)="onCategorySelected($event)"
+                                      [carouselView]="childCategoriesCarouselView"
+                                      [productView]="childCategoriesProductView"
+                                      #navigator></app-categories-navigator>
+          </div>
+
+
+          <ng-container *ngIf="isBrowser">
+          <app-select-category-dialog (categorySelect)="onCategorySelected($event)" [filter]="contentTypeFilter"
+                                      #categorydialog></app-select-category-dialog>
+          </ng-container>
+
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="filter">
+    <ng-container *ngIf="filterType=='feed' || filterType == 'favorite-posts'">
+      <div class="ui-g-12 padding-left-right-0 text-align-center">
+
+        <app-select-common-item [(item)]="filter.post_type" [endpoint]="'post-types'" [defaultFilter]="postTypesFilter"
+                                [showFilter]="false"
+                                [buttonBadgeClass]="'big-primary-badge'" [items]="postTypes"
+                                [viewType]="3" [selectedButtonBadgeClass]="'big-primary-badge-selected'"
+                                [namePlural]="true" [disabled]="loading"
+                                [sortByName]="false" [showClear]="true"
+                                (itemChange)="updatePostType($event)"></app-select-common-item>
+
+      </div>
+    </ng-container>
+    <div class="ui-g-12 padding-left-right-0 padding-top-0">
+      <ng-container *ngIf="filterType=='feed' || filterType == 'favorite-posts'">
+
+
+        <ng-container *ngIf="filter.salary_from||filter.salary_to">
+ <span class="value-badge-filter-attributes" style="cursor: pointer;"
+       (click)="clearSalary()">&nbsp;
+
+   {{ 'POSTS.Salary' | translate }}:
+        <ng-container *ngIf="filter.salary_from">
+          {{ 'POSTS.Salary from' | translate }} {{filter.salary_from}}
+        </ng-container>
+        <ng-container *ngIf="filter.salary_from && filter.salary_to"> -</ng-container>
+        <ng-container *ngIf="filter.salary_to">
+          {{ 'POSTS.Salary to' | translate }} {{filter.salary_to}}
+        </ng-container>
+   <ng-container *ngIf="app.appService.loadingIcons">
+  <i class="pi pi-times close-filter-icon">close</i>
+   </ng-container>
+ </span>&nbsp;
+
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngIf="filter.country">
+
+    <span class="value-badge" style="cursor: pointer;" (click)="deleteCountry()">{{filter.country.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+      </ng-container>
+      <ng-container *ngIf="filter.region">
+
+    <span class="value-badge" style="cursor: pointer;" (click)="deleteRegion()">{{filter.region.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+      </ng-container>
+
+      <ng-container *ngIf="filter.city">
+
+    <span class="value-badge" style="cursor: pointer;" (click)="deleteCity()">{{filter.city.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+      </ng-container>
+
+      <ng-container *ngIf="filterType=='companies' || filterType=='people' || filterType=='favorite-companies'">
+
+        <ng-container *ngIf="filter.company_type">
+
+  <span class="value-badge" style="cursor: pointer;"
+        (click)="deleteCompanyType()">{{filter.company_type.name}} <i
+    class="pi pi-times close-filter-icon"></i>&nbsp;</span>&nbsp;
+
+
+        </ng-container>
+        <ng-container *ngIf="filter.company_industry">
+
+  <span class="value-badge" style="cursor: pointer;"
+        (click)="deleteCompanyIndustry()">{{filter.company_industry.name}} <i
+    class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+
+        <ng-container *ngIf="filter.company_size">
+
+  <span class="value-badge" style="cursor: pointer;"
+        (click)="deleteCompanySize()">{{filter.company_size.name}} <i
+    class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+
+
+      </ng-container>
+
+      <ng-container *ngIf="filterType=='applicants' ">
+        <ng-container *ngIf="filter.applicantStatus">
+
+    <span class="value-badge" style="cursor: pointer;"
+          (click)="deleteApplicantStatus()">{{filter.applicantStatus.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngIf="filterType=='responds' ">
+        <ng-container *ngIf="filter.respondStatus">
+
+    <span class="value-badge" style="cursor: pointer;"
+          (click)="deleteRespondStatus()">{{filter.respondStatus.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngIf="filterType=='supply-requests' ">
+        <ng-container *ngIf="filter.requestStatus">
+
+    <span class="value-badge" style="cursor: pointer;"
+          (click)="deleteRequestStatus()">{{filter.requestStatus.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngIf="filterType=='applicants' || filterType=='feed'">
+
+        <ng-container *ngIf="filter.job_type">
+
+    <span class="value-badge" style="cursor: pointer;" (click)="deleteJobType()">{{filter.job_type.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+        <ng-container *ngIf="filter.seniority_label">
+
+    <span class="value-badge" style="cursor: pointer;"
+          (click)="deleteSeniorityLabel()">{{filter.seniority_label.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+
+        <ng-container *ngIf="filter.job_function">
+
+    <span class="value-badge" style="cursor: pointer;"
+          (click)="deleteJobFunction()">{{filter.job_function.name}} <i
+      class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+      </ng-container>
+
+    </div>
+    <ng-container *ngIf="feedFilter">
+      <ng-container *ngIf="feedFilter.filter_id && feedFilter.able_to_follow">
+        <div class="ui-g-12 padding-left-right-0 text-align-right border-top-small">
+          <button *ngIf="!feedFilter.following_status" pButton type="button" class="flat ui-button-success"
+                  icon="pi pi-plus" label="{{ 'BUTTONS.Follow feed' | translate }}"
+                  (click)="followFeed()" style="width: auto" [disabled]="loading"></button>
+
+          <button *ngIf="feedFilter.following_status" pButton type="button"
+                  class="flat ui-button-secondary following-btn" icon="pi pi-check"
+                  label="{{ 'BUTTONS.Following feed' | translate }}"
+                  (click)="unfollowFeed()" style="width: auto;" [disabled]="loading"></button>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+
+  <ng-container *ngIf="filter">
+
+    <div class="ui-g-12 padding-0">
+
+
+      <ng-container *ngIf="filter.filterSet">
+        <ng-container
+          *ngIf="(filter.filterSet.price_from||filter.filterSet.price_to) || filter.filterSet.filterValues.length>0">
+     <span class="value-badge-filter-attributes" style="cursor: pointer;"
+           (click)="clearAtributes()">
+     <ng-container *ngIf="filter.filterSet.price_from||filter.filterSet.price_to">
+
+
+    {{ 'PRODUCT.Price' | translate }}:
+    <ng-container *ngIf="filter.filterSet.price_from">
+    {{ 'PRODUCT.Price from' | translate }} {{filter.filterSet.price_from}}
+    </ng-container>
+    <ng-container *ngIf="filter.filterSet.price_from && filter.filterSet.price_to">  - </ng-container>
+    <ng-container *ngIf="filter.filterSet.price_to">
+    {{ 'PRODUCT.Price to' | translate }} {{filter.filterSet.price_to}}
+    </ng-container>,
+
+
+
+    </ng-container>
+
+      <ng-container *ngFor="let filterValue of filter.filterSet.filterValues; let i = index"  >
+  <ng-container *ngIf="filterValue.type==1 && !filterValue.multiple">
+    {{filterValue.value_list.name}},
+  </ng-container>
+         <ng-container *ngIf="filterValue.type==1 && filterValue.multiple && filterValue.attribute">
+           {{filterValue.attribute.name}}: {{filterValue.values.length}}   {{ 'GENERAL.values' | translate }},
+         </ng-container>
+        <ng-container *ngIf="(filterValue.type==2 || filterValue.type==5) && filterValue.attribute">
+            {{filterValue.attribute.name}}: {{filterValue.values[0]}} - {{filterValue.values[1]}},
+        </ng-container>
+        <ng-container *ngIf="filterValue.type==4 && filterValue.attribute">
+       {{filterValue.attribute.name}},
+        </ng-container>
+
+      </ng-container>
+      <i
+        class="pi pi-times close-filter-icon"></i></span>&nbsp;
+
+
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+
+
+</ng-container>

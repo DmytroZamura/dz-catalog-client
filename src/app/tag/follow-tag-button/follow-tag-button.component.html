@@ -1,0 +1,12 @@
+<ng-container *ngIf="userId">
+
+  <button *ngIf="!followStatus" pButton type="button" class="flat width-auto" icon="pi pi-plus" label="{{ 'BUTTONS.Follow' | translate }}"
+              (click)="followTag()"  [disabled]="loading" ></button>
+
+  <button *ngIf="followStatus"   pButton type="button" class="flat ui-button-secondary width-auto color-primary font-bold"
+          icon="pi pi-check" label="{{ 'BUTTONS.Following' | translate }}"
+              (click)="unfollowTag()" [disabled]="loading"></button>
+
+
+
+  </ng-container>

@@ -1,0 +1,118 @@
+<ng-container *ngIf="company">
+    <ng-container *ngIf="size !== 'actor'">
+  <div class="contacts">
+    <ul>
+      <li class="clearfix ">
+        <span class="link-color cursor-pointer" (click)="showCompany()"
+           (mouseleave)="hidePreviewPanel()">
+          <img *ngIf="company.logo_details"
+               src="{{company.logo_details.small_image_url}}" (mouseover)="showPreviewPanel($event)" class="user-preview-image-{{size}}"
+               alt="{{company.name}}"/>
+
+          <img *ngIf="!company.logo_details"
+               src="static/assets/img/company-default.png" (mouseover)="showPreviewPanel($event)" alt="{{company.name}}"
+               class="user-preview-image-{{size}}"/>
+        </span>
+        <ng-container *ngIf="product">
+          <span class="link-color cursor-pointer" (click)="showProduct()"
+             (mouseleave)="hidePreviewPanel()">
+
+            <img *ngIf="product.images[0]" alt="{{product.name}}" (mouseover)="showProductPreviewPanel($event)"
+                 src="{{product.images[0].image_details.small_image_url}}" class="preview-margin-image-{{size}}"/>
+
+            <img *ngIf="!product.images[0]" alt="{{product.name}}" (mouseover)="showProductPreviewPanel($event)"
+                 src="static/assets/img/default_product.png"
+                 class="preview-margin-image-{{size}}"/>
+          </span>
+        </ng-container>
+        <div class="contact-info">
+          <ng-container *ngIf="!company.deleted">
+          <ng-container *ngIf="!((rating &&  product) || (editRating && product)) ">
+            <span class="link-color cursor-pointer" (click)="showCompany()" (mouseover)="showPreviewPanel($event)"
+               (mouseleave)="hidePreviewPanel()">
+                      <span class="user-preview-name-{{size}}">{{company.name | truncate : truncate_number}}
+                        <ng-container *ngIf="showSlug"> <span class="text-muted">@{{company.slug}}</span></ng-container>
+                      </span>
+
+
+              <ng-container *ngIf="showInfo && !product">
+              <span *ngIf="company.headline"
+                    class="user-preview-info-{{size}}">{{company.headline | truncate : truncate_number + 4}}</span>
+                <span
+                  *ngIf="!company.headline &&  company.company_industry_details"
+                  class="user-preview-info-{{size}}">{{company.company_industry_details.name | truncate : truncate_number + 8}}</span>
+
+              </ng-container>
+            </span>
+          </ng-container>
+          <ng-container *ngIf="(showInfo && product) || (rating && product) || (editRating && product)">
+            <ng-container *ngIf="product">
+            <span class="link-color cursor-pointer" (click)="showProduct()" (mouseover)="showProductPreviewPanel($event)"
+               (mouseleave)="hidePreviewPanel()">
+               <span *ngIf="!product.deleted && product.published"
+                     class="user-preview-name-{{size}}"><strong>{{product.name | truncate : truncate_number}}</strong></span>
+               <span *ngIf="product.deleted || !product.published"
+                     class="user-preview-name-{{size}}"><strong>{{'GENERAL.А product is deleted' | translate}}</strong></span>
+            </span>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="rating || editRating">
+            <ng-container *ngIf="!product">
+              <span class="link-color cursor-pointer" (click)="showCompany()" (mouseover)="showPreviewPanel($event)"
+                 (mouseleave)="hidePreviewPanel()">
+                <p-rating [ngModel]="rating" [cancel]="false" [disabled]="!editRating" (onRate)="onRate($event)"
+                          [iconOnStyle]="{'color': '#FFC107'}"></p-rating>
+              </span>
+            </ng-container>
+            <ng-container *ngIf="product">
+              <span class="link-color cursor-pointer" (click)="showProduct()" (mouseover)="showProductPreviewPanel($event)"
+                 (mouseleave)="hidePreviewPanel()">
+                <p-rating [ngModel]="rating" [cancel]="false" [disabled]="!editRating" (onRate)="onRate($event)"
+                          [iconOnStyle]="{'color': '#FFC107'}"></p-rating>
+              </span>
+            </ng-container>
+
+
+          </ng-container>
+
+          <ng-container *ngIf="message">
+            <span class="user-preview-message-{{size}} muted"><i>{{message| truncate : truncate_number}}</i></span>
+
+          </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="company.deleted">
+             <span class="user-preview-name-{{size}}">{{'GENERAL.А company is deleted' | translate}}
+                      </span>
+          </ng-container>
+        </div>
+
+      </li>
+
+    </ul>
+
+
+  </div>
+    </ng-container>
+
+  <ng-container *ngIf="size == 'actor'">
+ <span class="select-text middle-text"
+       (click)="showCompany()" (mouseover)="showPreviewPanel($event)"
+       (mouseleave)="hidePreviewPanel()"><strong>
+   <ng-container *ngIf="!company.deleted">
+{{company.name}}</ng-container>
+    <ng-container *ngIf="company.deleted">
+      {{'GENERAL.А company is deleted' | translate}}
+    </ng-container>
+
+ </strong></span>
+  </ng-container>
+
+
+  <ng-container *ngIf="showPreview && !company.deleted">
+
+    <app-preview-overlay-panel  [locale]="locale" [currentUser]="currentUser" [currencyCode]="currencyCode"
+                               (itemClicked)="onItemClicked()"
+                               #previewpanel></app-preview-overlay-panel>
+  </ng-container>
+</ng-container>

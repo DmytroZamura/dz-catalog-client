@@ -1,0 +1,62 @@
+
+<ng-container *ngIf="isBrowser">
+ <p-sidebar [(visible)]="visibleSidebar1" position="right" [dismissible]="true" [showCloseIcon]="false" [styleClass]="'notification-bar ui-sidebar-md'"
+            [modal]="false">
+
+<div class="ui-g dashboard ">
+  <div class="ui-g-12  padding-0 ">
+    <div class="ui-toolbar-group-left">
+    <h3>{{ 'GENERAL.Notifications' | translate }}</h3>
+    </div>
+     <div class="ui-toolbar-group-right">
+       <button pButton type="button" title="{{ 'GENERAL.Favorites' | translate }}" (click)="closeFeed()"
+          class="flat ui-button-secondary" icon="pi pi-times"></button>
+     </div>
+  </div>
+
+
+      <div #scrollContainer class="sidebar-scroll box-border-small" appInfscroll (scroll)="onScrolled($event)">
+
+        <ng-container *ngFor="let item of feedItems; let i = index"  >
+
+
+          <ng-container *ngIf="item.activities[0].target">
+            <div class="ui-g-12 padding-0 notification-height"
+
+                 [class.border-bottom-small]="item.is_seen"
+                 [class.border-top-small]="item.is_seen"
+
+                 [class.border-top-primary-small]="!item.is_seen"
+                 [class.border-bottom-primary-small]="!item.is_seen">
+
+              <ng-container>
+
+
+                <app-notification-item [truncateNumber]="truncateNumber" [currentUserId]="currentUserId" [item]="item"
+                                        [locale]="locale" [siteUrl]="siteUrl"
+                                       (chatSelected)="onShowChat($event)" (itemClicked)="closeFeed()"></app-notification-item>
+
+
+
+
+              </ng-container>
+
+
+            </div>
+          </ng-container>
+
+        </ng-container>
+      <ng-container *ngIf="loading">
+        <div class="ui-g-12 text-center" align="center">
+          <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+                             animationDuration=".5s"></p-progressSpinner>
+        </div>
+      </ng-container>
+
+    </div>
+</div>
+
+ </p-sidebar>
+
+
+</ng-container>

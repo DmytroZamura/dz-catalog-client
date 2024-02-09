@@ -1,0 +1,114 @@
+<p-dialog header="{{ 'COMMUNITY.Create community' | translate }}" [(visible)]="show_dialog"
+         [styleClass]="'mobile-dialog'" [appendTo]="'body'" [modal]="true">
+
+  <form #communityForm="ngForm" (ngSubmit)="onSave()">
+    <div class="ui-g-12 info-profile-size" *ngIf="community">
+  <p-scrollPanel [styleClass]="'dialog-scroll'">
+
+      <div class="ui-md-3 ui-g-12 text-align-center">
+
+
+        <img *ngIf="community.image_details" name="avatar" style="width: 100%; height: auto"
+             src="{{community.image_details.file_url}}" class="ui-icon-broken-image"/>
+        <img *ngIf="!community.image_details"
+             src="static/assets/img/community.png"
+             style="width: 100%; height: auto" class="ui-icon-broken-image"/>
+
+        <app-file id="file_upload" [resizeToWidth]="300" [cropperMinWidth]="300"
+                          [cropImage]="true" [onlyIcon]="false" [label]="'BUTTONS.Browse' | translate "  [icon]="'pi pi-image'"
+                          (fileUpload)="onFileUpload($event)"></app-file>
+
+      </div>
+      <div class="ui-md-9 ui-g-12">
+
+        <ng-container>
+          <div class="ui-g-12">
+            <div class="ui-g form-group ui-fluid">
+              <div class="ui-g-12"><span style="font-size: 12px; color: #757575;"> {{ 'GENERAL.Please fill data in English' | translate }}</span>
+              </div>
+              <div class="ui-g-12">
+
+         <span class="md-inputfield">
+
+        <input id="community_name" name="community_name" type="text" pInputText [(ngModel)]="community.name" required
+               #community_name="ngModel"/>
+        <label for="community_name">{{ 'COMMUNITY.Community Title' | translate }}:</label>
+            <div [hidden]="community_name.valid || community_name.pristine">
+<div *ngIf="community_name.errors && community_name.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+              </div>
+
+
+              <div class="ui-g-12">
+
+                <label for="description">{{ 'COMMUNITY.Community Description' | translate }}: </label>
+                <textarea id="description" name="short_description" pInputTextarea
+                          [(ngModel)]="community.description"
+                          rows="4"></textarea>
+
+
+              </div>
+
+
+              <div class="ui-g-12 ui-md-4">
+                {{ 'COMMUNITY.Open Community' | translate }}:
+                <p-checkbox name="open" id="open" [(ngModel)]="community.open" binary="true"></p-checkbox>
+
+              </div>
+
+             <div class="ui-g-12 ui-md-8">
+                {{ 'COMMUNITY.Show Products' | translate }}:
+                <p-checkbox name="show_products" id="show_products" [(ngModel)]="community.show_products" binary="true" [disabled]="community.open"></p-checkbox>
+
+              </div>
+
+                      <div class="ui-g-12 ui-md-4">
+                {{ 'COMMUNITY.Local Community' | translate }}:
+                <p-checkbox name="local_community" id="local_community" [(ngModel)]="community.local_community" binary="true" (onChange)="onLocalChange($event)" ></p-checkbox>
+
+              </div>
+
+
+<div class="ui-g-12 ui-md-8 padding-0">
+
+      <app-select-location [city]="community.city_details" [country]="community.country_details"
+                                       [initGeo]="false" [checkEnteredName]="true" [disabled]="!community.local_community"
+                                       (selectedLocation)="onLocationSelect($event)" #location></app-select-location>
+</div>
+
+                   <div class="ui-g-12">
+
+                <label for="rules">{{ 'COMMUNITY.Community Rules' | translate }}: </label>
+                <textarea id="rules" name="rules" pInputTextarea
+                          [(ngModel)]="community.rules"
+                          rows="4"></textarea>
+
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+        </ng-container>
+      </div>
+  </p-scrollPanel>
+
+    </div>
+  </form>
+
+    <div class="ui-dialog-buttonpane ui-helper-clearfix text-align-center">
+      <button type="button" pButton icon="pi pi-times" (click)="onCancel()" class="flat ui-button-secondary"
+              label="{{ 'BUTTONS.Cancel' | translate }}"></button>&nbsp; &nbsp;
+      <button type="submit" pButton icon="pi pi-save" class="ui-button flat"
+              label="{{ 'BUTTONS.Save' | translate }}" [disabled]="!communityForm.form.valid || disabledSave "
+              (click)="onSave()"></button>
+    </div>
+
+
+</p-dialog>

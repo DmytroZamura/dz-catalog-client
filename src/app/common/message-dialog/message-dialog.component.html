@@ -1,0 +1,52 @@
+<p-dialog [(visible)]="show_dialog" [modal]="true" [appendTo]="'body'"
+          [maximizable]="false" [closeOnEscape]="true" [blockScroll]="true">
+
+
+  <p-header>
+    <strong>{{header }}</strong>
+
+  </p-header>
+
+
+  <div class="ui-g form-group ui-fluid">
+
+
+    <div class="ui-g-12 posts-list-size">
+
+      <label for="message"><strong>{{ label}}:</strong> </label>
+      <p-scrollPanel [styleClass]="'dialog-scroll-message'">
+        <app-text-editor id="message" [(text)]="message" [theme]="'bubble'" [showAttachments]="false"
+                         [mentions]="true" [bounds]="'self'"
+                         [showBorder]="false"
+                         [placeholder]="placeholder" #textEditor></app-text-editor>
+      </p-scrollPanel>
+
+    </div>
+
+  </div>
+
+  <div class="ui-g-12 padding-bottom-0 padding-top-0">
+    <div class="ui-toolbar-group-right">
+      <ng-container *ngIf="show_dialog">
+        <app-message-attachments
+                                      (selectImage)="onFileUpload($event)"
+                                      (selectEmoji)="addEmoji($event)"
+                                      (selectGiphy)="addGiphy($event)"
+                                      (selectSticker)="addSticker($event)"></app-message-attachments>
+      </ng-container>
+
+
+    </div>
+  </div>
+
+  <div class="ui-g-12 text-align-center message-box">
+    <button pButton type="button" class="ui-button-secondary flat" label="{{ 'BUTTONS.Cancel' | translate }}"
+            (click)="onCancel()" style="width: auto"></button>
+
+    &nbsp;&nbsp;
+    <button pButton type="button" label="{{submitButtonLabel}}" style="width: auto"
+            (click)="onSendMessage()" icon="pi pi-envelope"></button>
+  </div>
+
+
+</p-dialog>

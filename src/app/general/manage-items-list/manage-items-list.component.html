@@ -1,0 +1,52 @@
+<div [class.padding-0]="!showFilter" [class.ui-g-12]="!showFilter">
+  <div class="ui-g-12 padding-0" [class.onboarding-container]="app.appService.onboarding">
+    <div class="ui-g-12 padding-0" joyrideStep="navigator" title="{{ 'ONBOARDING.filterTitle' | translate }}"
+             text="{{ 'ONBOARDING.filterNavigatorText' | translate }}" stepPosition="bottom">
+      <app-filter-navigator [filterType]="itemsType" [showCategories]="showCategories"
+                            [showFilter]="showFilter" [objectRelatedTypesFilter]="objectRelatedTypesFilter"
+                            [childCategoriesCarouselView]="childCategoriesCarouselView"
+                            [childCategoriesProductView]="childCategoriesProductView"
+                            [showChildCategories]="showChildCategories" [filter]="appliedFilter"
+                            #navigator></app-filter-navigator>
+    </div>
+  </div>
+
+</div>
+
+<ng-container *ngIf="(showSearch || showOrdering) && app.lang">
+  <div class="ui-g-12 padding-0">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12 padding-left-right-0">
+
+        <ng-container *ngIf="showSearch">
+          <div class="padding-0" [class.ui-g-5]="showOrdering" [class.ui-md-6]="showOrdering"
+               [class.ui-g-12]="!showOrdering">
+            <div style=" margin-top: -6px;">
+              <app-search-box [showRightIcon]="true" [showRightButton]="false" [showSearchLabel]="showSearchLabel"
+                              [userType]="userType" [itemsType]="itemsType"
+                              [rightIconClass]="'search-icon-no-border'"
+                              (searchKeyword)="setKeyword($event)"></app-search-box>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="showOrdering">
+          <div class="padding-0" [class.ui-g-7]="showSearch" [class.ui-md-6]="showSearch" [class.ui-g-12]="!showSearch">
+                <span style="float: right">
+                <span
+                  class="text-muted middle-text">{{ 'GENERAL.Ordering' | translate }}: </span>
+                     <app-select-ordering [itemsType]="itemsType"
+                                          (selectedOrdering)="changeOrdering($event)"></app-select-ordering>
+
+                </span>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="isBrowser">
+
+  <app-likes-dialog [locale]="locale" #likes></app-likes-dialog>
+</ng-container>

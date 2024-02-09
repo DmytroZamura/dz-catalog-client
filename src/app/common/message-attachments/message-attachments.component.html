@@ -1,0 +1,57 @@
+
+
+<!--<ng-container *ngIf="showEmojiButton">-->
+  <!--<button id="emojibutton" name="emojibutton" type="button" class="flat comment-button"-->
+          <!--pButton (click)="toggleEmojiPicker($event)" icon="pi pi-thumbs-up"></button>-->
+<!--</ng-container>-->
+<ng-container *ngIf="showImageButton">
+  <app-file id="file_upload" [cropImage]="false"
+            [class]="'flat comment-button'" [uploadImage]="true"
+            [cropperMinWidth]="200" [resizeToWidth]="1000" [onlyScaleDown]="true"
+            [changeAspectRatio]="true" (fileUpload)="onFileUpload($event)" [onlyIcon]="true"
+            [icon]="'pi pi-camera'"></app-file>
+</ng-container>
+
+<ng-container *ngIf="showGiphyButton">
+  <button id="gifbutton" name="gifbutton" type="button" class="flat comment-button" title="gifs"
+          pButton (click)="toggleGiphySearch($event)" icon="pi pi-images"></button>
+</ng-container>
+<ng-container *ngIf="showGiphyStickersButton">
+  <button id="gifstickersbutton" name="gifstickersbutton" type="button" class="flat comment-button" title="Stickers"
+          pButton (click)="toggleGiphyStickersSearch($event)" icon="pi pi-thumbs-up"></button>
+</ng-container>
+
+
+<!--<ng-container *ngIf="showEmojiButton">-->
+  <!--<p-overlayPanel  [appendTo]="'body'" #emojiPanel>-->
+    <!--<emoji-mart *ngIf="showEmoji" class="emoji-mart" set="google" (emojiSelect)="addEmoji($event)" [sheetSize]="32"-->
+                <!--[i18n]="{ search: 'GENERAL.Search' | translate, categories: { search: 'GENERAL.Search results' | translate,-->
+<!--recent: 'GENERAL.Frequently Used' | translate,-->
+  <!--people: 'GENERAL.Smileys & People' | translate,-->
+  <!--nature: 'GENERAL.Animals & Nature' | translate,-->
+  <!--foods: 'GENERAL.Food & Drink' | translate,-->
+  <!--activity: 'GENERAL.Activity' | translate,-->
+  <!--places: 'GENERAL.Travel & Places' | translate,-->
+  <!--objects: 'GENERAL.Objects' | translate,-->
+  <!--symbols: 'GENERAL.Symbols' | translate,-->
+  <!--flags: 'GENERAL.Flags' | translate}}"-->
+                <!--title="{{'GENERAL.Pick your emoji…' | translate}}"></emoji-mart>-->
+  <!--</p-overlayPanel>-->
+<!--</ng-container>-->
+
+<ng-container *ngIf="showGiphyButton">
+<p-overlayPanel [appendTo]="'body'" (onHide)="onGiiphyHide()" #giphyPanel>
+  <ng-container *ngIf="showGiphySearch">
+    <app-select-giphy  (selectGiphy)="onGiphySelect($event)"></app-select-giphy>
+  </ng-container>
+</p-overlayPanel>
+</ng-container>
+
+
+<ng-container *ngIf="showGiphyStickersButton">
+<p-overlayPanel [appendTo]="'body'" (onHide)="onStickerHide()" #giphyStickersPanel >
+  <ng-container *ngIf="showGiphyStickersSearch">
+    <app-select-giphy  [stickers]="true" (selectGiphy)="onStickerSelect($event)" ></app-select-giphy>
+  </ng-container>
+</p-overlayPanel>
+</ng-container>

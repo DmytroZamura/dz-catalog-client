@@ -1,0 +1,63 @@
+<div class="ui-g">
+
+  <ng-container *ngIf="!dialog">
+    <div *ngIf="!newPost" class="ui-g-12 create-post-box">
+
+
+      <input type="text" pInputText placeholder="{{ placeholder}}"
+             (focus)="focusPostEvent()">
+    </div>
+  </ng-container>
+  <ng-container *ngIf="newPost && post">
+    <div class="ui-g form-group ui-fluid">
+      <div class="ui-g-12" style="padding-left: 1em; padding-right: 1em; padding-top: 1.5em;">
+        <app-select-user-or-company [viewType]="1" [disabled]="disabledSelectUserOrCompany"
+                                    [selected_company]="company" [forced_selection]="true"
+                                    (selectedRole)="onSelectedRole($event)"></app-select-user-or-company>
+      </div>
+
+      <div class="ui-g-12 padding-0">
+        <app-select-location [city]="post.city_details" [country]="post.country_details"
+                             [initGeo]="false" [checkEnteredName]="true"
+                             (selectedLocation)="onLocationSelect($event)" #location></app-select-location>
+      </div>
+
+      <ng-container *ngIf="!dialog">
+        <div class="ui-g-12">
+
+          <app-select-common-item [(item)]="post.type_details" [endpoint]="'post-types'" [defaultFilter]="filter"
+                                  [showFilter]="false" [filter]="'?exclude_article=1'"
+                                  [dataKey]="'id'" [optionLabel]="'name'"
+                                  [sortByName]="false" [showClear]="false" [placeholder]="''"
+                                  [label]="'POSTS.Post type' | translate" [componentId]="'select-post-type'"
+                                  (itemChange)="onTypeSelected($event)"></app-select-common-item>
+
+        </div>
+      </ng-container>
+    </div>
+
+
+    <div class="ui-g-12 padding-0">
+
+
+      <app-edit-post-lazy *ngxLazyEl [post]="post" [postType]="postType" [dialog]="dialog"
+                          [product]="product" [currentCurrencyId]="currentCurrencyId"
+                          [relatedCompany]="relatedCompany" [relatedProduct]="relatedProduct"
+                          [relatedUser]="relatedUser"
+                          (postPublished)="onPostPublished($event.detail)" [truncateNumber]="truncateNumber"
+                          (canceled)="onCanceled()"
+                          (postNotPublished)="onPostNotPublished()"
+                          #editpost></app-edit-post-lazy>
+
+
+    </div>
+
+
+  </ng-container>
+
+
+</div>
+
+<app-process-dialog [header]="'POSTS.Post' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

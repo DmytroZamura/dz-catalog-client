@@ -1,0 +1,69 @@
+<ng-container *ngIf="message">
+  <ng-container *ngIf="message.id != 0">
+    <div class="ui-g-12" [class.comment-box]="!fromMe" [class.fromme-comment-box]="fromMe">
+
+      <div class="ui-g-12 padding-0">
+        <div class="ui-toolbar-group-left ql-color-white">
+          <app-user-preview-short *ngIf="message.user_details && !message.company_details" [size]="'small'"
+                                  [userData]="message.user_details"
+                                  [showInfo]="true" [truncate_number]="truncateNumber"
+                                  [locale]="locale"></app-user-preview-short>
+
+          <ng-container *ngIf="message.company_details && !message.user_details">
+            <app-company-preview-short *ngIf="message.company_details.name" [locale]="locale"
+                                       [company]="message.company_details" [showInfo]="true" [size]="'small'"
+                                       [truncate_number]="truncateNumber"></app-company-preview-short>
+            <app-company-preview-short *ngIf="!message.company_details.name" [locale]="locale"
+                                       [company]="message.company_default_details" [showInfo]="true" [size]="'small'"
+                                       [truncate_number]="truncateNumber"></app-company-preview-short>
+
+          </ng-container>
+
+          <ng-container *ngIf="message.company_details && message.user_details">
+
+            <app-company-user-preview-short *ngIf="message.company_details.name" [company]="message.company_details"
+                                            [locale]="locale"
+                                            [userData]="message.user_details" [size]="'small'"
+                                            [truncate_number]="truncateNumber"></app-company-user-preview-short>
+            <app-company-user-preview-short *ngIf="!message.company_details.name"
+                                            [company]="message.company_default_details"
+                                            [locale]="locale"
+                                            [userData]="message.user_details" [size]="'small'"
+                                            [truncate_number]="truncateNumber"></app-company-user-preview-short>
+
+          </ng-container>
+
+        </div>
+        <div class="ui-toolbar-group-right ql-color-white">
+          <span class="date-time-text">{{message.update_date | dateAgo: locale }}</span>
+        </div>
+      </div>
+      <div class="ui-g-12 padding-0" style="margin-top: -10px">
+
+        <div class="contacts">
+          <ul>
+            <li class="clearfix">
+
+              <app-text-show-more [currentUserId]="user_id" [text]="message.message"
+                                  [showSeeMore]="true" [richText]="true" [truncateWords]="1000"
+                                  [calcTruncateWords]="false"></app-text-show-more>
+
+
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="message.id == 0">
+    <p>&nbsp; </p>
+    <hr/>
+
+
+  </ng-container>
+
+
+</ng-container>

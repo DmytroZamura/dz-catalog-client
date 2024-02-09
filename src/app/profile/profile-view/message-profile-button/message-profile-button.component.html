@@ -1,0 +1,12 @@
+<ng-container *ngIf="currentUserId && followingStatus">
+
+  <button pButton type="button" icon="pi pi-envelope"
+          label="{{ 'GENERAL.Message' | translate }}" class="width-auto"
+          (click)="mdialog.showDialog('')"></button>&nbsp;
+
+
+  <app-message-dialog [label]="'GENERAL.A personal message' | translate" [header]="'GENERAL.Message' | translate"
+                      [submitButtonLabel]="'BUTTONS.Send' | translate"
+                       [placeholder]="'GENERAL.Comment placeholder' | translate" (sendMessage)="onSendMessage($event)"
+                      #mdialog></app-message-dialog>
+</ng-container>

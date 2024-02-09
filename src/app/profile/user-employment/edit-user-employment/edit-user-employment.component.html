@@ -1,0 +1,155 @@
+<form #employmentForm="ngForm" (input)="ready_to_save()" (ngSubmit)="saveEmployment()">
+  <div class="card" style="margin-top: 5px">
+    <div class="ui-card-body padding-0">
+      <div class="ui-g padding-0">
+        <div class="ui-g-12 padding-0">
+          <div class="ui-toolbar-group-right">
+            <button pButton type="button" class="ui-button-secondary flat" (click)="deleteEmploymnets()"
+
+                    icon="pi pi-times"></button>
+            <button pButton type="submit" class="ui-button-secondary flat"
+
+                    icon="pi pi-save" [disabled]="disabled_save || !employmentForm.form.valid "
+            ></button>
+          </div>
+
+
+        </div>
+        <div class="ui-g-12 padding-0">
+          <div class="ui-g form-group ui-fluid">
+
+            <div class="ui-g-12 ui-md-6">
+              <ng-container *ngIf="!education">
+                <app-select-company id="company" [disabled]="disabled" [company]="employment.company_details"
+                                    [education]="education" [label_text]=" 'COMPANY.Company' | translate "
+                                    (companyNameSelected)="onCompanyNameSelected($event)" [requred]="true"
+                                    (companySelected)="onCompanySelect($event)"></app-select-company>
+              </ng-container>
+              <ng-container *ngIf="education">
+                <app-select-company id="school" [disabled]="disabled" [company]="employment.company_details"
+                                    [education]="education" [label_text]=" 'USERPROFILE.School' | translate "
+                                    (companyNameSelected)="onCompanyNameSelected($event)" [requred]="true"
+                                    (companySelected)="onCompanySelect($event)"></app-select-company>
+              </ng-container>
+
+            </div>
+            <div class="ui-g-12 ui-md-6">
+
+
+         <span class="md-inputfield translation-mark">
+ <ng-container *ngIf="!education">
+
+        <input id="title{{employment.id}}" name="title{{employment.id}}" type="text" pInputText [(ngModel)]="employment.title"
+               required #title="ngModel"/>
+   <label for="title{{employment.id}}">{{ 'USERPROFILE.Job_Title' | translate }}<span>&nbsp;<b>({{language_code}})</b></span>:</label>
+
+   <div [hidden]="title.valid">
+<div *ngIf="title.errors && title.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+ </ng-container>
+
+            <ng-container *ngIf="education">
+        <input id="degree{{employment.id}}" name="degree{{employment.id}}" type="text" pInputText
+               [(ngModel)]="employment.title"
+        />
+        <label for="degree{{employment.id}}">{{ 'USERPROFILE.Degree' | translate }}<span>&nbsp;<b>({{language_code}}
+          )</b></span>:</label>
+
+ </ng-container>
+
+         </span>
+
+
+            </div>
+            <div class="ui-g-12 padding-0">
+              <app-select-location [city]="employment.city_details" [country]="employment.country_details"
+                                   [initGeo]="false" [checkEnteredName]="true"
+                                   (selectedLocation)="onLocationSelect($event)" #location></app-select-location>
+            </div>
+
+            <div class="ui-md-12 ui-g-12">
+
+              <p-checkbox name="presenttime{{employment.id}}" [(ngModel)]="employment.present_time" binary="true"
+                          [disabled]="disabled" (onChange)="onPresentTimeChange()"></p-checkbox>
+              <ng-container *ngIf="!education">
+                {{ 'USERPROFILE.I am currently working in this role' | translate }}
+              </ng-container>
+              <ng-container *ngIf="education">
+                {{ 'USERPROFILE.I am currently studying here' | translate }}
+              </ng-container>
+
+
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+
+       <span class="md-inputfield">
+        <p-calendar id="start_date{{employment.id}}" name="start_date{{employment.id}}" [(ngModel)]="startDate" (onSelect)="onStartDateSelect($event)"
+                    view="month" dateFormat="mm/yy" [yearNavigator]="true" [readonlyInput]="true" [disabled]="disabled"
+                    yearRange="{{this.currentYear-30}}:{{this.currentYear}}" [maxDate]="maxDate" required
+                    #startDateF="ngModel"></p-calendar>
+     <label for="start_date{{employment.id}}">{{ 'USERPROFILE.Start Date' | translate }}:</label>
+          <div [hidden]="startDateF.valid">
+<div *ngIf="startDateF.errors && startDateF.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+       </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+              <ng-container *ngIf="!employment.present_time">
+       <span class="md-inputfield">
+        <p-calendar id="end_date{{employment.id}}" name="end_date{{employment.id}}" [(ngModel)]="endDate" (onSelect)="onEndDateSelect($event)"
+                    [minDate]="this.startDate"
+                    view="month" dateFormat="mm/yy" [yearNavigator]="true" [readonlyInput]="true"
+                    [disabled]="disabled || !startDate"
+                    yearRange="{{this.currentYear-30}}:{{this.currentYear}}" [maxDate]="maxDate" required
+                    #endDateF="ngModel" #selectEndDate></p-calendar>
+     <label for="start_date{{employment.id}}">{{ 'USERPROFILE.End Date' | translate }}:</label>
+ <div [hidden]="endDateF.valid ">
+<div *ngIf="endDateF.errors && endDateF.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+       </span>
+              </ng-container>
+              <ng-container *ngIf="employment.present_time">
+                &nbsp; <b> {{ 'USERPROFILE.Present' | translate }}</b>
+              </ng-container>
+
+            </div>
+
+            <div class="ui-g-12">
+              <label for="emlpdescription{{employment.id}}">{{ 'GENERAL.Description' | translate }}
+                <span>&nbsp;<b>({{language_code}})</b></span>: </label>
+
+              <div class="translation-mark text-editor">
+                <app-text-editor id="emlpdescription{{employment.id}}" [(text)]="employment.description"
+                                 [showBorder]="true"
+                                 (textChange)="ready_to_save()" [mentions]="true"
+                                 [styles]="{'min-height': '100px'}"></app-text-editor>
+              </div>
+
+            </div>
+            <div class="ui-g-12 border-top-primary-small" align="center">
+
+              <button pButton class="ui-button-secondary flat" type="button"
+                      label="{{ 'BUTTONS.Delete' | translate }}"
+                      (click)="deleteEmploymnets()"
+                      icon="pi pi-times" style="width: auto"></button> &nbsp;&nbsp;
+              <button pButton type="submit" label="{{ 'BUTTONS.Save' | translate }}"
+                      [disabled]="disabled_save || !employmentForm.form.valid "
+                      icon="pi pi-save" style="width: auto"></button>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</form>

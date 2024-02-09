@@ -1,0 +1,19 @@
+<p-dialog header="{{header}}" [(visible)]="showDialog"
+          [modal]="true" [appendTo]="'body'" [maximizable]="false" [closable]="false">
+  <div class="ui-g ui-fluid  dashboard border-primary-small" style="margin-bottom: 10px;">
+
+      <div class="ui-g-12 padding-top-0 posts-list-size">
+        <div class="ui-g-12 text-align-center">
+          <span class="post-title"><strong>{{ processName}}.</strong></span>
+        </div>
+        <div class="ui-g-12 text-align-center">
+          <span class="middle-text">{{processComment}}.</span>
+        </div>
+        <div class="ui-g-12 text-align-center">
+          <p-progressSpinner [style]="{width: '80px', height: '80px'}" strokeWidth="8" fill="#EEEEEE"
+                             animationDuration=".5s"></p-progressSpinner>
+        </div>
+
+      </div>
+    </div>
+</p-dialog>

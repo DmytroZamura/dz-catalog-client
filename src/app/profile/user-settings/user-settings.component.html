@@ -1,0 +1,159 @@
+<!--<div *ngIf="this.profile" class="ui-fluid">-->
+<ng-container *ngIf="isBrowser">
+  <p-confirmDialog></p-confirmDialog>
+
+  <ng-container *ngIf="!userSettings">
+    <div class="ui-g-12 text-center" align="center">
+      <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+                         animationDuration=".5s"></p-progressSpinner>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="userSettings">
+    <div class="ui-g ui-fluid main-component-layout">
+
+
+      <div class="ui-g-12 padding-left-right-0 info-profile-size">
+        <ng-container *ngIf="msgs1">
+        <p-message id="messages" text="{{msgs1}}" severity="{{severity}}" #messages></p-message>
+        </ng-container>
+        <div class="ui-g-12 text-align-right">
+
+                  <span [appHighlightborder]="'#ebe7ef'" class="select-text"
+                        (click)="onEditProfile()">{{ 'USERPROFILE.Edit Profile' | translate }}</span>
+        </div>
+        <div class="ui-g-12">
+
+          <div class="card card-w-title">
+            <form #settingsForm="ngForm" (input)="ready_to_save()" (ngSubmit)="save()">
+              <h1>{{ 'MENU.SETTINGS' | translate }}</h1>
+              <div class="ui-g form-group ui-fluid">
+
+
+                <div class="ui-g-12 ui-md-6">
+
+                  <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon"><strong>@</strong></span>
+                    <span class="md-inputfield">
+               <input id="slug_edit" name="slug_edit" type="text" pInputText
+                      [(ngModel)]="userSettings.slug"
+                      required #slug="ngModel"/>
+                     <label for="slug_edit">Url:</label>
+                   </span>
+                    <div [hidden]="slug.valid || slug.pristine">
+                      <div *ngIf="slug.errors && slug.errors.required"
+                           class="ui-message ui-messages-error ui-corner-all">
+                        {{ 'GENERAL.This field is required' | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-6">
+                     <span class="md-inputfield">
+                <input id="email" name="email" type="text" pInputText
+                       pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="userSettings.email"
+                       [disabled]="true" required
+                       #email="ngModel"/>
+                         <label for="email">{{ 'USERPROFILE.Email' | translate }}:</label>
+                     </span>
+                  <div [hidden]="email.valid">
+
+                    <div *ngIf="email.errors && email.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                    <div *ngIf="email.errors && email.errors.pattern"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is invalid' | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="ui-g-12 padding-0">
+
+                  <app-select-location [city]="userSettings.city_details" [country]="userSettings.country_details"
+                                       [initGeo]="!userSettings.settings_checked" [checkEnteredName]="true"
+                                       (selectedLocation)="onLocationSelect($event)" #location></app-select-location>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                  <app-select-common-item [(item)]="userSettings.language_details" [endpoint]="'languages'"
+                                          [showFilter]="false"
+                                          [sortByName]="true" [showClear]="false" [placeholder]="''"
+                                          [label]="'USERPROFILE.UILanguage' | translate"
+                                          (itemChange)="onLanguageSelect($event)"></app-select-common-item>
+
+                </div>
+
+
+                <div class="ui-g-12 ui-md-6">
+
+                  <app-select-common-item [(item)]="userSettings.default_currency_details" [endpoint]="'currencies'"
+                                          [showFilter]="true"
+                                          [sortByName]="true" [showClear]="false" [placeholder]="''"
+                                          [label]="'USERPROFILE.Default currency' | translate"
+                                          (itemChange)="onCurrencySelect($event)"></app-select-common-item>
+
+                </div>
+
+                   <div class="ui-md-6 ui-g-12 text-align-left">
+
+                      <p-checkbox name="notification-sound" [(ngModel)]="userSettings.notifications_sound" binary="true"
+                                  (onChange)="ready_to_save()"></p-checkbox> {{ 'GENERAL.Notification sound' | translate }}
+
+                    </div>
+                 <div class="ui-md-6 ui-g-12 text-align-left">
+
+                      <p-checkbox name="message-sound" [(ngModel)]="userSettings.message_sound" binary="true"
+                                  (onChange)="ready_to_save()"></p-checkbox> {{ 'GENERAL.Message sound' | translate }}
+
+                    </div>
+
+                <div class="ui-md-6 ui-g-12 text-align-left">
+
+                      <p-checkbox name="notification-email" [(ngModel)]="userSettings.notifications_email" binary="true"
+                                  (onChange)="ready_to_save()"></p-checkbox> {{ 'GENERAL.Notification email' | translate }}
+
+                    </div>
+                 <div class="ui-md-6 ui-g-12 text-align-left">
+
+                      <p-checkbox name="message-email" [(ngModel)]="userSettings.message_email" binary="true"
+                                  (onChange)="ready_to_save()"></p-checkbox> {{ 'GENERAL.Message email' | translate }}
+
+                    </div>
+
+
+                <div class="ui-g-12 text-align-right">
+
+                  <span [appHighlightborder]="'#ebe7ef'" class="select-text"
+                        (click)="onDeleteProfile()">{{ 'GENERAL.Delete your profile' | translate }}</span>
+                </div>
+
+                <div class="ui-g-12 text-align-center">
+                  <button [disabled]="(disabled_save || !settingsForm.form.valid || saveDisabled) && userSettings.settings_checked "
+                          type="submit" style="width: auto"
+                          label="{{ 'BUTTONS.Save' | translate }}" pButton icon="pi pi-save"></button>
+                </div>
+
+
+              </div>
+
+            </form>
+          </div>
+
+
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </ng-container>
+</ng-container>
+
+
+<app-process-dialog [header]="'GENERAL.Deletion' | translate" [processName]="'GENERAL.The deletion process' | translate"
+                    [processComment]="'GENERAL.This may take several minutes' | translate"
+                    #deleteDialog></app-process-dialog>

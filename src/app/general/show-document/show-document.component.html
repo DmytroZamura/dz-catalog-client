@@ -1,0 +1,38 @@
+<ng-container *ngIf="!document">
+  <div class="ui-g-12 text-center loading" align="center">
+    <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                       animationDuration=".5s"></p-progressSpinner>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="document">
+
+  <div class="ui-g dashboard ui-fluid main-component-layout">
+    <div class="ui-g-12 product-profile-size">
+
+      <div class="ui-g-12">
+        <div class="card">
+          <div class="ui-g">
+            <div class="ui-g-12 article">
+              <ng-container>
+                <div appRouteTransformer>
+                  <span class="text-pre-line ql-editor ql-container" [innerHTML]="document.text | safeHtml"></span>
+                </div>
+              </ng-container>
+
+
+
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+</ng-container>

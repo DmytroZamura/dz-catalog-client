@@ -1,0 +1,39 @@
+<p-overlayPanel (mouseleave)="preview.hide()" (mouseover)="onMouseOverPanel()"
+                (onHide)="onPanelHide()" #preview>
+  <ng-container *ngIf="profile">
+    <div class="ui-g dashboard padding-0">
+      <div class="mention-item-size padding-0">
+
+
+        <app-user-feed-preview [locale]="locale" [user]="currentUser" [profile]="profile" [isMobile]="isMobile" (itemClicked)="onItemClicked()"></app-user-feed-preview>
+
+
+      </div>
+
+
+    </div>
+  </ng-container>
+  <ng-container *ngIf="company">
+    <div class="ui-g dashboard padding-0">
+      <div class="mention-item-size padding-0">
+
+        <app-company-info-card [company]="company" [isMobile]="isMobile" [locale]="locale"
+                               [curretUser]="currentUser" (itemClicked)="onItemClicked()" ></app-company-info-card>
+      </div>
+
+
+    </div>
+  </ng-container>
+
+   <ng-container *ngIf="product">
+    <div class="ui-g dashboard padding-0">
+      <div class="mention-item-size padding-0">
+
+      <app-product-info-card [product]="product" [locale]="locale" [currencyCode]="currencyCode" (itemClicked)="onItemClicked()"></app-product-info-card>
+      </div>
+
+
+    </div>
+  </ng-container>
+
+</p-overlayPanel>

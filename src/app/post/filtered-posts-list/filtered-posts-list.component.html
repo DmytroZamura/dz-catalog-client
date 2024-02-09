@@ -1,0 +1,182 @@
+<ng-container *ngIf="isBrowser">
+  <p-confirmDialog></p-confirmDialog>
+</ng-container>
+<div class="ui-g-12 padding-0" #contentArea>
+  <div class="ui-g ui-fluid dashboard">
+
+    <ng-container *ngIf="currentCurrencyDetails">
+      <ng-container *ngFor="let item of feedItems; let i = index"  >
+
+
+         <ng-container *ngIf="showAdd && isBrowser && (i+1)%itemsPerAdd==0">
+          <div class="ui-g-12 padding-left-right-0">
+           <div class="ui-g-12 padding-left-right-0">
+                <ng-container *ngIf="app.appService.loadingLazyElements">
+            <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="4219526045" [adFormat]="'fluid'"
+                        [layoutKey]="'-6h+ed+1d-6a+ak'"
+                        [display]="'block'"></ng-adsense>
+                </ng-container>
+          </div>
+          </div>
+        </ng-container>
+
+<div class="ui-g-12 padding-left-right-0">
+        <ng-container *ngIf="item.verb !== 'load'">
+          <div class="ui-g-12 border-bottom-small">
+
+
+
+            <ng-container *ngIf="item.verb !== 'post' && item.verb !== 'tagged' && item.verb !== 'filter'">
+
+
+              <app-user-preview-short [userData]="item.activities[0].actor" [currentUser]="currentUserId"
+                                      [locale]="locale"
+                                      [size]="'actor'" [truncate_number]="truncateNumber" [showSlug]="!isMobile"
+                                      [showPreview]="true" [currencyCode]="currencyCode"></app-user-preview-short>
+              <ng-container *ngIf="item.activities[1]">,
+                <app-user-preview-short [userData]="item.activities[1].actor" [currentUser]="currentUserId"
+                                        [size]="'actor'" [truncate_number]="truncateNumber" [locale]="locale"
+                                        [showPreview]="true" [currencyCode]="currencyCode"></app-user-preview-short>
+              </ng-container>
+              <ng-container *ngIf="item.actor_count>2">
+                {{'POSTS.and' | translate}} {{item.actor_count - 2}} {{'POSTS.others' | translate}}
+              </ng-container>
+              <span class="middle-text">
+        <ng-container
+          *ngIf="item.verb=='like' || item.verb=='comment_like'">&nbsp;{{'POSTS.likes this' | translate}}</ng-container>
+      <ng-container *ngIf="item.verb=='comment'">&nbsp;{{'POSTS.commented on this' | translate}}</ng-container>
+                <ng-container
+                  *ngIf="(item.verb=='followcompany' || item.verb=='company_follower')">&nbsp;<ng-container
+                  *ngIf="item.activities.length==1">{{'POSTS.follows this company' | translate}}</ng-container><ng-container
+                  *ngIf="item.activities.length>1">{{'POSTS.follow this company' | translate}}</ng-container>
+
+                </ng-container>
+      </span>
+            </ng-container>
+
+            <ng-container *ngIf="item.verb == 'filter'">
+              <app-filter-preview [filter]="item.activities[0].actor" [truncateNumber]="truncateNumber+15"
+                                  (filterSelected)="onFilterSelected(item.activities[0].actor)"></app-filter-preview>
+            </ng-container>
+
+            <ng-container *ngIf="item.verb == 'tagged'">
+              <a
+                [routerLink]="'/hashtag/'+item.activities[0].object.name"><strong>#{{item.activities[0].object.name}}</strong></a>
+            </ng-container>
+            <div class="date-time-text ui-toolbar-group-right" >{{item.created_at | dateAgo: locale}}</div>
+
+
+          </div>
+
+          <ng-container
+            *ngIf="item.verb == 'post' || item.verb == 'like' || item.verb == 'comment' || item.verb == 'comment_like' || item.verb == 'tagged'
+|| item.verb == 'filter'">
+
+            <app-post-item [currentUserId]="currentUserId" [feedItem]="item" [index]="i" [locale]="locale"
+                           [isMobile]="isMobile" [currencyCode]="currencyCode" [showCommunity]="!community"
+                           [siteUrl]="siteUrl" [isBrowser]="isBrowser"
+                           (postDeleted)="deletePost($event)" (showLikes)="onShowLikes($event)"
+                           (sendRespond)="onSendRespond($event, i , 1)" (copyPostLink)="onCopyLink($event)"
+                           (categorySelect)="onSelectCategory($event)" [editable]="editable"
+                           [truncateNumber]="truncateNumber"></app-post-item>
+
+
+          </ng-container>
+          <ng-container *ngIf="(item.verb=='followcompany' || item.verb=='company_follower')">
+            <app-company-feed-preview [user]="currentUserId" [company]="item.activities[0].target"
+                                      [locale]="locale"
+            ></app-company-feed-preview>
+          </ng-container>
+
+
+
+
+          <ng-container *ngIf="i == feedItems.length-3">
+            <ng-container *ngIf="isBrowser">
+              <div pDefer (onLoad)="onPostFocus()" class="padding-0">
+                <ng-template>
+                  &nbsp;
+                </ng-template>
+
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+
+</div>
+      </ng-container>
+
+      <ng-container *ngFor="let post of this.posts; let i = index"  >
+
+
+         <ng-container *ngIf="showAdd && isBrowser && (i+1)%itemsPerAdd==0">
+          <div class="ui-g-12 padding-left-right-0">
+               <ng-container *ngIf="app.appService.loadingLazyElements">
+            <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="4219526045" [adFormat]="'fluid'"
+                        [layoutKey]="'-6h+ed+1d-6a+ak'"
+                        [display]="'block'"></ng-adsense>
+               </ng-container>
+          </div>
+        </ng-container>
+
+
+
+
+        <div class="ui-g-12 padding-left-right-0">
+        <div class="ui-g-12 border-bottom-small">
+          <ng-container *ngIf="!post.published">
+          <div class="info-badge-black ui-toolbar-group-left"
+                >&nbsp;<b>{{'POSTS.Unpublished' | translate}}</b>&nbsp;</div>
+          </ng-container>
+
+          <div class="date-time-text ui-toolbar-group-right" >{{post.create_date | dateAgo: locale }}</div>
+        </div>
+        <app-post-item *ngIf="!(this.posts[i].id == 0)" [currentUserId]="currentUserId" [post]="post" [index]="i"
+                       [locale]="locale" [truncateNumber]="truncateNumber" [currencyCode]="currencyCode"
+                       (postDeleted)="deletePost($event)" [showCommunity]="!community" [isMobile]="isMobile"
+                       [siteUrl]="siteUrl" [isBrowser]="isBrowser" (showLikes)="onShowLikes($event)"
+                       (sendRespond)="onSendRespond($event, i , 2)" (copyPostLink)="onCopyLink($event)"
+                       (categorySelect)="onSelectCategory($event)" [editable]="editable"></app-post-item>
+        </div>
+
+
+
+        <ng-container *ngIf="i == posts.length-3 && (!postsFinished || !feedFinished)">
+          <ng-container *ngIf="isBrowser">
+            <div pDefer (onLoad)="onPostFocus()" class="padding-0">
+              <ng-template>
+                &nbsp;
+              </ng-template>
+
+            </div>
+          </ng-container>
+        </ng-container>
+
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="loading && (!postsFinished || !feedFinished)">
+
+      <app-empty-post></app-empty-post>
+
+    </ng-container>
+
+  </div>
+</div>
+
+<ng-container *ngIf="isBrowser">
+
+<ng-container *ngIf="currentUserId">
+
+  <app-send-post-respond (responded)="onResponded($event)"
+                         #respond></app-send-post-respond>
+</ng-container>
+
+<app-process-dialog [header]="'GENERAL.Deletion' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>
+
+<app-copy-link #copyLink></app-copy-link>
+
+<app-likes-dialog [locale]="locale" #likes></app-likes-dialog>
+</ng-container>

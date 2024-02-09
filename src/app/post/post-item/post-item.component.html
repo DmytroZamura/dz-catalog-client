@@ -1,0 +1,384 @@
+<ng-container *ngIf="post">
+
+  <div class="card padding-0 post-item" [class.border-promotion]="post.promotion">
+
+    <ng-container *ngIf="(post.published || post.admin_status) &&  !post.deleted">
+      <ng-container *ngIf="post.shared_post">
+
+        <ng-container *ngIf="post.user_data">
+          <div class="ui-g-12 contacts padding-0">
+
+            <div class="ui-toolbar-group-left ql-color-white">
+              <app-user-preview-short [userData]="post.user_data" [currentUser]="currentUserId"
+                                      [truncate_number]="truncateNumber" [showSlug]="false"
+                                      (itemClicked)="postEngagement(3)"
+                                      [showPreview]="true"></app-user-preview-short>
+
+            </div>
+
+            <ng-container *ngIf="currentUserId">
+              <div class="ui-toolbar-group-right ql-color-white">
+                <app-favorite-button [currentUserId]="currentUserId" [id]="post.id"
+                                     [favoriteStatus]="post.favorite_status"
+                                     (buttonClicked)="onFavoriteButtonClicked($event)"
+                                     [objectType]="'post'"></app-favorite-button>
+              </div>
+            </ng-container>
+
+
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!edit_mode">
+          <div *ngIf="post.comment" class="ui-g-12 padding-top-0">
+
+
+            <app-text-show-more [currentUserId]="currentUserId" [text]="post.comment"
+                                [richText]="true" [truncateWords]="60"></app-text-show-more>
+
+
+          </div>
+        </ng-container>
+
+
+        <div class="ui-g-12">
+          <div class="ui-g-12 box-border-small padding-0">
+            <app-post-item [currentUserId]="currentUserId" [post]="post.shared_post_details" [index]="index"
+                           [editable]="false" [showActivitiesPanel]="false" [asSharedPost]="true"
+                           (categorySelect)="onSelectCategory($event)"></app-post-item>
+
+          </div>
+        </div>
+
+        <div *ngIf="edit_mode" class="ui-g-12">
+          <button pButton type="button" label="{{ 'POSTS.Post' | translate }}" (click)="onPostPublished(post)"
+                  icon="pi pi-share-alt"></button>
+        </div>
+
+      </ng-container>
+
+
+      <ng-container *ngIf="!post.shared_post">
+        <div class="ui-g-12 padding-0 border-bottom-small bg-light">
+
+          <div class="ui-g-12">
+            <ng-container *ngIf="post.type_details">
+        <span
+          class="info-box-{{post.type_details.code}}"><strong>&nbsp;{{post.type_details.name}}
+          <ng-container *ngIf="post.type_details.code=='offering'">
+            <ng-container *ngIf="post.post_offering">
+          <span *ngIf="post.post_offering.type==1">: {{ 'POSTS.Sale' | translate }} </span>
+          <span *ngIf="post.post_offering.type==2">: {{ 'POSTS.Rent' | translate }} </span>
+            <span *ngIf="post.post_offering.type==3">: {{ 'GENERAL.Promotions and discounts' | translate }} </span>
+            </ng-container>
+
+        </ng-container>
+      &nbsp;</strong></span>
+            </ng-container>
+            <ng-container *ngIf="post.promotion">
+              <span pTooltip="{{'PROMOTION.Promotion' | translate}}" class="top-badge"><i
+                class="pi pi-star"></i><span class="small-text"><b>{{post.promotion_grade}}</b></span></span>
+            </ng-container>
+            <ng-container *ngIf="post.category">
+              &nbsp; &nbsp; <span *ngIf="post.category_details" (click)="onSelectCategory(post.category_details)"
+                                  class="info-box-category cursor-pointer">
+      <strong>&nbsp;{{post.category_details.name | truncate : 60}}&nbsp;</strong>
+    </span> &nbsp;
+            </ng-container>
+            <ng-container *ngIf="post.suggested_category &&  post.admin_status">
+
+              &nbsp; &nbsp; <span class="info-box-category cursor-pointer">
+      <strong>&nbsp;{{post.suggested_category_details.name | truncate : 40}}&nbsp;</strong>
+    </span>&nbsp;<span class="badge-suggested">{{ 'ALERTS.In review' | translate }}</span> &nbsp;
+
+            </ng-container>
+
+
+            <ng-container>
+              <div class="ui-toolbar-group-right">
+                <app-location-preview [country]="post.country_details"
+                                      [city]="post.city_details"></app-location-preview>
+              </div>
+
+            </ng-container>
+
+
+          </div>
+        </div>
+
+        <div class="ui-g-12 contacts text-pre-line">
+          <ng-container *ngIf="!company && post.user_data">
+            <div class="ui-toolbar-group-left ql-color-white">
+              <app-user-preview-short [userData]="post.user_data" [currentUser]="currentUserId" [product]="product"
+                                      [truncate_number]="truncateNumber" [showSlug]="false" [size]="previewSize"
+                                      [locale]="locale" (itemClicked)="postEngagement(3)"
+                                      [showPreview]="true" [currencyCode]="currencyCode"></app-user-preview-short>
+
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="company">
+            <div class="ui-toolbar-group-left ql-color-white">
+              <app-company-preview-short [company]="company" [product]="product" [size]="previewSize"
+                                         [truncate_number]="truncateNumber" [showSlug]="false"
+                                         [currentUser]="currentUserId" [showPreview]="true"
+                                         [locale]="locale" (itemClicked)="postEngagement(3)"
+                                         [currencyCode]="currencyCode"></app-company-preview-short>
+
+
+            </div>
+          </ng-container>
+          <ng-container *ngIf="currentUserId">
+            <div class="ui-toolbar-group-right ql-color-white">
+              <app-favorite-button [currentUserId]="currentUserId" [id]="post.id"
+                                   [favoriteStatus]="post.favorite_status"
+                                   (buttonClicked)="onFavoriteButtonClicked($event)"
+                                   [objectType]="'post'"></app-favorite-button>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="ui-g-12 padding-0 bg-white">
+
+          <ng-container *ngIf="!edit_mode">
+
+            <app-request-post *ngIf="post.type_details.code == 'request'" [post]="post"
+                              [currentUserId]="currentUserId" [truncateWords]="20" [isMobile]="isMobile"
+                              [truncateComment]="truncateComment" [isBrowser]="isBrowser"
+                              [urlPreview]="urlPreview"
+                              (showMoreClicked)="postEngagement(5)" (imagePreviewOpened)="postEngagement(7)"
+                              (linkClicked)="postEngagement(1)"
+            ></app-request-post>
+
+
+            <app-common-post
+              *ngIf="post.type_details.code=='post' || post.type_details.code=='review' || post.type_details.code=='question'
+            || post.type_details.code=='article'" [truncateComment]="truncateComment" [truncateWords]="20"
+              [post]="post" [externalLink]="externalLink" [locale]="locale" (voted)="postEngagement(6)"
+              (showMoreClicked)="postEngagement(5)" (imagePreviewOpened)="postEngagement(7)"
+              (linkClicked)="postEngagement(1)" (profileClicked)="postEngagement(3)"
+              [isBrowser]="isBrowser" [isMobile]="isMobile"
+              [currentUserId]="currentUserId" [truncateNumber]="truncateNumber"
+              [currencyCode]="currencyCode" [urlPreview]="urlPreview"></app-common-post>
+
+            <app-offering-post *ngIf="post.type_details.code == 'offering' && post.post_offering" [post]="post"
+                               [currentUserId]="currentUserId" [truncateComment]="truncateComment"
+                               [isMobile]="isMobile"
+                               [urlPreview]="urlPreview" [isBrowser]="isBrowser" [truncateWords]="20"
+                               (showMoreClicked)="postEngagement(5)" (imagePreviewOpened)="postEngagement(7)"
+                               (linkClicked)="postEngagement(1)"
+            ></app-offering-post>
+
+            <app-jop-post *ngIf="post.type_details.code=='job'" [post]="post" [currentUserId]="currentUserId"
+                          [truncateComment]="truncateComment" [isBrowser]="isBrowser" [truncateWords]="20"
+                          [isMobile]="isMobile"
+                          [urlPreview]="urlPreview" (showMoreClicked)="postEngagement(5)"
+                          (imagePreviewOpened)="postEngagement(7)"
+                          (linkClicked)="postEngagement(1)"
+                          (applyJob)="onSendRespond()"></app-jop-post>
+
+          </ng-container>
+
+          <ng-container *ngIf="edit_mode">
+
+
+            <div class="ui-g-12 padding-0">
+              <app-edit-post-lazy *ngxLazyEl [post]="post" [urlPreview]="urlPreview"
+                                  [truncateNumber]="truncateNumber" (canceled)="onPostCancel()"
+                                  (postPublished)="onPostPublished($event.detail)"></app-edit-post-lazy>
+            </div>
+          </ng-container>
+        </div>
+
+        <ng-container *ngIf="post.community && showCommunity && currentUserId">
+          <div class="ui-g-12">
+            <app-community-preview [communityDefaultDetails]="post.community_default_details"
+                                   [communityDetails]="post.community_details"
+                                   (itemClicked)="postEngagement(3)"></app-community-preview>
+          </div>
+        </ng-container>
+
+
+      </ng-container>
+
+
+      <ng-container *ngIf="showActivitiesPanel">
+
+        <div class="ui-g-12 border-top-small">
+          <ng-container *ngIf="post.eventsqty">
+            <div class="ui-g-12 padding-0">
+              <app-like [likeStatus]="post.like_status" [post]="post.id" [user]="currentUserId" [locale]="locale"
+                        [likesCount]="post.eventsqty.likes"
+                        (likeStatusChanged)="onLikeChanged($event); postEngagement(8);"
+                        (showDialog)="onShowLikes($event)"></app-like>
+              &nbsp;
+              <button pButton type="button" (click)="createComment(); postEngagement(8);"
+                      class="ui-button-secondary flat" icon="pi pi-comments"></button>
+              <ng-container *ngIf="post.eventsqty.comments">
+                <span class="select-text"
+                      (click)="onCommentsClick(); postEngagement(8);"><strong>{{post.eventsqty.comments}}</strong></span>
+              </ng-container> &nbsp;
+
+              <!--<ng-container *ngIf="ableToShare">-->
+              <!--<ng-container>-->
+              <!--<button pButton type="button" (click)="mdialog.showDialog(''); postEngagement(8);"-->
+              <!--class="ui-button-secondary flat" icon="pi pi-share-alt"></button>-->
+              <!--<ng-container *ngIf="post.eventsqty.shares">-->
+              <!--<span class="select-text"-->
+              <!--(click)="mdialog.showDialog(''); postEngagement(8);"><strong>{{post.eventsqty.shares}}</strong></span>-->
+              <!--</ng-container> &nbsp;-->
+              <!--</ng-container>-->
+              <!--</ng-container>-->
+              <button pButton type="button" (click)="onCopyLink(); postEngagement(1);"
+                      title="{{ 'GENERAL.Link' | translate }}"
+                      class="ui-button-secondary flat" icon="pi pi-link"></button>
+
+              <div class="ui-toolbar-group-right ql-color-white">
+                <ng-container
+                  *ngIf="(post.type_details.code=='offering' || post.type_details.code=='request' || post.type_details.code=='job')
+              && !post.admin_status &&!post.can_delete_status && !post.responder_status &&!post.applicant_status && showButtonRespond">
+                  <button pButton type="button" (click)="onSendRespond()" label="{{ 'POSTS.Respond Now' | translate }}"
+                          class="ui-button-secondary flat" icon="pi pi-envelope"></button>
+                </ng-container>
+
+                <ng-container *ngIf="post.admin_status">
+                  <button *ngIf="!edit_mode" pButton type="button" icon="pi pi-pencil" (click)="editPost()"
+                          class="ui-button-secondary flat"></button>
+                  <button *ngIf="!edit_mode && post.published" title="{{'BUTTONS.Unublish' | translate}}" pButton
+                          type="button" icon="pi pi-ban" (click)="changeStatus(false)"
+                          class="ui-button-secondary flat"></button>
+                  <button *ngIf="!edit_mode && !post.published" title="{{'BUTTONS.Publish' | translate}}" pButton
+                          type="button" icon="pi pi-globe" (click)="changeStatus(true)"
+                          class="ui-button-secondary flat"></button>
+                </ng-container>
+                <ng-container *ngIf="post.admin_status || post.can_delete_status">
+                  <button pButton type="button" icon="pi pi-trash" (click)="deletePost()"
+                          class="ui-button-secondary flat"></button>
+                </ng-container>
+
+              </div>
+
+            </div>
+
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="post.admin_status && post.eventsqty">
+        <div class="ui-g-12 padding-top-0 padding-bottom-0 border-top-small bg-light">
+          <div class="ui-g-12 padding-0  vertical-middle">
+            <div class="ui-g-5">
+
+           <span class="date-time-text">
+             <ng-container *ngIf="post.type_details.code!='article'">
+               <span pTooltip="{{'GENERAL.Impressions' | translate}}" tooltipPosition="bottom">
+          <i
+            class="pi pi-eye select-button-icon"></i>&nbsp;{{post.eventsqty.user_impressions + post.eventsqty.impressions | thousandSuffixes: 1 }}</span>
+               &nbsp;<span pTooltip="{{'GENERAL.Unique users' | translate}}" tooltipPosition="bottom"><i
+               class="pi pi-users select-button-icon"></i>&nbsp;{{post.eventsqty.user_impressions  | thousandSuffixes: 1 }}</span>
+               &nbsp;<span pTooltip="{{'GENERAL.Engagements' | translate}}" tooltipPosition="bottom"><i
+               class="pi pi-angle-double-up select-button-icon"></i>&nbsp;{{post.eventsqty.engagements  | thousandSuffixes: 1 }}</span>
+
+             </ng-container>
+             <ng-container *ngIf="post.type_details.code=='article'">
+               <span pTooltip="{{'GENERAL.Views' | translate}}" tooltipPosition="bottom">
+          <i
+            class="pi pi-user-plus select-button-icon"></i>&nbsp;{{post.eventsqty.user_views + post.eventsqty.views | thousandSuffixes: 1 }}</span>
+               &nbsp;<span pTooltip="{{'GENERAL.Unique users' | translate}}" tooltipPosition="bottom"><i
+               class="pi pi-users select-button-icon"></i>&nbsp;{{post.eventsqty.user_views  | thousandSuffixes: 1 }}</span>
+               <span pTooltip="{{'GENERAL.Engagements' | translate}}" tooltipPosition="bottom"><i
+                 class="pi pi-angle-double-up select-button-icon"></i>&nbsp;{{post.eventsqty.engagements  | thousandSuffixes: 1 }}</span>
+             </ng-container>
+           </span>
+
+            </div>
+            <ng-container *ngIf="!post.deleted && post.published">
+              <div class="ui-g-7 text-align-right">
+                <div class="ui-g-12 text-align-right">
+                  <button *ngIf="!post.promotion" pButton type="button"
+                          class="ui-button flat ui-button-secondary color-primary"
+                          label="{{ 'PROMOTION.Promote to top' | translate }}" icon="pi pi-star"
+                          (click)="onPromoteTop()"></button>
+
+
+                  <ng-container *ngIf="post.promotion&&post.promotion_date">
+
+                    <div class="ui-label">
+                <span
+                  class="color-primary">{{ 'PROMOTION.Promoted to top' | translate }} {{post.promotion_date + 'T01:00:00.000000' | dateAgo:locale}}.
+                  <ng-container *ngIf="post.promotion_grade">&nbsp;{{ 'PROMOTION.Importance weight' | translate }}: {{post.promotion_grade}}.</ng-container>
+                </span>
+
+                    </div>
+
+                  </ng-container>
+
+                </div>
+
+
+              </div>
+
+
+            </ng-container>
+
+          </div>
+
+          <ng-container *ngIf="post.promotion">
+                  <div class="ui-g-12 text-align-right padding-top-0">
+                    <button pButton type="button"
+                            class="ui-button flat ui-button-secondary color-primary width-auto"
+                            label="{{ 'PROMOTION.Importance raising' | translate }}" icon="pi pi-arrow-up"
+                            (click)="onImportanceRaising()"></button>
+                  </div>
+                </ng-container>
+        </div>
+        <!--<div class="ui-g-12 padding-0 border-top-small text-align-center">-->
+        <!---->
+        <!--</div>-->
+      </ng-container>
+
+      <!--<ng-container *ngIf="feedItem">-->
+      <!--<ng-container *ngIf="!post.show_comments && (feedItem.verb=='comment' || feedItem.verb=='comment_like')">-->
+
+      <!--<div class="ui-g-12 padding-top-0">-->
+      <!--<ng-container *ngFor="let comment of commentsActivity; let i = index">-->
+      <!--<ng-container *ngIf="comment.object">-->
+      <!--<ng-container *ngIf="comment.object.text">-->
+
+      <!--<app-comment [user]="currentUserId" [postComment]="comment.object" [postCommentsPreview]="true"-->
+      <!--[editable]="false"-->
+      <!--[locale]="locale" (updatePostCommentQty)="onUpdatePostCommentQty($event)"></app-comment>-->
+
+      <!--</ng-container>-->
+
+      <!--</ng-container>-->
+      <!--</ng-container>-->
+      <!--</div>-->
+
+      <!--</ng-container>-->
+      <!--</ng-container>-->
+
+      <ng-container *ngIf="post.show_comments || commentsActivity">
+        <app-comments-list [post]="post.id" [user]="currentUserId" [locale]="locale"
+                           [showComments]="post.show_comments"
+                           [showCreateCommentPanel]="showChildCreateCommentPanel" [activityComments]="commentsActivity"
+                           (updatePostCommentQty)="onUpdatePostCommentQty($event)" #list></app-comments-list>
+
+      </ng-container>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="post.deleted || (!post.published && !post.admin_status)">
+      <div class="ui-g-12 text-align-center">
+        <span class="post-title"> {{'GENERAL.A content is unreachable' | translate}}</span>
+      </div>
+    </ng-container>
+  </div>
+
+
+  <!--<app-message-dialog [label]="'GENERAL.Comment' | translate" [header]="'BUTTONS.Share' | translate"-->
+  <!--[submitButtonLabel]="'BUTTONS.Post' | translate" (sendMessage)="sharePost($event)"-->
+  <!--[placeholder]="'GENERAL.Comment placeholder' | translate"-->
+  <!--#mdialog></app-message-dialog>-->
+
+</ng-container>

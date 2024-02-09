@@ -1,0 +1,283 @@
+<p-confirmDialog></p-confirmDialog>
+<ng-container *ngIf="!article">
+  <div class="ui-g-12 text-center loading" align="center">
+    <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                       animationDuration=".5s"></p-progressSpinner>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="article">
+  <div class="ui-g ui-fluid dashboard main-component-layout">
+    <div class="ui-g-12 article-size padding-left-right-0">
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card">
+
+          <div class="ui-g">
+            <div class="ui-g-12">
+              <form #articleForm="ngForm" (input)="setReadyToSave()" (ngSubmit)="saveArticle()">
+                <div class="ui-g-12">
+                  <div class="ui-toolbar-group-left">
+                    <ng-container *ngIf="article.post_details.company">
+                      <ng-container *ngIf="article.post_details.company_details.name">
+                        <app-company-preview-short [company]="article.post_details.company_details"
+                                                   [truncate_number]="truncateNumber"
+                                                   [showPreview]="false" [size]="'middle'"></app-company-preview-short>
+                      </ng-container>
+                      <ng-container *ngIf="!article.post_details.company_details.name">
+                        <app-company-preview-short [company]="article.post_details.company_default_details"
+                                                   [truncate_number]="truncateNumber"
+                                                   [showPreview]="false" [size]="'middle'"></app-company-preview-short>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!article.post_details.company">
+                      <app-user-preview-short [userData]="article.post_details.user_data"
+                                              [truncate_number]="truncateNumber"
+                                              [showPreview]="false" [size]="'middle'"></app-user-preview-short>
+                    </ng-container>
+                  </div>
+                  <div class="ui-toolbar-group-right">
+                    <button pButton type="button" class="ui-button ui-button-success"
+                            label="{{ 'BUTTONS.Publish' | translate }}"
+                            [disabled]="processing || !article.to_publish || readyToSave || !article.text_draft
+                            || !article.title_draft"
+                            (click)="publish()"
+                            icon="pi pi-check" style="width: auto"></button>&nbsp;&nbsp;
+
+                  </div>
+                </div>
+                <div class="ui-g-12 padding-0">
+                  <div class="ui-g form-group ui-fluid">
+                    <div class="ui-g-12 ui-md-6">
+
+                      <app-select-category [category]="article.draft_category_details"
+                                           [label_text]="'CATEGORY.Category' | translate "
+                                           [showSuggestCategory]="false"
+                                           (categorySelect)="onCategorySelect($event)"
+                                           #selectCategory></app-select-category>
+
+
+                    </div>
+
+
+                    <div class="ui-g-12 ui-md-6">
+
+         <span class="md-inputfield">
+
+
+        <input id="slug" name="slug" type="text" pInputText [(ngModel)]="article.post_details.slug"
+               pattern="^[0-9a-zA-Z_.-]*"  [disabled]="true"
+               #slug="ngModel"/>
+
+        <label for="slug">{{ 'GENERAL.Public URL' | translate }} / @:</label>
+            <div [hidden]="slug.valid || slug.pristine">
+<div *ngIf="slug.errors && slug.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+               <div *ngIf="slug.errors && slug.errors.pattern" class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+ </span>
+                    </div>
+                    <div class="ui-g-12 padding-0">
+                      <app-select-location [city]="article.draft_city_details" [country]="article.draft_country_details"
+                                           [initGeo]="false" [checkEnteredName]="true"
+                                           (selectedLocation)="onLocationSelect($event)"
+                                           #location></app-select-location>
+                    </div>
+
+                    <div class="ui-g-12">
+                      <label for="tags">{{ 'GENERAL.Hashtags' | translate }}:</label>
+                      <p-chips [(ngModel)]="article.tags" id="tags" name="tags"
+                               title="{{ 'GENERAL.Hashtags' | translate }}" (onRemove)="setReadyToSave()">
+
+                        <ng-template let-item pTemplate="item">
+                          <a class="text-white" [routerLink]="'/hashtag/'+item">
+                              <span
+                                class="ui-chips-token-label ng-star-inserted"><strong><u>#{{item}} </u></strong></span>
+                          </a>
+
+
+                        </ng-template>
+                      </p-chips>
+
+
+                    </div>
+
+                    <div class="ui-g-12">
+                      <app-file id="file_upload" [cropImage]="true" [imagePreview]="true"
+                                [image]="article.image_draft_details"
+                                [class]="'flat comment-button'" [aspectRatio]="16 / 9"
+                                [cropperMinWidth]="700" [resizeToWidth]="1000" [onlyScaleDown]="true"
+                                [changeAspectRatio]="false" (fileUpload)="onImageUpload($event)" [onlyIcon]="true"
+                                [icon]="'pi pi-camera'"></app-file>
+
+                    </div>
+
+
+                    <div class="ui-g-12">
+                      <p-tabView (onChange)="onLanguageChanged($event)" (onClose)="onCloseTab($event)"
+                                 [(activeIndex)]="activeIndex">
+                        <p-tabPanel [header]="item.name" [selected]="item.code==article.language_code"
+                                    *ngFor="let item of article.languages; let i = index"
+                                    [closable]="article.languages.length>=2">
+                          <ng-template pTemplate="content">
+                            <div class="ui-g form-group ui-fluid">
+                              <ng-container>
+                                <ng-container *ngIf="item.code==article.language_code">
+                                  <div class="ui-g-12 padding-left-right-0 padding-bottom-0">
+                                    &nbsp;
+                                  </div>
+                                  <div class="ui-g-12 padding-left-right-0">
+              <span class="md-inputfield">
+
+        <input id="title{{item.code}}" name="titleitem{{item.code}}" type="text" pInputText class="article-header"
+               required
+               [(ngModel)]="article.title_draft"/>
+        <label for="title{{item.code}}">{{ 'GENERAL.Title' | translate }}:</label>
+
+         </span>
+                                  </div>
+                                  <div class="ui-g-12 padding-left-right-0 padding-top-0">
+                                   <span *ngIf="!showAdvanced" class="cursor-pointer color-primary"
+                                         (click)="showAdvancedSettings()"><b>{{ 'GENERAL.Advanced' | translate }}...</b> </span>
+                                    <ng-container *ngIf="showAdvanced">
+                                      <div class="ui-g-12 padding-left-right-0">
+                                        <div class="ui-g form-group ui-fluid">
+                                          <div class="ui-g-12 padding-left-right-0">
+
+
+
+         <span class="md-inputfield ">
+
+        <input id="seotitle{{item.code}}" name="seotitle{{item.code}}" type="text" pInputText
+               [(ngModel)]="article.seo_title_draft"/>
+        <label for="seotitle{{item.code}}">{{ 'POSTS.SEO Title' | translate }}:</label>
+         </span>
+                                          </div>
+
+
+                                          <div class="ui-g-12 padding-left-right-0">
+
+
+
+         <span class="md-inputfield ">
+
+        <input id="description{{item.code}}" name="description{{item.code}}" type="text" pInputText
+               [(ngModel)]="article.description_draft"/>
+        <label for="description{{item.code}}">{{ 'GENERAL.Description' | translate }}:</label>
+         </span>
+                                          </div>
+
+
+                                          <div class="ui-g-12 padding-left-right-0">
+
+         <span class="md-inputfield">
+
+        <input id="link_canonical" name="link_canonical" type="url" pInputText
+               [(ngModel)]="article.link_canonical_draft" pattern="^https?://.+"
+               #link_canonical="ngModel"/>
+        <label for="link_canonical">Link canonical:</label>
+
+           <div [hidden]="link_canonical.valid || link_canonical.pristine">
+
+           <div *ngIf="link_canonical.errors && link_canonical.errors.pattern"
+                class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}. {{ 'GENERAL.It should look like' | translate }}
+             https://mysite.com
+            </div>
+           </div>
+           </span>
+                                          </div>
+                                        </div>
+
+                                      </div>
+
+
+                                    </ng-container>
+                                  </div>
+
+                                  <div class="ui-g-12 padding-left-right-0 padding-top-0">
+                                    <div class="text-editor">
+                                      <app-text-editor  id="text{{item.code}}" [(text)]="article.text_draft"
+                                                       [showBorder]="false"
+                                                       [placeholder]=" 'POSTS.Write your story here' | translate"
+                                                       [className]="'article'"
+                                                       [copyAttributes]="true" [toolbar]="toolbarArticle"
+                                                       (textChange)="setReadyToSave()" [mentions]="false"
+                                                       [showAttachments]="true">
+
+                                      </app-text-editor>
+                                    </div>
+
+                                  </div>
+
+                                </ng-container>
+
+                              </ng-container>
+
+                              <ng-container *ngIf="item.code!=article.language_code">
+                                <div class="ui-g-12 text-center loading" align="center">
+                                  <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                                                     animationDuration=".5s"></p-progressSpinner>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </ng-template>
+                        </p-tabPanel>
+
+
+                        <ng-container *ngIf="article.languages_to_add.length>0">
+                          <p-tabPanel [disabled]="readyToSave || processing">
+                            <ng-template pTemplate="header">
+                            <span><i
+                              class="pi pi-plus select-icon"></i>&nbsp;{{ 'BUTTONS.Add' | translate }}</span>
+                            </ng-template>
+                            <ng-template pTemplate="content">
+                              <p-listbox [options]="article.languages_to_add"
+                                         optionLabel="name" (onDblClick)="addLanguage($event)">
+
+                              </p-listbox>
+                            </ng-template>
+
+
+                          </p-tabPanel>
+                        </ng-container>
+
+                      </p-tabView>
+                    </div>
+
+
+                    <div class="ui-g-12 border-top-primary-small" align="center">
+
+                      <button pButton class="ui-button-secondary flat" type="button"
+                              label="{{ 'BUTTONS.Delete' | translate }}"
+                              (click)="deleteArticle()" [disabled]="processing"
+                              icon="pi pi-times" style="width: auto"></button> &nbsp;&nbsp;
+
+
+                      <button pButton type="submit" label="{{ 'BUTTONS.Save' | translate }}"
+                              [disabled]="!readyToSave || !articleForm.form.valid || processing"
+                              icon="pi pi-save" style="width: auto"></button>
+
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</ng-container>
+
+<app-process-dialog [header]="'GENERAL.Deletion' | translate" [processName]="'GENERAL.The deletion process' | translate"
+                    [processComment]="'GENERAL.This may take several minutes' | translate"
+                    #deleteDialog></app-process-dialog>

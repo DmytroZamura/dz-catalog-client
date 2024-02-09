@@ -1,0 +1,30 @@
+<ng-container *ngIf="show">
+  <ng-container *ngIf="attributes || showNewAttribute">
+    <ng-container *ngIf="attributes.length>0  || showNewAttribute">
+      <p-fieldset legend=" {{ 'GENERAL.Attributes' | translate }}">
+        <div class="ui-g ui-fluid">
+          <ng-container *ngFor="let attribute of attributes; let i = index"  >
+
+            <div class="ui-g-11 padding-2">
+              <app-attribute [attribute]="attribute" (multiSelectChanged)="onMultiSelectChange($event, i)" [attributeId]="i"
+                             [editMode]="editMode" (attributeChanged)="onAttributesChanged()"></app-attribute>
+            </div>
+            <div class="ui-g-1 padding-2">
+              <ng-container *ngIf="attribute.user_attribute && editMode">
+                <button pButton class="ui-button-secondary flat" type="button"
+                        (click)="deleteAttribute(i)"
+                        icon="pi pi-times"></button>
+              </ng-container>
+            </div>
+
+          </ng-container>
+          <div *ngIf="editMode" class="ui-g-12">
+            <button id="new" name="new" class="ui-button-secondary ui-button-raised flat width-auto" type="button"
+                    label="{{ 'GENERAL.Add attribute' | translate }}"
+                    pButton (click)="addAttribute()" icon="pi pi-plus-circle"></button>
+          </div>
+        </div>
+      </p-fieldset>
+    </ng-container>
+  </ng-container>
+</ng-container>

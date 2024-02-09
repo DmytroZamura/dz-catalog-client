@@ -1,0 +1,60 @@
+<ng-container *ngIf="postComment">
+
+  <div class="ui-g create-comment-box">
+    <div class="ui-g-12 vertical-middle padding-0">
+
+      <div class="ui-g-12">
+
+        <app-text-editor  id="conditions" [(text)]="postComment.text" [checkLinks]="true"
+                         [mentions]="true" [currentLink]="currentUrl" [maxLength]="2000"
+                         (mainLinkChanged)="mainLinkChanged($event)" [placeholder]="'POSTS.Add_comment' | translate"
+                         [styles]="{'height': '100%'}" #textEditor></app-text-editor>
+      </div>
+
+
+    </div>
+
+    <ng-container *ngIf="postComment.image_details">
+      <div class="ui-g-12 padding-0">
+        <app-user-image-preview [image]="postComment.image_details" [className]="'create-comment-image'"
+                                [editMode]="true"
+                                (imageDeleted)="onImageDeleted()"></app-user-image-preview>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!postComment.image">
+      <div class="ui-g-12 padding-0">
+
+        <app-url-preview [urlPreview]="postComment.urlpreview" (newPreview)="onNewPreview($event)" [size]="1"
+                         [bgClass]="'bg-preview'" #previewurl></app-url-preview>
+      </div>
+
+    </ng-container>
+
+
+    <div class="ui-g-12 padding-0">
+      <div class="ui-toolbar-group-right">
+        <ng-container *ngIf="postComment">
+        <app-message-attachments  (selectImage)="onFileUpload($event)" (selectSticker)="onStickerUpload($event)"
+                                 (selectEmoji)="addEmoji($event)" (selectGiphy)="addGiphy($event)"></app-message-attachments>
+        </ng-container>
+
+      </div>
+    </div>
+
+
+    <ng-container>
+      <div class="ui-g-12" align="center">
+        <button pButton class=" flat" type="button" label="{{ 'BUTTONS.Post' | translate }}"
+                (click)="onPublishComment()"
+                [disabled]="(!postComment.text && !postComment.image) || published"></button>
+      </div>
+
+    </ng-container>
+  </div>
+
+
+</ng-container>
+
+
+

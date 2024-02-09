@@ -1,0 +1,73 @@
+<div class="ui-g ui-fluid dashboard">
+
+<div class="ui-g-12" style="padding-left: 1em; padding-right: 1em; padding-top: 1.5em;">
+        <app-select-user-or-company [viewType]="1" [selected_company]="company"
+                                    (selectedRole)="onSelectedRole($event)"></app-select-user-or-company>
+      </div>
+    <div class="ui-g-12">
+      <div>
+        <p-selectButton [options]="product_types" [(ngModel)]="selectedProductType"></p-selectButton>
+      </div>
+    </div>
+
+
+    <div class="ui-g-12">
+      <form #productForm="ngForm" (ngSubmit)="saveProduct()">
+        <div class="ui-g form-group ui-fluid">
+          <div class="ui-g-12 ui-md-12">
+            <app-select-category
+              (categorySelect)="onCategorySelect($event)" [required]="true"
+              [category]="product.category_details" [label]="true"
+              [label_text]="'PRODUCT.Product category' | translate"></app-select-category>
+          </div>
+          <!--<div class="ui-g-12 ui-md-12">-->
+            <!--<app-select-product-group [user_id]="currentUserId" [company_id]="company"-->
+                                      <!--[group]="product.product_group_details"-->
+                                      <!--(producGroupSelected)="onProductGroupSelected($event)"></app-select-product-group>-->
+          <!--</div>-->
+          <div class="ui-g-12"><span class="middle-text"
+            > {{ 'GENERAL.Please fill data in English' | translate }}</span>
+          </div>
+          <div class="ui-g-12">
+
+         <span class="md-inputfield">
+
+        <input id="name" name="name" type="text" pInputText [(ngModel)]="product.name"  required
+               #product_name="ngModel"/>
+        <label  for="name">{{ 'PRODUCT.Product Name' | translate }} *:</label>
+           <div [hidden]="product_name.valid || product_name.pristine">
+<div *ngIf="product_name.errors && product_name.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+          </div>
+
+
+          <div class="ui-g-12">
+
+            <label for="description">{{ 'PRODUCT.Product short description' | translate }}: </label>
+            <textarea id="description" name="description" pInputTextarea [(ngModel)]="product.short_description" rows="3"></textarea>
+
+
+          </div>
+
+
+          <div class="ui-g-12" align="center">
+            <button *ngIf="selectedProductType" pButton
+                    [disabled]="disabled_save || !productForm.form.valid " type="submit" label="{{ 'PRODUCT.Save product' | translate }}"
+                    style="width: auto"></button>
+
+            <button *ngIf="!selectedProductType" pButton  [disabled]="disabled_save || !productForm.form.valid " type="submit"
+                    label="{{ 'PRODUCT.Save service' | translate }}"
+                     style="width: auto"></button>
+
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+
+</div>

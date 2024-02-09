@@ -1,0 +1,42 @@
+<ng-container *ngIf="categoriesReadyToShow || alwaysShowPanel">
+  <ng-container>
+    <div class="ui-g-12 padding-left-right-0 padding-top-0 padding-bottom-0">
+      <p-breadcrumb [model]="items" [home]="homeItem" [styleClass]="styleClass">
+
+      </p-breadcrumb>
+    </div>
+  </ng-container>
+
+</ng-container>
+
+
+<ng-container *ngIf="showChildCategories">
+
+  <ng-container *ngIf="childCategoriesReadyToShow">
+
+
+    <ng-container *ngIf="productView">
+      <div class="ui-g-12 padding-0">
+        <div class="ui-g ui-fluid">
+          <ng-container *ngFor="let category of childCategories; let i = index"  >
+            <div [appHighlightborder]="'#ebe7ef'" class="ui-g-6 ui-md-3 ui-lg-2 padding-bottom-0 padding-top-0">
+              <app-category-item-big [category]="category" [productView]="true"
+                                     (categorySelect)="onSelectCategory($event)"></app-category-item-big>
+            </div>
+
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+
+  </ng-container>
+
+</ng-container>
+
+
+
+
+
+
+

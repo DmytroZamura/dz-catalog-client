@@ -1,0 +1,77 @@
+
+
+
+<p-dialog [(visible)]="visible" [responsive]="true" [positionTop]="150"
+          [modal]="true" [style]="{'width': '450px'}">
+
+
+  <p-header>
+    <strong>{{ 'PROMOTION.Make a payment' | translate }}</strong>
+
+  </p-header>
+
+
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 padding-0">
+      <ng-container *ngIf="account && locale && visible">
+        <form #paymentForm="ngForm" (ngSubmit)="createPayments()">
+          <div class="ui-g form-group payment-form">
+
+            <div class="ui-g-12 padding-top-0 padding-bottom-0">
+              <span class="small-text">
+                {{ 'PROMOTION.A minimum payment' | translate }} - {{min | currency:currency.code :'symbol-narrow' }}
+              </span>
+            </div>
+
+            <div class="ui-g-12">
+
+              <!--<h1>-->
+                <!--<input id="sum" name="sum" title="{{ 'GENERAL.Quantity' | translate }}" type="number"-->
+                       <!--pInputText [(ngModel)]="sum" pKeyFilter="pint" class="p-inputtext-lg"-->
+                       <!--style="text-align: right" #sumField="ngModel"/> {{currency.code}} </h1>-->
+
+              <p-inputNumber id="sum" name="sum" [(ngModel)]="sum" [locale]="locale"
+                             mode="currency" currency="{{currency.code}}"
+                             [showButtons]="true"
+                               [step]="min" [min]="min"
+                               inputId="vertical"
+                               decrementButtonClass="ui-button-secondary" incrementButtonClass="ui-button-secondary"
+                               incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                             #sumField="ngModel"></p-inputNumber>
+
+
+            </div>
+
+            <div class="ui-g-12 text-align-center message-box">
+              <button pButton type="button" class="ui-button-secondary flat" label="{{ 'BUTTONS.Cancel' | translate }}"
+                      (click)="onCancel()" style="width: auto"></button>
+
+              &nbsp;&nbsp;
+              <button pButton type="submit" label="{{ 'PROMOTION.Make a payment' | translate }}" style="width: auto"
+                      [disabled]="!paymentForm.form.valid || !sum"
+                      icon="pi pi-check"></button>
+
+
+            </div>
+            <div class="ui-g-2"></div>
+            <div class="ui-g-8 text-align-center">
+              <img  alt="Fondy"
+                   src="static/assets/img/fondy-light-3/fondy_logo_cards.png"
+                   class="img-fluid "/>
+            </div>
+            <div class="ui-g-2"></div>
+
+          </div>
+
+        </form>
+      </ng-container>
+    </div>
+  </div>
+
+
+</p-dialog>
+
+
+<app-process-dialog [header]="'ALERTS.Payment' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

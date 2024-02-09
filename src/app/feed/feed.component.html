@@ -1,0 +1,81 @@
+<div class="ui-g main-component-layout">
+
+  <div class="ui-g-6 ui-fluid dashboard padding-left-right-0 posts-list-size">
+
+
+    <div class="ui-g-12 padding-left-right-0 onboarding-container">
+
+      <ng-container *ngIf="app.lang">
+        <div class="card padding-0">
+          <ng-container *ngIf="currentUserId">
+            <ng-container *ngIf="isBrowser">
+              <app-create-post [placeholder]="'POSTS.share_message' | translate"
+
+                               [postTypes]="app.appService.postTypes"
+                               [category]="category"></app-create-post>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="!currentUserId">
+            <div class="ui-g">
+              <div class="ui-g-12 create-post-box">
+
+
+                <input type="text" pInputText placeholder="{{ 'POSTS.share_message' | translate}}"
+                       (focus)="focusPostEvent()">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+
+    </div>
+
+    <ng-container *ngIf="paramsChecked && showContent && language ">
+      <div class="ui-g-12 padding-left-right-0 " [class.onboarding-container]="app.appService.onboarding">
+        <div class="ui-g-12 padding-0" joyrideStep="navigator" title="{{ 'ONBOARDING.filterTitle' | translate }}"
+             text="{{ 'ONBOARDING.filterFeedNavigatorText' | translate }}" stepPosition="bottom">
+          <app-filter-navigator [filterType]="'feed'" [showChildCategories]="false" [followFilter]="true"
+                                [currentUserId]="currentUserId"
+                                [filter]="appliedFilter" [childCategoriesCarouselView]="false"
+                                #navigator></app-filter-navigator>
+        </div>
+
+
+      </div>
+
+      <ng-container *ngIf="(currentUserId && app.appService.isAuthenticated()) || !currentUserId">
+      <app-filtered-posts-list [country]="country_id" [city]="city_id" [check_filter]="true"
+                               [appliedFilter]="appliedFilter" [showAdd]="true" [itemsPerAdd]="10"
+                               (categorySelect)=" onCategorySelect($event)"
+                               #list></app-filtered-posts-list>
+      </ng-container>
+    </ng-container>
+
+  </div>
+
+  <div class="ui-g-6 padding-top-0 info-item-size hide-mobile">
+    <div class="ui-g-12">
+      <div class="ui-g-12">
+        <ng-container *ngIf="currentUserId && app.appService.postTypes && app.appService.isAuthenticated()">
+
+
+         <app-user-dashboards [locale]="language" [userId]="currentUserId" (createPost)="onCreatePost($event)"></app-user-dashboards>
+
+
+        </ng-container>
+        <ng-container *ngIf="isBrowser && !isMobile">
+          <div class="ui-g-12 padding-left-right-0">
+            <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="6825384377" [display]="'inline-block'"
+                        [width]="300" [height]="600"></ng-adsense>
+
+
+          </div>
+
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+

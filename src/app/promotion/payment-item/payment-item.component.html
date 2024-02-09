@@ -1,0 +1,9 @@
+<ng-container *ngIf="payment && currencyCode">
+
+  <div class="ui-g-12 " [class.bg-light]="(index % 2) === 0">
+    <div class="ui-g-6 ">
+      {{payment.create_date| dateAgo:translate.currentLang}}
+    </div>
+    <div class="ui-g-6 text-align-right">{{payment.sum | currency:currencyCode :'symbol-narrow'  }}</div>
+  </div>
+</ng-container>

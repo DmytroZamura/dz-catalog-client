@@ -1,0 +1,43 @@
+<ng-container *ngIf="post">
+  <ng-container *ngIf="!likeStatus">
+    <button pButton type="button" (click)="onLikeClick()"
+            class="ui-button-secondary flat" icon="pi pi-heart"></button>
+  </ng-container>
+
+  <ng-container *ngIf="likeStatus">
+    <button pButton type="button" (click)="onLikeDeleteClick()"
+            class="ui-button ui-button-liked flat" icon="pi pi-heart"></button>
+  </ng-container>
+
+
+  <ng-container *ngIf="likesCount">
+    <span class="select-text" (click)="showLikes()"><strong>{{likesCount}}</strong></span>
+  </ng-container>
+
+
+</ng-container>
+
+
+<ng-container *ngIf="comment">
+  <ng-container *ngIf="!likeStatus">
+
+    <span class="small-link"><i class="pi pi-heart clickable-icon" (click)="onLikeClick()"></i></span>
+
+  </ng-container>
+
+  <ng-container *ngIf="likeStatus">
+    <span class="small-link liked-icon"><i class="pi pi-heart clickable-icon"
+                                           (click)="onLikeDeleteClick()"></i></span>
+  </ng-container>
+
+
+  <ng-container *ngIf="likesCount">
+    <span class="select-text small-link" (click)="showLikes()"><strong> {{'POSTS.Likes' | translate}}
+      : {{likesCount}}</strong></span>
+  </ng-container>
+
+
+</ng-container>
+
+
+

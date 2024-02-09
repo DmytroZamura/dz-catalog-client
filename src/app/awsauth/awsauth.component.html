@@ -1,0 +1,516 @@
+<ng-container *ngIf="isBrowser && !app.appService.signedIn">
+
+
+  <div class="ui-g main-component-layout">
+    <div class="ui-g-12  posts-list-size auth-form">
+
+
+      <div class="card">
+
+        <div class="ui-g  ui-fluid">
+          <div class="ui-g-12 ">
+
+            <div class="ui-g-12 padding-0">
+              <ng-container *ngIf="msgs1">
+                <p-message id="messages" text="{{msgs1}}" severity="{{severity}}" #messages></p-message>
+              </ng-container>
+            </div>
+            <!--<div class="ui-g-12 text-align-center">-->
+            <!--<h2>{{'USERPROFILE.Sign in to your account' | translate}}</h2>-->
+            <!--</div>-->
+
+            <ng-container *ngIf="signInForm">
+              <div class="ui-g-12">
+                <button id="google-button" class="ui-button ui-button-secondary " pButton
+                        (click)="signInWithGoogle()">
+<span>
+<span><svg class="social-logo" enable-background="new 0 0 533.5 544.3" version="1.1" viewBox="0 0 533.5 544.3" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns="&amp;ns_sfw;" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<path
+  d="m533.5 278.4c0-18.5-1.5-37.1-4.7-55.3h-256.7v104.8h147c-6.1 33.8-25.7 63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z"
+  style="fill:#4285f4"/>
+<path
+  d="m272.1 544.3c73.4 0 135.3-24.1 180.4-65.7l-87.7-68c-24.4 16.6-55.9 26-92.6 26-71 0-131.2-47.9-152.8-112.3h-90.5v70.1c46.2 91.9 140.3 149.9 243.2 149.9z"
+  style="fill:#34a853"/>
+<path d="M119.3,324.3c-11.4-33.8-11.4-70.4,0-104.2V150H28.9c-38.6,76.9-38.6,167.5,0,244.4L119.3,324.3z"
+      style="fill:#fbbc04"/>
+<path
+  d="m272.1 107.7c38.8-0.6 76.3 14 104.4 40.8l77.7-77.7c-49.2-46.2-114.5-71.6-182.1-70.8-102.9 0-197 58-243.2 150l90.4 70.1c21.5-64.5 81.8-112.4 152.8-112.4z"
+  style="fill:#ea4335"/>
+</svg></span> <span>{{ 'GENERAL.Sign in with Google' | translate }}</span>
+</span>
+                </button>
+              </div>
+              <div class="ui-g-12 text-align-center padding-0">
+                <h4>{{'GENERAL.or' | translate}}:</h4>
+              </div>
+
+
+              <form #signInForm="ngForm" (ngSubmit)="login()">
+                <div class="ui-g-12">
+                  <label for="email"><b>{{ 'USERPROFILE.Email' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="email" name="email" type="text" pInputText [(ngModel)]="name" required email
+                         [placeholder]="'USERPROFILE.Enter your email address' | translate "
+                         #fEmail="ngModel"/>
+
+                  <div [hidden]="fEmail.valid || fEmail.pristine">
+                    <div *ngIf="fEmail.errors && fEmail.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                    <div *ngIf="fEmail.errors && fEmail.errors.email"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is invalid' | translate }}
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <div class="ui-g-12">
+                  <label for="password"><b>{{ 'USERPROFILE.Password' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+
+                  <input id="password" name="password" type="password" pPassword [(ngModel)]="password"
+                         [feedback]="false"
+                         required
+
+                         [placeholder]="'USERPROFILE.Enter your password' | translate "
+                         #fPassword="ngModel"/>
+
+
+                  <div [hidden]="fPassword.valid || fPassword.pristine">
+                    <div *ngIf="fPassword.errors && fPassword.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                  </div>
+
+                  <h4>{{ 'USERPROFILE.Forgot your password?' | translate }} <a [appHighlightborder]="'#ebe7ef'"
+                                                                          class="cursor-pointer"
+                                                                          (click)="showResetPasswordForm()">{{ 'USERPROFILE.Reset password' | translate }}</a>
+                  </h4>
+
+                </div>
+
+
+                <div class="ui-g-12">
+
+
+                  <p-button id="submit" styleClass="text-uppercase" type="submit" [disabled]="!signInForm.form.valid "
+                            label="{{ 'USERPROFILE.Sign In' | translate }}" class="w-100"
+
+                  ></p-button>
+
+                </div>
+              </form>
+
+              <div class="ui-g-12 text-align-center padding-0">
+                <h4>{{ 'USERPROFILE.No account?' | translate }}</h4>
+              </div>
+              <div class="ui-g-12">
+
+                <p-button id="create" styleClass="ui-button-info text-uppercase" type="button"
+                          label="{{ 'USERPROFILE.Create Account' | translate }}" class="w-100"
+                          (onClick)="showSignUpForm()"
+
+                ></p-button>
+
+              </div>
+
+              <div class="ui-g-12">
+                <span class="small-text">{{ 'GENERAL.By using this service you agree to our' | translate }}&nbsp;
+<a
+  [routerLink]="['/document/privacy-policy/'+app.translate.currentLang]">{{ 'GENERAL.Privacy Policy & Terms' | translate }}</a>, <a
+                    [routerLink]="['/document/cookies-policy/'+app.translate.currentLang]">{{ 'GENERAL.Cookies Policy' | translate }}</a>.</span>
+              </div>
+
+            </ng-container>
+
+
+            <ng-container *ngIf="signUpForm">
+              <form #signUpForm="ngForm" (ngSubmit)="createAccount()">
+                <div class="ui-g-12">
+                  <h2><b>{{ 'USERPROFILE.Create a new account' | translate }}</b></h2>
+                </div>
+                <div class="ui-g-12">
+                  <label for="firstName"><b>{{ 'USERPROFILE.First_Name' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="firstName" name="firstName" type="text" pInputText [(ngModel)]="firstName" required
+                         [placeholder]="'USERPROFILE.Enter your name' | translate "
+                         #fFirstName="ngModel"/>
+
+                  <div [hidden]="fFirstName.valid || fFirstName.pristine">
+                    <div *ngIf="fFirstName.errors && fFirstName.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+                <div class="ui-g-12">
+                  <label for="lastName"><b>{{ 'USERPROFILE.Last_Name' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="lastName" name="lastName" type="text" pInputText [(ngModel)]="lastName" required
+                         [placeholder]="'USERPROFILE.Enter your last name' | translate "
+                         #fLastName="ngModel"/>
+
+                  <div [hidden]="fLastName.valid || fLastName.pristine">
+                    <div *ngIf="fLastName.errors && fLastName.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+
+                <div class="ui-g-12">
+                  <label for="createemail"><b>{{ 'USERPROFILE.Email' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="createemail" name="email" type="text" pInputText [(ngModel)]="name" required email
+                         [placeholder]="'USERPROFILE.Enter your email address' | translate "
+                         #fcreateEmail="ngModel"/>
+
+                  <div [hidden]="fcreateEmail.valid || fcreateEmail.pristine">
+                    <div *ngIf="fcreateEmail.errors && fcreateEmail.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                    <div *ngIf="fcreateEmail.errors && fcreateEmail.errors.email"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is invalid' | translate }}
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <div class="ui-g-12">
+                  <label for="createpassword"><b>{{ 'USERPROFILE.Password' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+
+                  <input id="createpassword" name="password" type="password" pPassword [(ngModel)]="password"
+                         [promptLabel]="'USERPROFILE.Enter your password' | translate "
+                         [weakLabel]="'USERPROFILE.weak password' | translate "
+                         [mediumLabel]="'USERPROFILE.medium password' | translate "
+                         [strongLabel]="'USERPROFILE.strong password' | translate "
+                         required
+
+                         [placeholder]="'USERPROFILE.Enter your password' | translate "
+                         #fCreatePassword="ngModel"/>
+
+
+                  <div [hidden]="fCreatePassword.valid || fCreatePassword.pristine">
+                    <div *ngIf="fCreatePassword.errors && fCreatePassword.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="ui-g-12">
+
+                  <p-button id="createAcc" styleClass="ui-button-info text-uppercase" type="submit"
+                            label="{{ 'USERPROFILE.Create account' | translate }}" class="w-100"
+                            [disabled]="!signUpForm.form.valid "
+
+
+                  ></p-button>
+                </div>
+                <div class="ui-g-12">
+                  <h4>{{ 'USERPROFILE.Have an account?' | translate }} <a [appHighlightborder]="'#ebe7ef'"
+                                                                          class="cursor-pointer"
+                                                                          (click)="goSignIn()">{{ 'USERPROFILE.Back to Sign In' | translate }}</a>
+                  </h4>
+                </div>
+              </form>
+
+            </ng-container>
+
+            <ng-container *ngIf="signUpConfirmationForm">
+              <form #signUpConfForm="ngForm" (ngSubmit)="confirmSignUp()">
+                <div class="ui-g-12">
+                  <h2>{{ 'USERPROFILE.Confirm Sign up' | translate }}</h2>
+                </div>
+                <div class="ui-g-12">
+                  <label for="confemail"><b>{{ 'USERPROFILE.Email' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="confemail" name="confemail" type="text" pInputText [ngModel]="name" required
+                         [disabled]="true"
+                  />
+                </div>
+                <div class="ui-g-12">
+                  <label for="code"><b>{{ 'USERPROFILE.Confirmation Code' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="code" name="code" type="text" pInputText [(ngModel)]="code" required
+                         [placeholder]="'USERPROFILE.Enter your code' | translate "
+                         #fCode="ngModel"/>
+
+                  <div [hidden]="fCode.valid || fCode.pristine">
+                    <div *ngIf="fCode.errors && fCode.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+
+                  </div>
+                  <h4>{{ 'USERPROFILE.Lost your code?' | translate }} <a [appHighlightborder]="'#ebe7ef'"
+                                                                         class="cursor-pointer"
+                                                                         (click)="resendCode()">{{ 'USERPROFILE.Resend Code' | translate }}</a>
+                  </h4>
+
+                </div>
+                <div class="ui-g-12">
+
+                  <p-button id="confirmSignUp" styleClass="ui-button-info text-uppercase" type="submit"
+                            label="{{ 'USERPROFILE.Confirm' | translate }}" class="w-100"
+                            [disabled]="!signUpConfForm.form.valid "
+
+
+                  ></p-button>
+                </div>
+
+                <div class="ui-g-12">
+                  <h4><a [appHighlightborder]="'#ebe7ef'" class="cursor-pointer"
+                         (click)="goSignIn()">{{ 'USERPROFILE.Back to Sign In' | translate }}</a></h4>
+                </div>
+              </form>
+            </ng-container>
+
+
+            <ng-container *ngIf="forgotPasswordForm">
+
+
+
+              <form #resetPasswordForm="ngForm" (ngSubmit)="resetPassword()">
+                <div class="ui-g-12">
+                  <h2>{{ 'USERPROFILE.Reset password' | translate }}</h2>
+                </div>
+                <div class="ui-g-12">
+                  <label for="resetemail"><b>{{ 'USERPROFILE.Email' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="resetemail" name="email" type="text" pInputText [(ngModel)]="name" required email
+                         [placeholder]="'USERPROFILE.Enter your email address' | translate "
+                         #fResetEmail="ngModel"/>
+
+                  <div [hidden]="fResetEmail.valid || fResetEmail.pristine">
+                    <div *ngIf="fResetEmail.errors && fResetEmail.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                    <div *ngIf="fResetEmail.errors && fResetEmail.errors.email"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is invalid' | translate }}
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="ui-g-12">
+
+                  <p-button id="sendResetCode" styleClass="ui-button-info text-uppercase" type="submit"
+                            label="{{ 'USERPROFILE.Send Code' | translate }}" class="w-100"
+                            [disabled]="!resetPasswordForm.form.valid "
+
+
+                  ></p-button>
+                </div>
+
+                <div class="ui-g-12">
+                  <h4><a [appHighlightborder]="'#ebe7ef'" class="cursor-pointer"
+                         (click)="goSignIn()">{{ 'USERPROFILE.Back to Sign In' | translate }}</a></h4>
+                </div>
+              </form>
+            </ng-container>
+
+             <ng-container *ngIf="newPasswordForm">
+
+
+
+              <form #resetPasswordForm="ngForm" (ngSubmit)="newPassword()">
+                <div class="ui-g-12">
+                  <h2>{{ 'USERPROFILE.Reset password' | translate }}</h2>
+                </div>
+                <div class="ui-g-12">
+                  <label for="resetcode"><b>{{ 'USERPROFILE.Verification code' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+                  <input id="resetcode" name="email" type="text" pInputText [(ngModel)]="code" required
+                         [placeholder]="'USERPROFILE.Enter your code' | translate "
+                         #fResetCode="ngModel"/>
+
+                  <div [hidden]="fResetCode.valid || fResetCode.pristine">
+                    <div *ngIf="fResetCode.errors && fResetCode.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="ui-g-12">
+                  <label for="newpassword"><b>{{ 'USERPROFILE.New Password' | translate }}:</b></label>
+                </div>
+                <div class="ui-g-12">
+
+                  <input id="newpassword" name="password" type="password" pPassword [(ngModel)]="password"
+                         [promptLabel]="'USERPROFILE.Enter your password' | translate "
+                         [weakLabel]="'USERPROFILE.weak password' | translate "
+                         [mediumLabel]="'USERPROFILE.medium password' | translate "
+                         [strongLabel]="'USERPROFILE.strong password' | translate "
+                         required
+
+                         [placeholder]="'USERPROFILE.Enter your password' | translate "
+                         #fNewPassword="ngModel"/>
+
+
+                  <div [hidden]="fNewPassword.valid || fNewPassword.pristine">
+                    <div *ngIf="fNewPassword.errors && fNewPassword.errors.required"
+                         class="ui-message ui-messages-error ui-corner-all">
+                      {{ 'GENERAL.This field is required' | translate }}
+                    </div>
+                  </div>
+
+                </div>
+                <div class="ui-g-12">
+
+                  <p-button id="sendCode" styleClass="ui-button-info text-uppercase" type="submit"
+                            label="{{ 'BUTTONS.Send' | translate }}" class="w-100"
+                            [disabled]="!resetPasswordForm.form.valid "
+
+
+                  ></p-button>
+                </div>
+
+                <div class="ui-g-12">
+                  <h4><a [appHighlightborder]="'#ebe7ef'" class="cursor-pointer"
+                         (click)="goSignIn()">{{ 'USERPROFILE.Back to Sign In' | translate }}</a></h4>
+                </div>
+              </form>
+            </ng-container>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+</ng-container>
+
+
+<app-process-dialog [header]="'CREATE.Authentication' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>
+
+
+<!--<div class="ui-g-12 padding-left-right-0">-->
+
+<!--<div class="ui-g-12" style="position: relative">-->
+<!---->
+<!---->
+<!---->
+<!--<ng-container >-->
+
+<!--<amplify-authenticator usernameAlias="email">-->
+
+<!--<amplify-sign-in slot="sign-in" usernameAlias="email">-->
+<!--<div slot="federated-buttons">-->
+
+<!--<button id="google-button" class="ui-button ui-button-secondary social-button" pButton-->
+<!--(click)="signInWithGoogle()">-->
+<!--<span>-->
+<!--<span><svg class="social-logo" enable-background="new 0 0 533.5 544.3" version="1.1" viewBox="0 0 533.5 544.3" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns="&amp;ns_sfw;" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">-->
+<!--<path-->
+<!--d="m533.5 278.4c0-18.5-1.5-37.1-4.7-55.3h-256.7v104.8h147c-6.1 33.8-25.7 63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z"-->
+<!--style="fill:#4285f4"/>-->
+<!--<path-->
+<!--d="m272.1 544.3c73.4 0 135.3-24.1 180.4-65.7l-87.7-68c-24.4 16.6-55.9 26-92.6 26-71 0-131.2-47.9-152.8-112.3h-90.5v70.1c46.2 91.9 140.3 149.9 243.2 149.9z"-->
+<!--style="fill:#34a853"/>-->
+<!--<path d="M119.3,324.3c-11.4-33.8-11.4-70.4,0-104.2V150H28.9c-38.6,76.9-38.6,167.5,0,244.4L119.3,324.3z"-->
+<!--style="fill:#fbbc04"/>-->
+<!--<path-->
+<!--d="m272.1 107.7c38.8-0.6 76.3 14 104.4 40.8l77.7-77.7c-49.2-46.2-114.5-71.6-182.1-70.8-102.9 0-197 58-243.2 150l90.4 70.1c21.5-64.5 81.8-112.4 152.8-112.4z"-->
+<!--style="fill:#ea4335"/>-->
+<!--</svg></span> <span>{{ 'GENERAL.Sign in with Google' | translate }}</span>-->
+<!--</span>-->
+<!--</button>-->
+<!--<amplify-strike [className]="'sc-amplify-strike-h sc-amplify-strike-s hydrated'">-->
+<!--{{'GENERAL.or' | translate }}-->
+<!--</amplify-strike>-->
+
+<!--</div>-->
+
+<!--<div slot="header-subtitle">-->
+
+
+<!--<span class="small-text">{{ 'GENERAL.By using this service you agree to our' | translate }}&nbsp;-->
+<!--<a-->
+<!--[routerLink]="['/document/privacy-policy']">{{ 'GENERAL.Privacy Policy & Terms' | translate }}</a>, <a-->
+<!--[routerLink]="['/document/cookies-policy']">{{ 'GENERAL.Cookies Policy' | translate }}</a>.</span>-->
+
+
+<!--</div>-->
+
+
+<!--</amplify-sign-in>-->
+<!--<amplify-sign-up-->
+<!--slot="sign-up"-->
+<!--usernameAlias="email"-->
+<!--[formFields]="[-->
+<!--{-->
+<!--label: 'USERPROFILE.First_Name' | translate ,-->
+<!--placeholder: 'USERPROFILE.Enter your name' | translate ,-->
+<!--required: true,-->
+<!--type: 'name'-->
+<!--},-->
+<!--{-->
+<!--label: 'USERPROFILE.Last_Name' | translate,-->
+<!--placeholder: 'USERPROFILE.Enter your last name' | translate ,-->
+<!--required: true,-->
+<!--type: 'family_name'-->
+<!--},-->
+<!--{-->
+<!--label: 'Email',-->
+<!--required: true,-->
+<!--type: 'email'-->
+<!--},-->
+<!--{-->
+<!--label: 'Password',-->
+<!--required: true,-->
+<!--type: 'password'-->
+<!--}-->
+<!--]"></amplify-sign-up>-->
+
+
+<!--</amplify-authenticator>-->
+
+
+<!--</ng-container>-->
+<!--</div>-->
+
+
+<!--</div>-->
+
+
+
+
+
+
+

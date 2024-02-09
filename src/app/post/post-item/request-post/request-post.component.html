@@ -1,0 +1,105 @@
+<ng-container *ngIf="post">
+  <div class="ui-g-12 padding-0">
+    <ng-container *ngIf="post.post_request">
+      <ng-container *ngIf="post.post_title || post.post_request.deadline">
+
+        <ng-container *ngIf="post.post_request.deadline">
+          <div class="ui-g-12 text-align-right padding-top-0">
+            &nbsp;<span
+            class="simple-value-badge">{{ 'REQUEST.Deadline' | translate }}&nbsp;{{post.post_request.deadline | date}}</span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="post.post_title">
+          <div class="ui-g-12 ui-md-12  padding-bottom-0">
+            <h1 class="post-title">{{post.post_title}}</h1>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <div *ngIf="comment &&  !post.post_title" class="ui-g-12 padding-top-0 padding-bottom-0">
+        <app-text-show-more [currentUserId]="currentUserId" [text]="comment" [calcTruncateWords]="false"
+                            [richText]="true" [truncateWords]="truncateWords"
+                            (showMoreClicked)="onShowMoreClicked()"></app-text-show-more>
+      </div>
+
+
+      <div *ngIf="!show_details" class="ui-g-12 text-align-center">
+
+        <span class="cursor-pointer color-primary"
+              (click)="showDetails()"><b>{{ 'BUTTONS.Show details' | translate }}...</b> </span>
+
+      </div>
+
+      <ng-container *ngIf="show_details">
+        <div *ngIf="comment &&  post.post_title" class="ui-g-12">
+          <app-text-show-more [currentUserId]="currentUserId" [text]="comment"
+                              [richText]="true" [showSeeMore]="true" [truncateWords]="1000"
+                              (showMoreClicked)="onShowMoreClicked()"></app-text-show-more>
+        </div>
+        <ng-container *ngIf="post.post_request.price_currency_details">
+          <div class="ui-md-3 ui-g-12">
+            <span><b>{{ 'GENERAL.Currency' | translate }}:</b></span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="post.post_request.price_currency_details">
+          <div class="ui-md-9 ui-g-12">
+            <span>{{ post.post_request.price_currency_details.name}}</span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="post.post_request.delivery_address">
+          <div class="ui-g-12 padding-0">
+            <div class="ui-md-3 ui-g-12">
+              <span><b>{{ 'REQUEST.Delivery address' | translate }}:</b></span>
+            </div>
+
+            <div class="ui-md-9 ui-g-12">
+              <span>{{post.post_request.delivery_address}}</span>
+            </div>
+          </div>
+        </ng-container>
+        <div *ngIf="post.documents[0]" class="ui-g-12">
+          <app-attached-documents [documents]="post.documents" [editMode]="false"></app-attached-documents>
+
+
+        </div>
+
+
+      </ng-container>
+
+    </ng-container>
+  </div>
+
+
+  <ng-container *ngIf="post.images[0]">
+
+    <app-images-list [isMobile]="isMobile" [isBrowser]="isBrowser" [editMode]="false" [viewMode]="true" [images]="post.images"
+                     (previewOpened)="onImagePreview()"></app-images-list>
+  </ng-container>
+
+  <ng-container>
+
+    <app-url-preview [urlPreview]="urlPreview" [showImage]="showUrlImage" [showDescription]="false"
+                     [checkDescription]="false" (linkClicked)="onLinkClicked()"></app-url-preview>
+
+
+  </ng-container>
+
+
+  <ng-container *ngIf="post.admin_status">
+    <div class="ui-g-12 border-top-small text-align-center">
+      <a [routerLink]="['/post/'+post.id]">
+        <span>{{ 'GENERAL.New responses' | translate }} - {{post.eventsqty.new_responds}}.</span>
+        <span> {{ 'GENERAL.Total responded' | translate }} - {{post.eventsqty.responds}}</span>
+      </a>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="currentUserId && post.responder_status">
+    <div class="ui-g-12 border-top-small text-align-center">
+      <span class="text-muted">{{ 'GENERAL.You have already responded to this request' | translate }}</span>
+    </div>
+  </ng-container>
+
+</ng-container>
+
+
+

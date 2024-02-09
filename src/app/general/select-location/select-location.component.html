@@ -1,0 +1,23 @@
+<div class="ui-g form-group ui-fluid">
+  <div class="ui-g-12 {{colClass}}">
+
+
+    <app-select-common-item [item]="country" [endpoint]="'countries'"
+                            [showFilter]="false" [viewType]="4" [label]="'USERPROFILE.Country' | translate"
+                            [sortByName]="true" [showClear]="true" [placeholder]="''" [disabled]="disabled"
+                            [checkEnteredName]="checkEnteredName" [componentId]="'select-country'"
+                            (itemChange)="onCountrySelected($event)" #selectCountry></app-select-common-item>
+
+
+  </div>
+
+  <div class="ui-g-12 {{colClass}}">
+    <app-select-common-item [item]="city" [endpoint]="'cities'" [filter]="filter"
+                            [showFilter]="false" [viewType]="4" [label]="'USERPROFILE.City' | translate"
+                            [sortByName]="true" [showClear]="true" [placeholder]="''" [disabled]="disabled || disabledCity"
+                            [checkEnteredName]="checkEnteredName" [componentId]="'select-city'"
+                            (itemChange)="onCitySelected($event)"
+                            #selectCity></app-select-common-item>
+
+  </div>
+</div>

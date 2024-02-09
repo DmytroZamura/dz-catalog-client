@@ -1,0 +1,30 @@
+<p-dialog header="{{ 'GENERAL.Link' | translate }}" [(visible)]="showDialog"
+          [modal]="false" [appendTo]="'body'" [positionTop]="100">
+  <div class="ui-g  " style="margin-bottom: 10px;">
+
+    <div class="ui-g-12 padding-top-0 posts-list-size">
+
+      <div class="ui-g form-group ui-fluid">
+        <div class="ui-g-9">
+         <span class="md-inputfield">
+        <input id="link" name="link" title="{{ 'GENERAL.Link' | translate }}" type="text" pInputText
+               [(ngModel)]="link"
+               #linkInput/>
+             <label for="link">{{ 'GENERAL.Link' | translate }}:</label>
+         </span>
+        </div>
+        <div class="ui-g-3">
+          <button class="ui-button ui-button-secondary flat" type="button" pButton
+                  label="{{ 'BUTTONS.Copy' | translate }}"
+                  style="width: auto" (click)="copyLink(linkInput)"></button>
+
+        </div>
+      </div>
+      </div>
+
+
+    </div>
+
+
+
+</p-dialog>

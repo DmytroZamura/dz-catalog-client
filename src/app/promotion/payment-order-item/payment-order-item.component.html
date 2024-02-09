@@ -1,0 +1,22 @@
+<ng-container *ngIf="order && currencyCode">
+
+  <div class="ui-g-12 border-bottom-small">
+
+    <div class="ui-g-2 ">
+       <b>{{order.create_date| dateAgo:translate.currentLang}}</b>
+    </div>
+    <div class="ui-g-7">
+      <b>{{order.payment_product_details.name}}: {{order.quantity}} <ng-container *ngIf="order.payment_product_details.unit_type_details">({{order.payment_product_details?.unit_type_details.name_plural}})</ng-container></b>
+    </div>
+    <div class="ui-g-3 text-align-right"><b>{{order.sum | currency:currencyCode :'symbol-narrow'  }}</b></div>
+
+     <ng-container *ngIf="order.payment_product_details.code==='post-promotion' && order.promoted_post_details">
+
+      <div class="ui-g-12">
+        <app-post-preview [post]="order.promoted_post_details" [language]="translate.currentLang" #postPreview></app-post-preview>
+      </div>
+        </ng-container>
+
+  </div>
+</ng-container>
+

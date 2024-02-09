@@ -1,0 +1,180 @@
+<ng-container
+  *ngIf="commonVerbs.includes(item.verb)">
+  <div class="ui-g-12 padding-left-right-0">
+    <div class="ui-g-12 padding-0">
+      <div class="ui-toolbar-group-left">
+        <app-actors-list [currentUserId]="currentUserId" [truncateNumber]="truncateNumber" [locale]="locale"
+                         [activities]="item.activities" [verb]="item.verb" (itemClicked)="onItemClicked()"
+                         [purshaseRequestStatusVerbs]="purshaseRequestStatusVerbs"></app-actors-list>
+      </div>
+      <div class="ui-toolbar-group-right">
+        <span class="date-time-text">{{item.created_at | dateAgo: locale }}</span>
+      </div>
+    </div>
+
+    <ng-container
+      *ngIf="purshaseRequestStatusVerbs.includes(item.verb) ||
+    customerRequestStatusVerbsToCompany.includes(item.verb) || customerRequestStatusVerbsToUser.includes(item.verb)">
+
+      <div class="ui-g-12">
+        <div class="ui-toolbar-group-left">
+          <ng-container *ngIf="item.activities[0].object">
+            <ng-container *ngIf="item.activities[0].object.id">
+              <span>
+                <ng-container *ngIf="purshaseRequestStatusVerbs.includes(item.verb)">
+                {{ 'GENERAL.Purchase request' | translate }}
+                </ng-container>
+                 <ng-container
+                   *ngIf="customerRequestStatusVerbsToCompany.includes(item.verb) || customerRequestStatusVerbsToUser.includes(item.verb)">
+                {{ 'REQUEST.Customer request' | translate }}</ng-container>
+                №{{item.activities[0].object.id}}  </span>
+
+          </ng-container>
+          </ng-container>
+
+        </div>
+
+        <ng-container *ngIf="item.activities[0].message">
+          <div class="ui-toolbar-group-right">
+            <span
+              class="status-badge-{{item.activities[0].message}}"> {{'GENERAL.'+item.activities[0].message | translate}}</span>
+          </div>
+        </ng-container>
+      </div>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="item.verb=='company message' || item.verb=='user message'">
+      <div class="ui-g-12 comment-box cursor-pointer" [appHighlightborder]="'#ebe7ef'"
+           (click)="onShowChat(item.activities[0].target.id)">
+        <app-text-show-more [text]="item.activities[0].message" [richText]="true"
+                            [currentUserId]="currentUserId" [truncateWords]="20"
+                            [showSeeMore]="false"></app-text-show-more>
+
+
+      </div>
+    </ng-container>
+
+
+    <ng-container *ngIf="postPreviewVerbs.includes(item.verb)">
+      <div class="ui-g-12 comment-box cursor-pointer" [appHighlightborder]="'#ebe7ef'">
+
+        <a class="link-color" [routerLink]="['/'+previewLink+'/'+locale]" (click)="onItemClicked()">
+          <app-post-preview [post]="item.activities[0].target" [language]="locale" [siteUrl]="siteUrl"></app-post-preview>
+        </a>
+
+
+      </div>
+    </ng-container>
+
+
+    <ng-container *ngIf="item.verb=='comment_like'">
+      <div class="ui-g-12 comment-box cursor-pointer" [appHighlightborder]="'#ebe7ef'">
+
+        <a class="link-color" [routerLink]="['/'+previewLink+'/'+locale]" (click)="onItemClicked()">
+          <app-text-show-more [text]="item.activities[0].target.text" [richText]="true"
+                              [currentUserId]="currentUserId" [truncateWords]="20"
+                              [showSeeMore]="false"></app-text-show-more>
+        </a>
+
+
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="item.verb=='company_follower' || item.verb=='followcompany'">
+      <div class="ui-g-12">
+        <app-company-preview-short [currentUser]="currentUserId" [company]="item.activities[0].target"
+                                   [showInfo]="true" [showPreview]="true" [showLink]="true"
+                                   [size]="'actor'" (itemClicked)="onItemClicked()"
+                                   [truncate_number]="truncateNumber"></app-company-preview-short>
+      </div>
+    </ng-container>
+    <ng-container
+      *ngIf="communityVerbs.includes(item.verb)">
+      <div class="ui-g-12">
+        <app-community-preview [truncate_number]="truncateNumber" (itemClicked)="onItemClicked()"
+                               [communityDetails]="item.activities[0].target"
+                               [communityDefaultDetails]="item.activities[0].target"></app-community-preview>
+      </div>
+
+    </ng-container>
+
+    <ng-container
+      *ngIf="companyVerbs.includes(item.verb)">
+      <div class="ui-g-12">
+        <app-company-preview-short [truncate_number]="truncateNumber" [currentUser]="currentUserId"
+                                   [showPreview]="true" [company]="item.activities[0].target"
+                                   [showInfo]="true" (itemClicked)="onItemClicked()"></app-company-preview-short>
+      </div>
+
+
+    </ng-container>
+
+
+    <ng-container
+      *ngIf="item.verb=='user_customer_request_to_user' || item.verb=='company_customer_request_to_user' ||
+customerRequestStatusVerbsToUser.includes(item.verb)">
+      <div class="ui-g-12 cursor-pointer text-align-center padding-top-15px">
+            <span class="primary-badge" [appHighlightborder]="'#ebe7ef'" [routerLink]="'/requests/supplier/'"
+                  (click)="onItemClicked()">
+              {{ 'GENERAL.Open customer requests' | translate }} ...</span>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container
+      *ngIf="item.verb=='user_customer_request_to_company' || item.verb=='company_customer_request_to_company' ||
+customerRequestStatusVerbsToCompany.includes(item.verb)">
+      <div class="ui-g-12 cursor-pointer text-align-center padding-top-15px">
+            <span class="primary-badge" [appHighlightborder]="'#ebe7ef'"
+                  [routerLink]="'/requests/supplier/'+item.activities[0].target.id" (click)="onItemClicked()">
+              {{ 'GENERAL.Open customer requests' | translate }} ...</span>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container
+      *ngIf="purshaseRequestStatusVerbs.includes(item.verb) && item.activities[0].target.user_id">
+      <div class="ui-g-12 cursor-pointer text-align-center padding-top-15px" >
+            <span class="primary-badge" [appHighlightborder]="'#ebe7ef'"
+                  [routerLink]="'/requests/customer/'" (click)="onItemClicked()">
+              {{ 'GENERAL.Current purchases' | translate }} ...</span>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container
+      *ngIf="purshaseRequestStatusVerbs.includes(item.verb) && !item.activities[0].target.user_id">
+      <div class="ui-g-12 cursor-pointer text-align-center padding-top-15px" >
+            <span class="primary-badge" [appHighlightborder]="'#ebe7ef'"
+                  [routerLink]="'/requests/customer/'+item.activities[0].target.id" (click)="onItemClicked()">
+              {{ 'GENERAL.Current purchases' | translate }} ...</span>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="item.verb === 'category_suggested' && item.activities[0].target">
+      <div class="ui-g-12">
+        <p>{{ 'CATEGORY.Category' | translate }}: <b>{{item.activities[0].target.name}}</b></p>
+
+        <p>{{ 'ALERTS.Suggestion message' | translate }}</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="item.verb === 'new_category' && item.activities[0].target  && item.activities[0].object">
+      <div class="ui-g-12">
+        <p><b>{{item.activities[0].object.name}}</b></p>
+
+        <p>{{ 'ALERTS.Suggestion processed' | translate }}</p>
+        <p>{{ 'CATEGORY.UaFine category' | translate }}: <b>{{item.activities[0].target.name}}</b></p>
+      </div>
+    </ng-container>
+
+
+  </div>
+</ng-container>

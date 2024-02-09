@@ -1,0 +1,62 @@
+<ng-container *ngIf="isBrowser">
+
+
+  <ng-container *ngIf="!company">
+    <div class="ui-g-12 text-center loading" align="center">
+      <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                         animationDuration=".5s"></p-progressSpinner>
+    </div>
+  </ng-container>
+
+
+  <ng-container *ngIf="company">
+    <ng-container *ngIf="company.admin_status">
+      <div class="ui-g">
+        <div class="ui-g-12 padding-0">
+          <div class="layout-top">
+            <div class="card">
+              <div style="display : flex; align-items: center ">
+                <img *ngIf="company.logo_details"
+                     src="{{company.logo_details.small_image_url}}" alt="{{company.name}}"
+                     class="top-tab-image "/>
+                <img *ngIf="!company.logo_details" alt="{{company.name}}"
+                     src="static/assets/img/company-default.png"
+                     class="top-tab-image "/>
+                &nbsp;
+                &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}"></p-tabMenu>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+        <div class="ui-g-12 layout-work padding-left-right-0">
+          <ng-container *ngIf="activeTab==0 && company">
+            <app-company-overview-admin [company]="company" [currentUserId]="currentUserId"
+            ></app-company-overview-admin>
+          </ng-container>
+
+          <ng-container *ngIf="activeTab==1 && company">
+            <app-company-posts-admin [company]="company" [isBrowser]="isBrowser"
+            ></app-company-posts-admin>
+          </ng-container>
+
+          <ng-container *ngIf="activeTab==2 && company">
+            <app-company-products-admin [company_id]="company.id" [currentUserId]="currentUserId"
+                                        [isMobile]="isMobile" [locale]="language"
+            ></app-company-products-admin>
+          </ng-container>
+
+          <ng-container *ngIf="activeTab==3 && company">
+            <app-admins-management [company]="company.id" [locale]="language" [isMobile]="isMobile"
+                                   [currentUserId]="currentUserId"></app-admins-management>
+          </ng-container>
+
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

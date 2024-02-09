@@ -1,0 +1,73 @@
+<ng-container *ngIf="isBrowser">
+  <p-confirmDialog></p-confirmDialog>
+</ng-container>
+
+
+<div class="ui-g-12 padding-0">
+  <div class="ui-g ui-fluid dashboard">
+
+    <ng-container *ngFor="let item of items; let i = index">
+
+      <ng-container
+        *ngIf="bodyTemplateRef"
+        [ngTemplateOutlet]="bodyTemplateRef"
+        [ngTemplateOutletContext]="{$implicit:item, index:i}">
+      </ng-container>
+
+      <ng-container *ngIf="showAdd && isBrowser && (i+1)%itemsPerAdd==0">
+        <div class="ui-g-12 padding-left-right-0">
+          <ng-container *ngIf="app.appService.loadingLazyElements">
+            <ng-adsense [adClient]="adClient" [adSlot]="adSlot" [adFormat]="adFormat"
+                        [layoutKey]="layoutKey"
+                        [display]="display"></ng-adsense>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="i == items.length-2 &&  !itemsFinished">
+
+
+        <div pDefer (onLoad)="onItemFocus()" *ngIf="!loading">
+          <ng-template>
+            &nbsp;
+
+          </ng-template>
+
+
+        </div>
+
+      </ng-container>
+
+    </ng-container>
+
+
+
+  </div>
+
+  <ng-container *ngIf="isBrowser">
+    <ng-container *ngIf="loading">
+
+      <ng-container *ngIf="itemsType=='favorite-posts' || itemsType=='feed'">
+        <app-empty-post></app-empty-post>
+      </ng-container>
+      <ng-container *ngIf="itemsType!='favorite-posts' && itemsType!='feed'">
+        <div class="ui-g-12 text-center loading" align="center">
+          <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                             animationDuration=".5s"></p-progressSpinner>
+        </div>
+      </ng-container>
+    </ng-container>
+
+  </ng-container>
+
+</div>
+
+<ng-container *ngIf="isBrowser">
+  <app-process-dialog [header]="'GENERAL.Deletion' | translate"
+                      [processName]="'GENERAL.The deletion process' | translate"
+                      [processComment]="'GENERAL.This may take several seconds' | translate"
+                      #processDialog></app-process-dialog>
+</ng-container>
+
+
+<app-copy-link #copyLink></app-copy-link>

@@ -1,0 +1,4 @@
+<p-autoComplete [(ngModel)]="countries" [suggestions]="filteredCounties" field="name"
+                (completeMethod)="getFilteredCountries($event)" [multiple]="true"  [disabled]="disabled"
+                (onSelect)="onCountrySelect($event)" (onUnselect)="onCountryUnselect($event)"></p-autoComplete>
+<!--[dataKey]="id"-->

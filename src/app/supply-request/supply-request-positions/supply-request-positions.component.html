@@ -1,0 +1,8 @@
+<ng-container *ngFor="let position of positions; let i = index"  >
+  <div  class="ui-g-12">
+  <app-supply-request-position [currency]="currency" [editMode]="editMode" [position]="position" [updateMode]="updateMode"
+               [userType]="userType"                (positionChanged)="onPositionChanged($event, i)"
+  (deleted)="onPositionDelete(i)"
+  ></app-supply-request-position>
+  </div>
+</ng-container>

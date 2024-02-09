@@ -1,0 +1,273 @@
+<div class="ui-g">
+  <div class="ug-12 padding-0">
+    <div class="layout-top">
+      <div class="card" *ngIf="slug">
+        <div class="ui-g">
+          <div class="ui-g-12 padding-0">
+
+            <div class="ui-toolbar-group-left align-items-center">
+              <img
+                src="static/assets/img/search.jpg" alt="search"
+                class="top-tab-square-image "/>
+              &nbsp;&nbsp;
+
+              &nbsp;&nbsp;
+              <div>
+  <span class="title">
+
+          <strong>{{slug}}</strong></span><br/>
+
+              </div>
+            </div>
+
+
+            <div class="ui-g-12 padding-12 padding-0">
+              <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}"></p-tabMenu>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ui-g-12 layout-work-95 padding-left-right-0">
+    <div class="ui-g ui-fluid dashboard main-component-layout">
+
+
+      <ng-container *ngIf="activeTab==0">
+
+        <div class="ui-g-12 posts-list-size padding-left-right-0">
+          <div class="ui-g-12 padding-left-right-0">
+            <app-filter-navigator [filterType]="'feed'"></app-filter-navigator>
+
+          </div>
+
+          <app-filtered-posts-list [search_word]="slug" [editable]="false"
+                                   [check_filter]="true" [itemsPerAdd]="10" [showAdd]="true"
+                                   #list></app-filtered-posts-list>
+
+        </div>
+        <ng-container *ngIf="isBrowser && !isMobile">
+          <div class="ui-g-6 info-item-size hide-mobile">
+            <div class="ui-g-12">
+              <div class="ui-g-12 padding-left-right-0">
+
+                <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="6825384377" [display]="'inline-block'"
+                            [width]="300" [height]="600"></ng-adsense>
+              </div>
+
+            </div>
+          </div>
+
+        </ng-container>
+
+      </ng-container>
+      <ng-container *ngIf="activeTab==1 ">
+
+        <div class="ui-g-12 product-list-size">
+
+          <ng-container *ngIf="currentCurrencyDetails">
+
+            <div class="ui-g-12 padding-left-right-0">
+              <app-manage-items-list [itemsType]="'products'"
+                                     [showFilter]="true" [showCategories]="true" [showChildCategories]="false"
+                                     [showSearch]="false"
+                                     [showOrdering]="true" [showSearchLabel]="false"
+                                     [appliedFilter]="{}"
+                                     (newKeyword)="productsList.setKeyword($event)"
+                                     (newOrdering)="productsList.changeOrdering($event)"></app-manage-items-list>
+            </div>
+            <div class="ui-g-12 padding-left-right-0">
+
+              <app-items-list-agile [endPoint]="'products-by-page/'" [itemsPerPage]="20"
+                                    [itemsType]="'products'" [initCurrency]="true" [published]="true" [keyword]="slug"
+                                    [orderingCode]="'popularity'" [currentUserId]="currentUserId"
+                                    #productsList>
+                <ng-template let-item let-i="index" #body>
+
+                  <div class="ui-g-6 ui-md-3 product-item-size padding-left-0">
+
+                    <div class="card padding-0 ">
+
+                      <app-product-item [product]="item" [truncateNumber]="15"
+                                        [currentUserId]="currentUserId"
+                                        [currencyCode]="currentCurrencyDetails?.code" [isMobile]="isMobile"
+                                        [showPreview]="true" [locale]="language"></app-product-item>
+
+
+                    </div>
+                  </div>
+
+
+                </ng-template>
+
+              </app-items-list-agile>
+
+            </div>
+          </ng-container>
+
+
+        </div>
+
+
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==2 ">
+        <div class="ui-g-12 info-search-list-size padding-left-right-0">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'companies'"
+                                   [showFilter]="true" [showCategories]="true" [showChildCategories]="false"
+                                   [showSearch]="false" [showOrdering]="true" [showSearchLabel]="false"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="companiesList.setKeyword($event)"
+                                   (newOrdering)="companiesList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'companies-by-page/'" [itemsPerPage]="10"
+                                  [itemsType]="'companies'" [initCurrency]="true" [published]="true" [keyword]="slug"
+                                  [orderingCode]="'popularity'"
+                                  [addUserToFilter]="true"
+                                  [addTimestampToFilter]="true"
+                                  [currentUserId]="currentUserId"
+                                  [showAdd]="true"
+                                  [adClient]="'ca-pub-4091968257038599'" [adSlot]="2347723942" [adFormat]="'fluid'"
+                                  [layoutKey]="'-fb+5w+4e-db+86'"
+                                  [display]="'block'" [itemsPerAdd]="10"
+                                  #companiesList>
+              <ng-template let-item let-i="index" #body>
+                <div class="ui-g-12 padding-left-right-0">
+                  <app-company-feed-preview [user]="currentUserId" [company]="item" [locale]="language"
+                  ></app-company-feed-preview>
+                </div>
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==3 ">
+
+        <div class="ui-g-12 product-list-size">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'people'"
+                                   [showFilter]="true" [showCategories]="true" [showChildCategories]="false"
+                                   [showSearch]="false" [showOrdering]="true" [showSearchLabel]="false"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="usersList.setKeyword($event)"
+                                   (newOrdering)="usersList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'profiles-by-page/'" [itemsPerPage]="20"
+                                  [itemsType]="'people'" [initCurrency]="true" [published]="true" [keyword]="slug"
+                                  #usersList>
+              <ng-template let-item let-i="index" #body>
+
+                <div class="ui-g-6 ui-md-3 profile-item-size padding-left-0">
+
+                  <app-user-feed-preview [profile]="item" [user]="currentUserId" [isMobile]="isMobile"
+                                         [greedView]="true"
+                                         [locale]="language">
+
+                  </app-user-feed-preview>
+
+                </div>
+
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+
+        </div>
+
+
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==4">
+
+        <div class="ui-g-12 info-profile-size">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'communities'"
+                                   [showSearch]="false" [showFilter]="true" [showCategories]="true"
+                                   [showOrdering]="true"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)=" communitiesList.setKeyword($event)"
+                                   (newOrdering)="communitiesList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'communities-by-page/'" [itemsPerPage]="10" [itemsType]="'communities'"
+                                  [keyword]="slug"
+                                  [orderingCode]="'popularity'"
+                                  #communitiesList>
+              <ng-template let-item let-i="index" #body>
+                <div class="ui-g-12 padding-left-right-0">
+                  <app-community-item [community]="item" [currentUserId]="currentUserId" [index]="i"
+                  ></app-community-item>
+                </div>
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+
+        </div>
+      </ng-container>
+
+
+      <ng-container *ngIf="activeTab==5">
+
+        <div class="ui-g-12 product-list-size">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'tags'"
+                                   [showSearch]="false" [showFilter]="false"
+                                   [showOrdering]="true"
+                                   (newKeyword)=" tagsList.setKeyword($event)"
+                                   (newOrdering)="tagsList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'tags-by-page/'" [itemsPerPage]="20" [itemsType]="'tags'"
+                                  [keyword]="slug"
+                                  [orderingCode]="'popularity'"
+                                  #tagsList>
+              <ng-template let-item let-i="index" #body>
+                <div class="ui-g-12 ui-md-6">
+                  <div class="card padding-0">
+
+                    <app-tag-preview [tag]="item" [currentUserId]="currentUserId"
+                                     [buttonPosition]="'right'"
+                    ></app-tag-preview>
+
+                  </div>
+                </div>
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+
+
+
+        </div>
+      </ng-container>
+
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+.message-text {
+  white-space: pre-line;
+}
+
+.message-text-size-small {
+ font-size: small;
+}
+
+.message-text-size-medium {
+ font-size: medium;
+}
+
+.message-text-size-large {
+ font-size: large;
+}

@@ -1,0 +1,25 @@
+
+  <p-fieldset legend=" {{ 'POSTS.Post Options' | translate }}">
+    <div class="ui-g ui-fluid">
+      <ng-container *ngFor="let option of options; let i = index"  >
+
+        <div class="ui-g-11">
+           <input id="address" [disabled]="option.id" name="option{{i}}" type="text" title="option{{i}}" placeholder="{{ 'POSTS.Enter an answer option' | translate }}"  pInputText [(ngModel)]="option.name"/>
+        </div>
+        <div class="ui-g-1">
+          <ng-container >
+              <button pButton class="ui-button-secondary flat" type="button"
+                        (click)="deleteOption(i)"
+                        icon="pi pi-times"></button>
+          </ng-container>
+        </div>
+
+      </ng-container>
+      <div class="ui-g-12">
+        <button id="new" name="new" class="ui-button-secondary ui-button-raised flat width-auto" type="button"
+                label="{{ 'POSTS.Add a new option' | translate }}"
+                pButton (click)="addOption()" icon="pi pi-plus"></button>
+      </div>
+    </div>
+  </p-fieldset>
+

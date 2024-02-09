@@ -1,0 +1,218 @@
+<ng-container *ngIf="!article">
+  <div class="ui-g-12 text-center loading" align="center">
+    <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                       animationDuration=".5s"></p-progressSpinner>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="article">
+  <div class="ui-g ui-fluid dashboard main-component-layout">
+    <div class="ui-g-12 article-size padding-left-right-0">
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card padding-0">
+
+          <div class="ui-g">
+
+
+            <div class="ui-g-12">
+
+
+              <div class="ui-g-12">
+                <div class="ui-toolbar-group-left">
+                  <span class="date-time-text">{{article.post_details.create_date | dateAgo: language }}</span>
+                </div>
+                <div class="ui-toolbar-group-right">
+                  <app-location-preview [country]="article.post_details.country_details"
+                                        [city]="article.post_details.city_details"></app-location-preview>
+                </div>
+              </div>
+              <div class="ui-g-12 padding-0 text-muted">
+                <app-categories-navigator [currentCategoryId]="article.post_details.category"
+                                          (categorySelect)="onSelectCategory($event)"
+                                          #navigator></app-categories-navigator>
+
+
+              </div>
+
+              <div class="ui-g-12">
+                <div class="ui-toolbar-group-left">
+                  <ng-container *ngIf="article.post_details.company">
+                    <ng-container *ngIf="article.post_details.company_details.name">
+                      <app-company-preview-short [company]="article.post_details.company_details"
+                                                 [truncate_number]="truncateNumber" [currentUser]="currentUserId"
+                                                 [locale]="language" (itemClicked)="postEngagement(3)"
+                                                 [showPreview]="true" [size]="'middle'"></app-company-preview-short>
+                    </ng-container>
+                    <ng-container *ngIf="!article.post_details.company_details.name">
+                      <app-company-preview-short [company]="article.post_details.company_default_details"
+                                                 [truncate_number]="truncateNumber" [currentUser]="currentUserId"
+                                                 [locale]="language" (itemClicked)="postEngagement(3)"
+                                                 [showPreview]="true" [size]="'middle'"></app-company-preview-short>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="!article.post_details.company">
+                    <app-user-preview-short [userData]="article.post_details.user_data"
+                                            [truncate_number]="truncateNumber" [currentUser]="currentUserId"
+                                            [locale]="language" (itemClicked)="postEngagement(3)"
+                                            [showPreview]="true" [size]="'middle'"></app-user-preview-short>
+                  </ng-container>
+                </div>
+                <ng-container *ngIf="currentUserId">
+                  <div class="ui-toolbar-group-right ql-color-white">
+                    <app-favorite-button [currentUserId]="currentUserId" [id]="article.post_details.id"
+                                         [favoriteStatus]="article.post_details.favorite_status"
+
+                                         [objectType]="'post'"
+                                         (buttonClicked)="onFavoriteButtonClicked($event)"></app-favorite-button>
+                  </div>
+                </ng-container>
+
+              </div>
+            </div>
+            <ng-container *ngIf="article.image">
+              <div class="ui-g-12 padding-left-right-0">
+                <img  alt="{{article.seo_title}}"
+                     src="{{article.image_details.medium_image_url}}"
+                     class="w-100"/>
+              </div>
+            </ng-container>
+            <div class="ui-g-12 article-body">
+              <div class="ui-g-12">
+                <h1 class="article-header">{{article.title}}</h1>
+              </div>
+
+              <div class="ui-g-12 article">
+
+
+                <ng-container >
+                  <span class="text-pre-line ql-editor ql-container" [innerHTML]="article.text | safeHtml"></span>
+                </ng-container>
+
+
+              </div>
+
+              <ng-container *ngIf="isBrowser">
+                <div class="ui-g-12 text-align-center">
+                  <ng-container *ngIf="app.appService.loadingLazyElements">
+                  <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="9037486887" [adFormat]="'fluid'"
+                              [display]="'block'"
+                              [layout]="'in-article'"
+                  ></ng-adsense>
+                  </ng-container>
+
+                </div>
+              </ng-container>
+
+              <div *ngIf="article.post_details.tags.length>0" class="ui-g-12">
+
+                <p-chips [(ngModel)]="article.post_details.tags" id="tags" name="tags" [disabled]="true"
+                         title="{{ 'GENERAL.Hashtags' | translate }}">
+
+                  <ng-template let-item pTemplate="item">
+
+                              <span class="ui-chips-token-label ng-star-inserted"> <a class="text-white"
+                                                                                      [routerLink]="'/hashtag/'+item+'/'+language">
+                                <strong class="cursor-pointer"><u>{{item}} </u></strong> </a>
+                              </span>
+
+
+                  </ng-template>
+                </p-chips>
+
+
+              </div>
+
+              <ng-container *ngIf="article.post_details.admin_status && article.post_details.eventsqty">
+                <div class="ui-g-12 padding-0 ">
+                  <div class="ui-g-12">
+                    <div class="ui-toolbar-group-right">
+           <span class="date-time-text">
+
+
+               <span pTooltip="{{'GENERAL.Views' | translate}}" tooltipPosition="bottom">
+          <i
+            class="pi pi-eye select-button-icon"></i>&nbsp;{{article.post_details.eventsqty.user_views + article.post_details.eventsqty.views | thousandSuffixes: 1 }}</span>
+               &nbsp;<span pTooltip="{{'GENERAL.Unique users' | translate}}" tooltipPosition="bottom"><i
+             class="pi pi-users select-button-icon"></i>&nbsp;{{article.post_details.eventsqty.user_views  | thousandSuffixes: 1 }}</span>
+               <span pTooltip="{{'GENERAL.Engagements' | translate}}" tooltipPosition="bottom"><i
+                 class="pi pi-angle-double-up select-button-icon"></i>&nbsp;{{article.post_details.eventsqty.engagements  | thousandSuffixes: 1 }}</span>
+
+           </span>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+
+              <div class="ui-g-12  border-top-small">
+                <ng-container *ngIf="article.post_details.eventsqty">
+                  <div class="ui-g-12 padding-0">
+                    <app-like [likeStatus]="article.post_details.like_status" [post]="article.post_details.id"
+                              [user]="currentUserId"
+                              [likesCount]="article.post_details.eventsqty.likes"
+                              (likeStatusChanged)="onLikeChanged($event); postEngagement(8)"></app-like> &nbsp;
+                    <button pButton type="button" (click)="createComment()"
+                            class="ui-button-secondary flat" icon="pi pi-comment"></button>
+                    <ng-container *ngIf="article.post_details.eventsqty.comments">
+                    <span class="select-text"
+                          (click)="onCommentsClick(); postEngagement(8)"><strong>{{article.post_details.eventsqty.comments}}</strong></span>
+                    </ng-container>
+
+
+                    <div class="ui-toolbar-group-right ql-color-white">
+
+
+                      <ng-container *ngIf="article.post_details.admin_status">
+                        <button pButton type="button" icon="pi pi-pencil" (click)="editPost()"
+                                class="ui-button-secondary flat"></button>
+                      </ng-container>
+
+                    </div>
+
+                  </div>
+                </ng-container>
+              </div>
+              <div class="ui-g-12 ">
+                <app-comments-list [post]="article.post_details.id" [user]="currentUserId"
+                                   [showCreateCommentPanel]="showChildCreateCommentPanel && currentUserId"
+                                   [locale]="language"
+                                   (updatePostCommentQty)="onUpdatePostCommentQty($event)" #list></app-comments-list>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+       <ng-container *ngIf="article">
+    <ng-container *ngIf="article.post_details.related_posts.length>0 && !article.post_details.admin_status">
+      <div class="ui-g-12 padding-left-right-0 padding-bottom-0">
+      <div class="ui-g-12 border-bottom-small padding-left-right-0">
+        <h2 class="post-preview-title">{{'GENERAL.Other publications' | translate}}:</h2>
+      </div>
+      </div>
+
+       <div class="ui-g-12 padding-left-right-0">
+       <ng-container *ngFor="let related_post of article.post_details.related_posts; let i = index"  >
+
+         <div class="ui-g-12 padding-left-right-0">
+
+         <app-post-preview [truncateNumber]="truncateNumber" [post]="related_post.related_post_details" [isMobile]="isMobile"
+                           [siteUrl]="siteUrl" [language]="language" [truncateWords]="50" [readMore]="true"></app-post-preview>
+         </div>
+       </ng-container>
+       </div>
+
+    </ng-container>
+
+
+  </ng-container>
+
+    </div>
+
+  </div>
+</ng-container>
+
+

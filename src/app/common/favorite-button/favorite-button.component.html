@@ -1,0 +1,16 @@
+<ng-container *ngIf="currentUserId">
+  <ng-container *ngIf="favoriteStatus">
+
+     <button pButton type="button" title="{{ 'GENERAL.Favorites' | translate }}" (click)="onButtonClick()"
+
+
+            class="flat ui-button ui-button-favorite" icon="pi {{icon}}"></button>
+  </ng-container>
+
+  <ng-container *ngIf="!favoriteStatus">
+     <button pButton type="button" title="{{ 'GENERAL.Favorites' | translate }}" (click)="onButtonClick()"
+
+            [class.ui-button-secondary]="!favoriteStatus" [class.ui-button-favorite]="favoriteStatus"
+            class="flat ui-button ui-button-secondary" icon="pi {{icon}}"></button>
+  </ng-container>
+</ng-container>

@@ -1,0 +1,7 @@
+
+<span [appHighlightborder]="'#ebe7ef'" class="small-select-text-element" (click)="menu.toggle($event)">{{currentOrderingLabel}}
+
+  <i class="pi pi-chevron-down select-button-icon"></i>
+
+</span>
+<p-menu #menu [popup]="true" [model]="menuItems" [style]="{'color': 'black'}" [appendTo]="'body'"></p-menu>

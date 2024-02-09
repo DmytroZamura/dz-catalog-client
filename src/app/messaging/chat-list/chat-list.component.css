@@ -1,0 +1,80 @@
+
+.chat-view {
+  overflow-x: hidden !important;
+  overflow-y: auto;
+  height: 80vh !important;
+  width: 100%;
+}
+
+.chat-unread-messages {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+}
+
+.info-badge {
+
+  background-color: #0D47A1;
+  color: white;
+  font-size: 11px;
+  border-radius: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+
+.info-request-badge {
+
+  background-color: #2E7D32;
+  color: white;
+  font-size: 11px;
+  border-radius: 5px;
+  float: right
+}
+
+.info-post-request-badge {
+
+  background-color: #55527d;
+  color: white;
+  font-size: 11px;
+  border-radius: 5px;
+  float: right
+}
+
+.info-offering-badge {
+
+  background-color: #c52506;
+  color: white;
+  font-size: 11px;
+  border-radius: 5px;
+  float: right
+}
+
+.info-purchase-badge {
+
+  background-color: #f0ee06;
+  color: black;
+  font-size: 11px;
+  border-radius: 5px;
+  float: right
+}
+
+.info-post-badge {
+
+  background-color: #417a7d;
+  color: white;
+  font-size: 11px;
+  border-radius: 5px;
+  float: right
+}
+
+.info-job-badge {
+
+  background-color: #0b1e7d;
+  color: white;
+  font-size: 11px;
+  border-radius: 5px;
+  float: right
+}

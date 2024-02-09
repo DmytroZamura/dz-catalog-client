@@ -1,0 +1,50 @@
+<ng-container *ngIf="isBrowser">
+
+
+  <div class="ui-g dashboard main-component-layout">
+
+    <div class="ui-g-12 info-profile-size">
+      <p-panel>
+        <p-header>
+          <div class="ui-md-4 ui-g-12">
+            <span class="big-title">{{ 'COMPANY.Your Companies' | translate }} </span>
+
+          </div>
+          <div class="ui-md-8 ui-g-12">
+            <button pButton type="button" label="{{ 'COMPANY.Create company' | translate }}"
+                    (click)="onCreateCompany()" style="width: auto; float: right"></button>
+          </div>
+        </p-header>
+        <div class="ui-g dashboard ui-fluid">
+
+          <ng-container *ngFor="let company of user_companies; let i = index"  >
+            <div class="ui-g-12">
+              <div class="ui-toolbar-group-left ql-color-white">
+
+                <app-company-preview-short [company]="company.company_details" [truncate_number]="45"
+                                           [size]=""></app-company-preview-short>
+
+
+              </div>
+              <div class="ui-toolbar-group-right">
+                <button pButton type="button" class="flat" label="{{ 'COMPANY.Edit company page' | translate }}"
+                        (click)="onEditCompany(i)"></button>
+              </div>
+
+
+            </div>
+            <div class="ui-g-12">
+              <hr style="border-width: 0.5px">
+            </div>
+          </ng-container>
+
+        </div>
+      </p-panel>
+
+
+    </div>
+
+  </div>
+
+
+</ng-container>

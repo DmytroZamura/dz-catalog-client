@@ -1,0 +1,54 @@
+<ng-container *ngIf="resumes">
+  <div *ngIf="resumes[0]" class="ui-g-12">
+       <ng-container *ngIf="!selectMode">
+    <div class="ui-g-10">
+
+    </div>
+
+    <div class="ui-g-2 text-align-center">
+      <span>{{ 'GENERAL.Public' | translate }}</span>
+    </div>
+    </ng-container>
+    <ng-container *ngFor="let resume of resumes; let i = index"  >
+      <div [class.ui-g-10]="!selectMode" [class.ui-g-12]="selectMode">
+        <p-radioButton name="groupresume" [value]="resume" label="{{resume.file_details.name | truncate: 60}}"
+                       [inputId]="i" [(ngModel)]="selectedResume" (onClick)="selectIndex(i)"></p-radioButton>
+
+
+      </div>
+       <ng-container *ngIf="!selectMode">
+      <div class="ui-g-2 text-align-center">
+        <p-checkbox [(ngModel)]="resume.show_in_profile" binary="true" (onChange)="setPublicStatus($event, i)"></p-checkbox>
+      </div>
+       </ng-container>
+
+    </ng-container>
+
+  </div>
+
+  <ng-container *ngIf="loading">
+    <div class="ui-g-12 text-align-center">
+      <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+                         animationDuration=".5s"></p-progressSpinner>
+    </div>
+  </ng-container>
+  <div class="ui-g-12 " [class.border-top-primary-small]="resumes[0]">
+
+    <app-file [onlyIcon]="false" id="file_document_upload" [icon]="'pi pi-paperclip'" [cropImage]="false"
+              [label]="'BUTTONS.Upload' | translate " [maxSize]="3000000"
+              (fileUpload)="onResumeFileUpload($event)" [accept]="'.doc,.pdf,.docx'"
+               (startUploading)="onStartUploading()" (stopUploading)="onStopUploading()"
+              [class]="'ui-button-secondary ui-button-raised flat'"></app-file>
+
+
+    <ng-container *ngIf="resumes[0]">
+      <button [disabled]="!selectedResume" pButton type="button" class="flat ui-button-secondary width-auto"
+              icon="pi pi-download" label="{{ 'BUTTONS.Download' | translate }}"
+              (click)="downloadResume()" ></button>
+
+      <button [disabled]="!selectedResume" pButton type="button" class="flat ui-button-secondary width-auto" icon="pi pi-trash"
+              label="{{ 'BUTTONS.Delete' | translate }}"
+              (click)="deleteResume()"></button>
+    </ng-container>
+  </div>
+</ng-container>

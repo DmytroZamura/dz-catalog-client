@@ -1,0 +1,116 @@
+import 'zone.js/dist/zone-node';
+import 'reflect-metadata';
+
+import {enableProdMode} from '@angular/core';
+// import {ngExpressEngine} from '@nguniversal/express-engine';
+import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
+
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as compression from 'compression';
+// import {renderModuleFactory} from '@angular/platform-server';
+import {join} from 'path';
+import {readFileSync} from 'fs';
+import {ngExpressEngine} from '@nguniversal/express-engine';
+import { Blob } from 'blob-polyfill';
+
+
+
+enableProdMode();
+
+export const app = express();
+
+app.use(compression());
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+const PORT = process.env.PORT;
+// const DIST_FOLDER = join(process.cwd(), 'dist');
+
+// Our index.html we'll use as our template
+const DIST_FOLDER = join(process.cwd(), 'dist/browser');
+const template = readFileSync(join('dist', 'browser', 'index.html')).toString();
+
+
+// -- solution
+
+const domino = require('domino');
+
+Object.assign(global, domino.impl);
+(global as any)['KeyboardEvent'] = domino.impl.Event;
+
+const win = domino.createWindow(template);
+win.Object = Object;
+win.Math = Math;
+
+
+global['window'] = win;
+Object.defineProperty(win.document.body.style, 'transform', {
+  value: () => {
+    return {
+      enumerable: true,
+      configurable: true
+    };
+  },
+});
+
+global['Blob'] = Blob;
+global['File'] = null;
+global['branch'] = null;
+global['object'] = win.object;
+global['MouseEvent'] = win.MouseEvent;
+global['document'] = win.document;
+global['CSS'] = null;
+global['Prism'] = null;
+global['branch'] = null;
+global['object'] = win.object;
+global['HTMLElement'] = win.HTMLElement;
+global['DOMTokenList'] = win.DOMTokenList;
+global['Node'] = win.Node;
+global['Text'] = win.Text;
+const MockBrowser = require('mock-browser').mocks.MockBrowser;
+const mock = new MockBrowser();
+global['navigator'] = mock.getNavigator();
+
+
+// --- end solution
+
+const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require('./dist/server/main');
+
+
+app.engine('html', ngExpressEngine({
+  bootstrap: AppServerModuleNgFactory,
+  providers: [
+    provideModuleMap(LAZY_MODULE_MAP)
+  ]
+}));
+
+app.set('view engine', 'html');
+app.set('views', DIST_FOLDER);
+
+app.get('/redirect/**', (req, res) => {
+  const location = req.url.substring(10);
+  res.redirect(301, location);
+});
+
+app.get('*.*', express.static(DIST_FOLDER, {
+  maxAge: '1y'
+}));
+
+app.get('/*', (req, res) => {
+  res.render('index', {req, res}, (err, html) => {
+    if (html) {
+      res.send(html);
+    } else {
+      console.error(err);
+      res.send(err);
+    }
+  });
+});
+
+// Start up the Node server
+// app.listen(PORT, () => {
+//   console.log(`Node Express server listening on http://localhost:${PORT}`);
+// });

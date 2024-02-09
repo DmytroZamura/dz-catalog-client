@@ -1,0 +1,131 @@
+<ng-container *ngIf="isBrowser">
+  <div class="ui-g ui-fluid main-component-layout">
+
+
+    <p-menu #menu [popup]="true" [model]="menu_items" [style]="{'color': 'black'}"></p-menu>
+
+    <div class="ui-g-12 posts-list-size padding-left-right-0">
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card padding-left-right-0">
+          <div class="ui-g">
+            <div class="ui-g-12 padding-top-0 padding-left-right-0 border-bottom-primary-small">
+              <div class="ui-g-12 padding-bottom-0 padding-top-0">
+                <div class="ui-g-11">
+                  <span class="title"><strong>{{community.name}} </strong></span>
+
+                </div>
+                <div class="ui-g-1">
+
+
+                  <button *ngIf="community.member_status && menu_items[0]" type="button"
+                          class="ui-button-secondary flat float-right"
+
+                          pButton (click)="menu.toggle($event)" icon="pi pi-ellipsis-h"></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ui-g-3">
+              <img *ngIf="community.image_details" class="img-fluid"
+                   src="{{community.image_details.file_url}}"
+                   alt="{{community.name}}" />
+              <img *ngIf="!community.image_details"
+                   src="static/assets/img/community.png" class="img-fluid"
+                   alt="{{community.name}}"/>
+            </div>
+            <div class="ui-g-9">
+<ng-container *ngIf="community.description">
+              <app-text-show-more [text]="community.description" [calcTruncateWords]="false"></app-text-show-more>
+</ng-container>
+
+            </div>
+            <div *ngIf="community.tags.length>0" class="ui-g-12">
+              <label for="tags">{{ 'GENERAL.Hashtags' | translate }}:</label>
+              <p-chips [(ngModel)]="community.tags" id="tags" name="tags" [disabled]="true"
+                       title="{{ 'GENERAL.Hashtags' | translate }}">
+
+                <ng-template let-item pTemplate="item">
+
+                              <span class="ui-chips-token-label ng-star-inserted"> <a class="text-white"
+                                                                                      [routerLink]="'/hashtag/'+item+'/'+translate.currentLang">
+                                <strong class="cursor-pointer"><u>#{{item}} </u></strong> </a>
+                              </span>
+
+
+                </ng-template>
+              </p-chips>
+
+
+            </div>
+            <ng-container *ngIf="!community.member_status || community.admin_status || community.invitation_status">
+              <div class="ui-g-12 text-align-right">
+                <app-community-buttons [community]="community" [currentUserId]="currentUserId"
+
+                                       (joined)="joinCommunity()"></app-community-buttons>
+              </div>
+            </ng-container>
+            <div class="ui-g-12 padding-left-right-0 padding-bottom-0 border-top-primary-small">
+              <a [routerLink]="['/community/'+community.id]">
+                <div class="ui-md-2 ui-g-4 padding-0" align="center">
+                  <span class="small-text select-text">{{ 'COMMUNITY.Members' | translate }}</span><br/>
+                  <span class="title select-text">{{community.eventsqty.members | thousandSuffixes: 1 }}</span>
+                </div>
+
+                <div class="ui-md-2 ui-g-4 padding-0" align="center">
+                  <span class="small-text select-text">{{ 'GENERAL.Companies' | translate }}</span><br/>
+                  <span class="title select-text">{{community.eventsqty.companies | thousandSuffixes: 1 }}</span>
+                </div>
+
+                <div class="ui-md-2 ui-g-4 padding-0" align="center">
+                  <span class="small-text select-text">{{ 'POSTS.Posts' | translate }}</span><br/>
+                  <span class="title select-text">{{community.eventsqty.publications | thousandSuffixes: 1 }}</span>
+                </div>
+
+                <div class="ui-md-2 ui-g-4 padding-0" align="center">
+                  <span class="small-text select-text">{{ 'GENERAL.Requests' | translate }}</span><br/>
+                  <span class="title select-text">{{community.eventsqty.requests | thousandSuffixes: 1 }}</span>
+                </div>
+                <div class="ui-md-2 ui-g-4 padding-0" align="center">
+                  <span class="small-text select-text">{{ 'GENERAL.Offering' | translate }}</span><br/>
+                  <span class="title select-text">{{community.eventsqty.offerings | thousandSuffixes: 1 }}</span>
+                </div>
+
+                <div class="ui-md-2 ui-g-4 padding-0" align="center">
+                  <span class="small-text select-text">{{ 'GENERAL.Jobs' | translate }}</span><br/>
+                  <span class="title select-text">{{community.eventsqty.jobposts | thousandSuffixes: 1 }}</span>
+                </div>
+
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ui-g-12 padding-left-right-0" *ngIf="community.member_status && currentUserId">
+        <div class="card padding-0">
+          <app-create-post [community]="community.id"  [placeholder]="'POSTS.share_message' | translate "></app-create-post>
+        </div>
+      </div>
+
+      <ng-container *ngIf="community.member_status || community.open">
+        <div class="ui-g-12 padding-left-right-0">
+          <app-filter-navigator [filterType]="'feed'"></app-filter-navigator>
+
+        </div>
+
+        <app-filtered-posts-list [community]="community.id" [editable]="true"
+                                 [show_posts]="community.member_status || community.open"
+                                 #list></app-filtered-posts-list>
+
+      </ng-container>
+    </div>
+
+
+  </div>
+
+</ng-container>
+
+<app-process-dialog [header]="'COMMUNITY.Community' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

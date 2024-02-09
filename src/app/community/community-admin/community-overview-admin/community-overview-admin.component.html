@@ -1,0 +1,206 @@
+<p-confirmDialog></p-confirmDialog>
+<ng-container *ngIf="community">
+  <div class="ui-g ui-fluid main-component-layout">
+
+
+    <div class="ui-g-12 product-profile-size padding-left-right-0">
+      <div class="ui-g-12">
+        <ng-container *ngIf="language">
+          <div class="card card-w-title">
+          <span style="font-size: 1.5rem"><b>{{ 'GENERAL.Language' | translate }}:</b>
+
+
+          </span><br/>
+            <span style="font-size: 11px"> {{ 'GENERAL.Full Edit in English' | translate }} </span>
+
+            <div class="ui-g">
+              <div class="ui-md-6 ui-g-12">
+                <app-select-common-item [(item)]="language" [endpoint]="'languages'"
+                                          [showFilter]="false"
+                                          [sortByName]="true" [showClear]="false"
+
+                                          (itemChange)="onLanguageSelect($event)"></app-select-common-item>
+
+              </div>
+            </div>
+
+          </div>
+
+
+        </ng-container>
+      </div>
+
+      <ng-container *ngIf="language">
+      <div class="ui-g-12">
+        <form #communityForm="ngForm" (input)="ready_to_save()" (ngSubmit)="saveCommunity()">
+          <div class="card">
+
+            <div class="ui-g">
+              <div class="ui-g-12 text-align-right">
+
+
+                <button pButton class="ui-button-secondary flat" type="submit"
+                        [disabled]="disabled_save || !communityForm.form.valid "
+                        icon="pi pi-save"></button>
+                <button pButton class="ui-button-secondary flat" type="button"
+                        (click)="deleteCommunity()"
+                        icon="pi pi-times"></button>
+
+              </div>
+              <div class="ui-md-3 ui-g-12 text-align-center">
+
+
+                <img *ngIf="community.image_details" name="avatar" style="width: 100%; height: auto"
+                     alt="{{community.name}}"
+                     src="{{community.image_details.file_url}}" class="ui-icon-broken-image"/>
+                <img *ngIf="!community.image_details" alt="{{community.name}}"
+                     src="static/assets/img/community.png"
+                     style="width: 100%; height: auto" class="ui-icon-broken-image"/>
+
+                <app-file id="file_upload" [resizeToWidth]="300" [cropperMinWidth]="300"
+                          [cropImage]="true" [onlyIcon]="false" [label]="'BUTTONS.Browse' | translate "
+                          [icon]="'pi pi-image'"
+                          (fileUpload)="onFileUpload($event)"></app-file>
+
+              </div>
+              <div class="ui-md-9 ui-g-12">
+
+                <ng-container>
+                  <div class="ui-g-12">
+                    <div class="ui-g form-group ui-fluid">
+
+                      <div class="ui-g-12">
+
+         <span class="md-inputfield translation-mark">
+
+        <input id="community_name" name="community_name" type="text" pInputText [(ngModel)]="community.name" required
+               #community_name="ngModel"/>
+        <label for="community_name">{{ 'COMMUNITY.Community Title' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>:</label>
+            <div [hidden]="community_name.valid || community_name.pristine">
+<div *ngIf="community_name.errors && community_name.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+                      </div>
+
+
+                      <div class="ui-g-12">
+
+                        <label for="description">{{ 'COMMUNITY.Community Description' | translate }}
+                          <span>&nbsp;<b>({{language.code}})</b></span>: </label>
+                        <div class="translation-mark">
+                        <textarea id="description" name="short_description" pInputTextarea
+                                  [(ngModel)]="community.description"
+                                  rows="4"></textarea>
+                        </div>
+
+                      </div>
+
+
+                      <div class="ui-g-12 ui-md-4">
+                        {{ 'COMMUNITY.Open Community' | translate }}:
+                        <p-checkbox  name="open" id="open" [(ngModel)]="community.open"
+                                    binary="true" (onChange)="ready_to_save()"></p-checkbox>
+
+                      </div>
+
+                      <div class="ui-g-12 ui-md-8">
+                        <!--{{ 'COMMUNITY.A Moderator Check the Invite' | translate }}:-->
+                        <!--<p-checkbox name="moderator_check_invite" id="moderator_check_invite"-->
+                                    <!--[(ngModel)]="community.moderator_check_invite" binary="true"-->
+                                    <!--[disabled]="community.open" (onChange)="ready_to_save()"></p-checkbox>-->
+
+                         {{ 'COMMUNITY.Show Products' | translate }}:
+                        <p-checkbox name="show_products" id="show_products" [(ngModel)]="community.show_products"
+                                    binary="true" [disabled]="community.open"
+                                    (onChange)="ready_to_save()"></p-checkbox>
+
+                      </div>
+
+                      <div class="ui-g-12 ui-md-4">
+                        {{ 'COMMUNITY.Local Community' | translate }}:
+                        <p-checkbox  name="local_community" id="local_community"
+                                    [(ngModel)]="community.local_community"
+                                    binary="true" (onChange)="onLocalChange($event)"></p-checkbox>
+
+                      </div>
+
+
+
+ <div class="ui-g-12 ui-md-8 padding-0">
+      <app-select-location [city]="community.city_details" [country]="community.country_details"
+                                       [initGeo]="false" [checkEnteredName]="true" [disabled]="!community.local_community"
+                                       (selectedLocation)="onLocationSelect($event)" #location></app-select-location>
+ </div>
+
+                      <div class="ui-g-12">
+
+                        <label for="rules">{{ 'COMMUNITY.Community Rules' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>: </label>
+                      <div class="translation-mark">
+                        <textarea id="rules" name="rules" pInputTextarea
+                                  [(ngModel)]="community.rules"
+                                  rows="4"></textarea>
+                      </div>
+
+                      </div>
+
+                      <div class="ui-g-12">
+                        <label for="tags">{{ 'GENERAL.Hashtags' | translate }}:</label>
+                        <p-chips [(ngModel)]="community.tags" id="tags" name="tags"
+                                 title="{{ 'GENERAL.Hashtags' | translate }}" (onRemove)="ready_to_save()">
+
+                          <ng-template let-item pTemplate="item">
+                            <a class="text-white" [routerLink]="'/hashtag/'+item">
+                              <span
+                                class="ui-chips-token-label ng-star-inserted"><strong><u>#{{item}} </u></strong></span>
+                            </a>
+
+
+                          </ng-template>
+                        </p-chips>
+
+
+                      </div>
+
+                    </div>
+
+
+                  </div>
+
+
+                </ng-container>
+              </div>
+              <div class="ui-g-12 border-top-primary-small" align="center">
+
+                <button pButton class="ui-button-secondary flat" type="button"
+                        label="{{ 'BUTTONS.Delete' | translate }}"
+                        (click)="deleteCommunity()"
+                        icon="pi pi-times" style="width: auto"></button> &nbsp;&nbsp;
+                <button pButton type="submit" label="{{ 'BUTTONS.Save' | translate }}"
+                        [disabled]="disabled_save || !communityForm.form.valid"
+                        icon="pi pi-save" style="width: auto"></button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      </ng-container>
+      <div class="ui-g-12">
+        <div class="card">
+          <h2>{{ 'COMMUNITY.Community Categories' | translate }}:</h2>
+          <app-community-categories [community]="community.id" [edit_mode]="true"
+                                    ></app-community-categories>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+</ng-container>
+
+<app-process-dialog [header]="'GENERAL.Deletion' | translate" [processName]="'GENERAL.The deletion process' | translate"
+                    [processComment]="'GENERAL.This may take several minutes' | translate"
+                    #deleteDialog></app-process-dialog>

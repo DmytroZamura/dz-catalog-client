@@ -1,0 +1,236 @@
+<ng-container *ngIf="post">
+
+  <div class="card padding-0" [class.border-promotion]="post.promotion">
+    <div class="ui-g">
+      <div class="ui-g-12 padding-0 border-bottom-small bg-light">
+
+        <div class="ui-g-12">
+          <a class="link-color" [routerLink]="[slug]">
+            <ng-container *ngIf="post.type_details">
+        <span
+          class="info-box-{{post.type_details.code}}"><strong>&nbsp;{{post.type_details.name}}
+          <ng-container *ngIf="post.type_details.code=='offering'">
+            <ng-container *ngIf="post.post_offering">
+          <span *ngIf="post.post_offering.type==1">: {{ 'POSTS.Sale' | translate }} </span>
+          <span *ngIf="post.post_offering.type==2">: {{ 'POSTS.Rent' | translate }} </span>
+            <span *ngIf="post.post_offering.type==3">: {{ 'GENERAL.Promotions and discounts' | translate }} </span>
+            </ng-container>
+
+        </ng-container>
+      &nbsp;</strong></span>
+            </ng-container>
+            <ng-container *ngIf="post.promotion">
+              <span pTooltip="{{'PROMOTION.Promotion' | translate}}" class="top-badge"><i
+                class="pi pi-star"></i> <span class="small-text"><b>{{post.promotion_grade}}</b></span></span>
+            </ng-container>
+            <ng-container *ngIf="post.category_details">
+              &nbsp; &nbsp; <span *ngIf="post.category_details"
+                                  class="info-box-category cursor-pointer">
+      <strong>&nbsp;{{post.category_details.name | truncate : 60}}&nbsp;</strong>
+    </span> &nbsp;
+            </ng-container>
+
+
+            <ng-container>
+              <div class="ui-toolbar-group-right">
+                <app-location-preview [country]="post.country_details"
+                                      [city]="post.city_details"></app-location-preview>
+              </div>
+
+            </ng-container>
+          </a>
+
+        </div>
+      </div>
+      <div class="ui-g-12 padding-0">
+        <ng-container *ngIf="post.published && !post.deleted">
+
+
+          <div class="ui-g-12 padding-top-0">
+            <ng-container *ngIf="post.images[0] || post.image_url">
+              <a class="link-color" [routerLink]="[slug]">
+                <div class="ui-g-4" [class.ui-g-12]="isMobile" [class.ui-g-4]="!isMobile">
+
+                  <div class="ui-g-12 padding-left-right-0">
+                    <ng-container *ngIf="post.images[0]">
+
+                      <ng-container *ngIf="post.images[0].file_details">
+                        <img class="img-fluid" alt="{{post.post_title}}"
+                             src="{{post.images[0].file_details.small_image_url}}"/>
+                      </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngIf="!post.images[0]">
+                      <ng-container *ngIf="post.image_url">
+                        <img class="img-fluid" src="{{post.image_url}}" alt="{{post.post_title}}"/>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+              </a>
+            </ng-container>
+
+
+            <div [class.ui-g-8]="(post.images[0] || post.image_url) && !isMobile"
+                 [class.ui-g-12]="(!post.images[0] && !post.image_url) || isMobile">
+
+
+              <ng-container *ngIf="(post.title || post.post_title)">
+                <a class="link-color" [routerLink]="[slug]">
+                  <div class="ui-g-12 padding-bottom-0 padding-left-right-0">
+                    <h3 *ngIf="!post.post_title"
+                        class="post-preview-title">{{post.title }}</h3>
+                    <h3 *ngIf="post.post_title"
+                        class="post-preview-title">{{post.post_title}}</h3>
+                  </div>
+                </a>
+              </ng-container>
+
+
+              <ng-container *ngIf="post.type_details.code=='job'">
+                <div class="ui-g-12 padding-0">
+                  <ng-container *ngIf="post.post_job.salary && post.post_job.salary_currency_details">
+
+          <span
+            class="value-badge-price">{{post.post_job.salary | currency:post.post_job.salary_currency_details.code :'symbol-narrow'  }}</span>&nbsp;
+                  </ng-container>
+
+                  <ng-container *ngIf="post.post_job.job_type_details">
+                    <span class="value-badge-attributes">{{post.post_job.job_type_details.name}}</span>&nbsp;
+                  </ng-container>
+                  <ng-container *ngIf="post.post_job.seniority_details">
+                    <span class="value-badge-attributes">{{post.post_job.seniority_details.name}}</span>&nbsp;
+                  </ng-container>
+                  <ng-container *ngIf="post.post_job.job_function_details">
+                    <span class="value-badge-attributes">{{post.post_job.job_function_details.name}}</span>
+                  </ng-container>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="post.type_details.code=='offering'">
+                <ng-container *ngIf="post.post_offering.type!=3">
+                  <ng-container *ngIf="post.post_offering.price && post.post_offering.price_currency_details">
+                    <div class="ui-md-12 ui-g-12 text-align-right padding-top-0 padding-bottom-0">
+
+
+        <span
+          class="big-price-badge"><strong>{{post.post_offering.price | currency:post.post_offering.price_currency_details.code :'symbol-narrow'  }}</strong></span>
+                      <ng-container *ngIf="post.post_offering.unit_type_details">
+
+                        <span class="title"> / {{post.post_offering.unit_type_details.code}}</span>
+
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="post.post_offering.type==3 && price">
+                  <div class="ui-md-12 ui-g-12 text-align-right padding-top-0 padding-bottom-0">
+
+                    <div class="ui-toolbar-group-left">
+                      <ng-container *ngIf="post.post_offering.discount && price">
+
+                          <span class="discount-color"><strong>{{post.post_offering.discount}}
+                            % {{ 'PRODUCT.Discount OFF' | translate }}</strong></span>
+                      </ng-container>
+                      <ng-container *ngIf="post.deadline">
+                        <ng-container *ngIf="!post.post_offering.discount">
+                          <br/>
+                        </ng-container>
+                        &nbsp;<span
+                        class="value-badge-deadline">{{ 'PRODUCT.Discount ends date' | translate }}&nbsp;{{post.deadline | date: 'd'}}&nbsp;{{post.deadline | date: 'LLL'}}</span>
+
+                      </ng-container>
+                    </div>
+
+                    <div class="ui-toolbar-group-right">
+                      <ng-container *ngIf="post.post_offering.one_price && price">
+
+          <span
+            class="big-price-badge">{{price | currency:post.post_offering.price_currency_details.code :'symbol-narrow'  }}</span>
+
+                      </ng-container>
+
+                      <ng-container *ngIf="!post.post_offering.one_price && priceFrom && price">
+
+          <span
+            class="big-price-badge">{{priceFrom | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</span>
+                        <span class="title"> - </span><span
+                        class="big-price-badge">{{price | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</span>
+
+                      </ng-container>
+
+                      <ng-container *ngIf="post.post_offering.unit_type_details && price">
+
+                        <span class="title"> / {{post.post_offering.unit_type_details.code}}</span>
+
+                      </ng-container>
+
+                      <ng-container *ngIf="oldPrice">
+                        <br/>
+                        <ng-container *ngIf="post.post_offering.one_price && oldPrice">
+
+          <span
+            class="text-muted"><s>{{oldPrice | currency:post.post_offering.price_currency_details.code :'symbol-narrow'  }}</s></span>
+
+                        </ng-container>
+
+                        <ng-container *ngIf="!post.post_offering.one_price && oldPriceFrom && oldPrice">
+
+          <span
+            class="text-muted"><s>{{oldPriceFrom | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</s></span>
+                          <span> - </span><span
+                          class="text-muted"><s>{{oldPrice | currency:post.post_offering.price_currency_details.code:'symbol-narrow'}}</s></span>
+
+                        </ng-container>
+                      </ng-container>
+                    </div>
+
+                  </div>
+                </ng-container>
+
+              </ng-container>
+
+              <ng-container *ngIf="comment">
+                <div class="ui-g-12 padding-0">
+                  <app-text-show-more [richText]="true" [text]="comment" [truncateWords]="truncateNumber"
+                                      [showSeeMore]="false" [calcTruncateWords]="false"></app-text-show-more>
+                </div>
+
+              </ng-container>
+              <ng-container *ngIf="!comment && post.description">
+                <div class="ui-g-12 padding-0">
+                  <app-text-show-more [richText]="true" [text]="post.description" [truncateWords]="truncateNumber"
+                                      [showSeeMore]="false" [calcTruncateWords]="false"></app-text-show-more>
+                </div>
+
+              </ng-container>
+              <ng-container *ngIf="readMore">
+                <div class="ui-g-12 padding-left-right-0">
+                  <div class="ui-toolbar-group-right">
+                    <a [routerLink]="[slug]"><span>{{'GENERAL.Read more' | translate}}...</span></a>
+                  </div>
+                </div>
+
+              </ng-container>
+
+            </div>
+
+          </div>
+          <ng-container *ngIf="post.promotion && showPromoteDate">
+            <div class="ui-g-12 text-align-center">
+              <span
+                class="color-primary"><b>{{ 'PROMOTION.Promoted to top' | translate }} {{post.promotion_date}}</b></span>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="post.deleted || !post.published">
+          <div class="ui-g-12 text-align-center">
+            <span class="post-title"> {{'GENERAL.A content is unreachable' | translate}}</span>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+

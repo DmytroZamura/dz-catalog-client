@@ -1,0 +1,117 @@
+<ng-container *ngIf="isBrowser">
+
+
+  <div class="layout-tabmenu-contents">
+    <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': appService.activeTabIndex === 0}">
+      <div class="layout-submenu-title clearfix">
+        <ng-container *ngIf="navigationObject==0">
+          <span>{{ 'MENU.SETTINGS' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==1">
+          <span>{{ 'GENERAL.Feed' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==91">
+          <span>{{ 'GENERAL.Search' | translate }} - {{ 'GENERAL.Feed' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==92">
+          <span>{{ 'GENERAL.Search' | translate }} - {{ 'GENERAL.Companies' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==93">
+          <span>{{ 'GENERAL.Search' | translate }} - {{ 'GENERAL.Products' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==95">
+          <span>{{ 'GENERAL.Search' | translate }} - {{ 'GENERAL.People' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==2">
+          <span>{{ 'GENERAL.Companies' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==3">
+          <span>{{ 'GENERAL.Products' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==4">
+          <span>{{ 'COMMUNITY.Communities' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==5">
+          <span>{{ 'GENERAL.People' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==6 || navigationObject==61 || navigationObject==62">
+          <span>{{ 'COMPANY.Company' | translate }}</span>
+        </ng-container>
+        <ng-container *ngIf="navigationObject==7 || navigationObject==71 || navigationObject==72">
+          <span>{{ 'GENERAL.User' | translate }}</span>
+        </ng-container>
+        <ng-container
+          *ngIf="navigationObject==8 || navigationObject==81 || navigationObject==82 || navigationObject==83">
+          <span>{{ 'COMMUNITY.Community' | translate }}</span>
+        </ng-container>
+        <a href="#" class="menu-button pi pi-bars" (click)="appService.closeSidebar($event)"></a>
+      </div>
+      <app-sidebarTabContent>
+
+
+        <app-navigation-widget (filterApplied)="onFilterApplied($event)" [user]="currentUserId"
+                               (newNavigationObject)="onNewNavigationObject($event)"
+                               #navigation></app-navigation-widget>
+
+
+      </app-sidebarTabContent>
+    </div>
+
+    <ng-container *ngIf="appService.isAuthenticated()">
+      <div class="layout-tabmenu-content"
+           [ngClass]="{'layout-tabmenu-content-active': appService.activeTabIndex === 1}">
+
+        <ng-container *ngIf="appService.activeTabIndex === 1">
+          <div class="layout-submenu-title clearfix">
+            <div class="ui-g">
+              <div class="ui-g-10 padding-0">
+                <app-select-user-or-company [viewType]="1"
+                                            (selectedRole)="onRoleSelected($event)"></app-select-user-or-company>
+              </div>
+              <div class="ui-g-2 padding-0">
+                <a href="#" class="menu-button pi pi-bars" (click)="appService.closeSidebar($event)"></a>
+              </div>
+            </div>
+          </div>
+
+          <app-chat-list-lazy *ngxLazyEl [showFirstChat]="false" (selectedChat)="showChatDialog($event.detail)"
+                              #chatsList></app-chat-list-lazy>
+
+        </ng-container>
+
+      </div>
+    </ng-container>
+
+
+    <div [ngClass]="{'layout-tabmenu-content-active': appService.activeTabIndex === 2}">
+
+      <ng-container *ngIf="appService.activeTabIndex === 2">
+
+        <div class="ui-g">
+          <div class="ui-g-offset-1 ui-g-10">
+            <p>
+              {{ 'GENERAL.UaFine created by' | translate }}
+            </p>
+            <p>
+              {{ 'GENERAL.UaFine contact support' | translate }} - <a target="_blank" href="mailto:support@uafine.com">support@uafine.com</a>.<br/>
+              {{ 'GENERAL.UaFine contact business' | translate }} - <a target="_blank" href="mailto:info@uafine.com">info@uafine.com</a>.
+            </p>
+            <p><a
+              [routerLink]="['/document/privacy-policy/'+appService.languageService.lang]">{{ 'GENERAL.UaFine Privacy Policy & Terms' | translate }}</a>,
+              <a
+                [routerLink]="['/document/cookies-policy/'+appService.languageService.lang]">{{ 'GENERAL.UaFine Cookies Policy' | translate }}</a>.
+            </p>
+            <p class="text-align-center">© UaFine {{date | date : 'yyyy'}}<br/>
+              © Dmytro Zamura {{date | date : 'yyyy'}}</p>
+          </div>
+        </div>
+
+
+      </ng-container>
+
+    </div>
+
+
+  </div>
+
+</ng-container>

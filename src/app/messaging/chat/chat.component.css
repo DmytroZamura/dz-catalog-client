@@ -1,0 +1,67 @@
+
+.box-border {
+  border: 1px solid #d8d8d8;
+}
+
+.message-box {
+
+  height: auto;
+}
+
+/*#chat-view {*/
+  /*overflow-y: hidden;*/
+/*}*/
+
+/*#text-area {*/
+  /*overflow-x: visible;*/
+  /*overflow-y: auto;*/
+/*}*/
+
+/*#main-split {*/
+  /*overflow-x: visible;*/
+  /*overflow-y: visible;*/
+/*}*/
+
+
+.chat-container {
+  overflow-x: visible;
+  height: calc(100% - 75px);
+  position: relative;
+  background-color: rgba(245, 245, 245, 0.42);
+  border-radius: 10px;
+}
+
+#chat-text-container {
+  height: 100%;
+  position: relative;
+  min-height: 80px;
+}
+
+
+.chat-view {
+  overflow-x: hidden !important;
+  overflow-y: auto;
+  height: 60vh !important;
+}
+
+@media (max-width: 640px) {
+
+  .chat-view {
+    height: 65vh !important;
+  }
+
+  .chat-container {
+    height: calc(100% - 155px);
+  }
+
+}
+
+
+.chatSizeButton {
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -14px;
+  right: 2px;
+  position: absolute;
+  font-size: 18px;
+}

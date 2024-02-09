@@ -1,0 +1,44 @@
+<span [class.md-inputfield]="label">
+ <p-autoComplete id="select-profile-label" name="profile" title="{{ 'USERPROFILE.Profile' | translate }}"
+                  #profileF="ngModel" [placeholder]="placeholder"
+                 (onSelect)="onProfileSelect($event)" [field]="'full_name'"
+                 [suggestions]="filteredProfiles" (completeMethod)="getFilteredProfiles($event)"
+                 [(ngModel)]="profile" (onClear)="onClear()"
+                 [minLength]="1" [disabled]="disabled">
+
+
+   <ng-template let-profile pTemplate="item">
+
+
+
+
+      <div style="display : flex; align-items: center ">
+     <img *ngIf="profile.img_details" alt="{{profile.first_name}} {{profile.last_name}}"
+          src="{{profile.img_details.small_image_url}}"
+          style="width: 30px; height: 30px; border-radius: 50%"/>
+      <img *ngIf="!profile.img_details" alt="{{profile.first_name}} {{profile.last_name}}"
+           src="static/assets/img/default-user.jpeg"
+           style="width: 30px; height: 30px; border-radius: 50%;"/>
+    <span>&nbsp;&nbsp;&nbsp;
+      {{profile.first_name}} {{profile.last_name}}</span>&nbsp;<span class="text-muted"> @{{profile.slug}}</span>
+      </div>
+    </ng-template>
+
+
+ </p-autoComplete>
+  <ng-container *ngIf="label">
+ <label *ngIf="!label_text" for="select-profile-label">{{ 'USERPROFILE.Profile' | translate }}:</label>
+   <label *ngIf="label_text" for="select-profile-label">{{label_text}}:</label>
+<ng-container *ngIf="requred">
+   <div [hidden]="profileF.valid">
+<div *ngIf="profileF.errors && profileF.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+</ng-container>
+  </ng-container>
+         </span>
+
+
+
+

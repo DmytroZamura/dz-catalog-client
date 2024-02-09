@@ -1,0 +1,128 @@
+<ng-container *ngIf="isBrowser">
+  <p-confirmDialog></p-confirmDialog>
+</ng-container>
+
+<div class="ui-g ui-fluid  dashboard main-component-layout">
+
+
+  <div class="ui-g-12 ui-md-10 posts-list-size padding-left-right-0">
+
+
+    <div class="ui-g-12 padding-0">
+      <ng-container *ngIf="post && filterType">
+        <div class="ui-g ui-fluid dashboard">
+          <div class="ui-g-12 padding-left-right-0">
+            <div class="ui-g-12 border-bottom-small">
+              <ng-container *ngIf="!post.published">
+                <div class="ui-toolbar-group-left"> <span class="info-badge-black">&nbsp;<b>{{'POSTS.Unpublished' | translate}}</b>&nbsp;</span></div>
+              </ng-container>
+              <div class="ui-toolbar-group-right">
+              <span class="date-time-text">{{post.create_date | dateAgo:language }}</span></div>
+            </div>
+            <app-post-item *ngIf="post" [currentUserId]="currentUserId" [post]="post" [isBrowser]="isBrowser"
+                           [locale]="language" [truncateNumber]="truncateNumber" [truncateComment]="false" [isMobile]="isMobile"
+                           (postDeleted)="deletePost()" [siteUrl]="siteUrl" (copyPostLink)="onCopyLink($event)"
+                           [editable]="true"></app-post-item>
+          </div>
+        </div>
+        <ng-container
+          *ngIf="post.admin_status && (post.type_details.code=='job' || post.type_details.code=='request' || post.type_details.code=='offering')">
+          <div class="ui-g-12 padding-left-right-0 margin-top-10">
+            <div class="ui-g-12 padding-left-right-0 border-bottom-small">
+              <div class="ui-g-12 ui-md-2 padding-0">
+                <ng-container *ngIf="post.type_details.code=='job'">{{ 'GENERAL.Applicants' | translate }}:
+                </ng-container>
+                <ng-container *ngIf="post.type_details.code!='job'">{{ 'GENERAL.Responds' | translate }}:</ng-container>
+              </div>
+              <div class="ui-g-5 ui-md-4 padding-0">
+                <div class="post-view-search-box">
+                  <app-search-box [showRightIcon]="true" [showRightButton]="false"
+                                  [rightIconClass]="'search-icon-no-border'"
+                                  (searchKeyword)="onSearch($event)"></app-search-box>
+                </div>
+              </div>
+
+              <div class="ui-g-7 ui-md-6 padding-0">
+                <div class="ui-toolbar-group-right">
+                <span
+                  class="text-muted middle-text">{{ 'GENERAL.Ordering' | translate }}: </span>
+                <app-select-ordering [currentOrderingCode]="'-create_date'" [recent]="true" [rating]="true"
+                                     (selectedOrdering)="changeOrdering($event)"></app-select-ordering>
+                </div>
+              </div>
+
+
+              <app-filter-navigator [filterType]="filterType" [showCategories]="false"></app-filter-navigator>
+
+
+            </div>
+            <ng-container *ngIf="filterType">
+              <div class="ui-g-12 padding-left-right-0">
+
+                <app-post-responds-list [post]="postId" [postType]="post.type_details.code" [userType]="'owner'"
+                                        [currentUserId]="currentUserId"
+                                        (newMinus)="onChangeNewQty()" #list></app-post-responds-list>
+
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="loading">
+        <app-empty-post></app-empty-post>
+      </ng-container>
+    </div>
+
+
+    <ng-container *ngIf="post">
+      <ng-container *ngIf="post.related_posts.length>0 && !post.admin_status">
+        <div class="ui-g-12 padding-left-right-0 padding-bottom-0">
+          <div class="ui-g-12 border-bottom-small padding-left-right-0">
+            <h2 class="post-preview-title">{{'GENERAL.Other publications' | translate}}:</h2>
+          </div>
+        </div>
+
+        <div class="ui-g-12 padding-left-right-0">
+
+          <ng-container *ngFor="let related_post of post.related_posts; let i = index"  >
+
+            <div class="ui-g-12 padding-left-right-0">
+
+              <app-post-preview [truncateNumber]="truncateNumber" [post]="related_post.related_post_details"
+                                [siteUrl]="siteUrl" [language]="language" [isMobile]="isMobile" [readMore]="true"></app-post-preview>
+            </div>
+          </ng-container>
+        </div>
+
+      </ng-container>
+
+
+    </ng-container>
+
+  </div>
+
+
+  <ng-container *ngIf="isBrowser && !isMobile ">
+    <div class="ui-g-6 padding-top-0 info-item-size hide-mobile">
+
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="ui-g-12">
+          <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="6825384377" [display]="'inline-block'"
+                      [width]="300" [height]="600"></ng-adsense>
+        </div>
+      </div>
+
+
+    </div>
+
+  </ng-container>
+
+
+</div>
+
+<app-process-dialog [header]="'GENERAL.Deletion' | translate" [processName]="'GENERAL.The deletion process' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>
+
+
+<app-copy-link #copyLink></app-copy-link>

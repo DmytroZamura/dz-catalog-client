@@ -1,0 +1,229 @@
+<div class="ui-g">
+
+  <ng-container *ngIf="isBrowser">
+    <ng-container *ngIf="!profile">
+      <div class="ui-g-12 text-center loading" align="center">
+        <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                           animationDuration=".5s"></p-progressSpinner>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div class="ui-g-12 padding-0">
+    <div class="layout-top">
+      <div class="card" *ngIf="profile">
+        <div class="align-items-center">
+          <ng-container *ngIf="!isMobile">
+            <img *ngIf="profile.img_details" alt="{{profile.full_name}}"
+                 src="{{profile.img_details.small_image_url}}"
+                 class="top-tab-image hide-mobile"/>
+            <img *ngIf="!profile.img_details" alt="{{profile.full_name}}"
+                 src="static/assets/img/default-user.jpeg"
+                 class="top-tab-image hide-mobile"/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </ng-container>
+
+          <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}">
+            <ng-template pTemplate="item" let-item let-i="index">
+              <div class="tab-item">
+                <div class="padding-0" align="center">
+          <span>&nbsp;&nbsp;&nbsp;
+            {{item.label}}</span>
+                </div>
+                <ng-container *ngIf="item.badge">
+
+                  <div class="padding-0" align="center">
+
+                    <span class="title">{{item.badge | thousandSuffixes: 1 }}</span>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!item.badge">
+                  <div class="padding-0" align="center">
+
+                    <i class="pi pi-user title"></i>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-template>
+
+
+          </p-tabMenu>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-g-12 padding-0 layout-work">
+    <ng-container *ngIf="activeTab==0 && profile">
+      <app-profile-overview [admin]="admin" [profile]="profile" [currentUserId]="currentUserId"
+                            [isBrowser]="isBrowser" [language]="language"
+                            #overview></app-profile-overview>
+
+    </ng-container>
+
+    <ng-container *ngIf="activeTab==1 && profile">
+      <app-profile-posts [user_id]="profile.user_id" [admin]="admin" [isBrowser]="isBrowser" [isMobile]="isMobile"
+                         #posts></app-profile-posts>
+
+    </ng-container>
+
+    <ng-container *ngIf="activeTab==2 && profile">
+
+      <app-profile-products [userId]="profile.user_id" [profile]="profile.id" [currentUserId]="currentUserId"
+                            [isMobile]="isMobile"
+                            [locale]="language"
+                            #products></app-profile-products>
+
+
+    </ng-container>
+
+    <ng-container *ngIf="activeTab==3 && profile">
+      <div class="ui-g ui-fluid main-component-layout">
+
+
+        <div class="ui-g-12 dashboard posts-list-size padding-left-right-0">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <div class="card padding-0">
+
+              <ng-container *ngIf="!admin && currentUserId">
+                <app-create-post [relatedUser]="userData" [objectRelatedTypesFilter]="'True'"
+                                 [defaultPostTypeId]="defaultReviewTypeId"
+                                 [defaultPostTypeCode]="'review'"
+                                 [placeholder]="'POSTS.Leave your review or ask a question' | translate "
+                ></app-create-post>
+              </ng-container>
+            </div>
+          </div>
+
+
+          <div class="ui-g-12  padding-left-right-0">
+            <app-filter-navigator [filterType]="'feed'" [objectRelatedTypesFilter]="'True'"></app-filter-navigator>
+
+          </div>
+
+          <app-filtered-posts-list [relatedUser]="profile.user_id" [editable]="false" [showAdd]="true" [itemsPerAdd]="8"
+                                   #list></app-filtered-posts-list>
+
+
+        </div>
+
+        <ng-container *ngIf="isBrowser && !isMobile">
+          <div class="ui-g-6 info-item-size hide-mobile">
+
+
+            <div class="ui-g-12">
+
+              <ng-adsense [adClient]="'ca-pub-4091968257038599'" [adSlot]="6825384377" [display]="'inline-block'"
+                          [width]="300" [height]="600"></ng-adsense>
+
+
+            </div>
+
+          </div>
+
+        </ng-container>
+
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="activeTab==4 && profile">
+      <div class="ui-g ui-fluid  dashboard main-component-layout">
+
+
+        <div class="ui-g-12 product-list-size padding-0">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'people'"
+                                   [showFilter]="true" [showCategories]="false" [showChildCategories]="false"
+                                   [showSearch]="false" [showOrdering]="true"
+                                   [showSearchLabel]="false"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="followersList.setKeyword($event)"
+                                   (newOrdering)="followersList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'profiles-by-page/'" [itemsPerPage]="20"
+                                  [itemsType]="'people'" [initCurrency]="true" [published]="true"
+                                  [followProfile]="profile.id"
+                                  #followersList>
+              <ng-template let-item let-i="index" #body>
+
+                <div class="ui-g-6 ui-md-3 profile-item-size padding-left-0">
+
+                  <app-user-feed-preview [profile]="item" [user]="currentUserId" [isMobile]="isMobile"
+                                         [greedView]="true"
+                                         [locale]="language">
+
+                  </app-user-feed-preview>
+
+                </div>
+
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="activeTab==5 && profile">
+      <div class="ui-g ui-fluid  dashboard main-component-layout">
+
+
+        <div class="ui-g-12 product-list-size padding-0">
+
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'people'"
+                                   [showFilter]="true" [showCategories]="false" [showChildCategories]="false"
+                                   [showSearch]="false" [showOrdering]="true"
+                                   [showSearchLabel]="false"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="followList.setKeyword($event)"
+                                   (newOrdering)="followList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+            <app-items-list-agile [endPoint]="'profiles-by-page/'" [itemsPerPage]="20"
+                                  [itemsType]="'people'" [initCurrency]="true" [published]="true"
+                                  [followingUser]="profile.user_id"
+                                  #followList>
+              <ng-template let-item let-i="index" #body>
+
+                <div class="ui-g-6 ui-md-3 profile-item-size padding-left-0">
+
+                  <app-user-feed-preview [profile]="item" [user]="currentUserId" [isMobile]="isMobile"
+                                         [greedView]="true"
+                                         [locale]="language">
+
+                  </app-user-feed-preview>
+
+                </div>
+
+
+              </ng-template>
+
+            </app-items-list-agile>
+          </div>
+
+
+
+
+
+        </div>
+
+
+      </div>
+    </ng-container>
+
+  </div>
+</div>

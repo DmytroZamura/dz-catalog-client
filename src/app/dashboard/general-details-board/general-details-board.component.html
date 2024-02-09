@@ -1,0 +1,214 @@
+<ng-container *ngIf="data && showBoard">
+  <div class="card">
+
+    <div class="ui-g dashboard">
+
+      <div class="ui-g-12 padding-left-right-0">
+        <ng-container *ngIf="userDetails">
+          <app-user-preview-short [userData]="userDetails" [showPreview]="false"
+                                  [locale]="locale"
+                                  [size]="'small'"></app-user-preview-short>
+        </ng-container>
+        <ng-container *ngIf="company">
+          <app-company-preview-short [company]="company" [size]="'small'"
+                                     [locale]="locale"
+                                     [showPreview]="false"></app-company-preview-short>
+        </ng-container>
+      </div>
+      <div class="ui-g-12 padding-0 border-bottom-small">
+        <div class="ui-g-9 cursor-pointer padding-top-0">
+          <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text" (click)="onItemClick('products')"><b> {{ 'GENERAL.Products' | translate }}:</b></span><br/>
+          <span class="dushboard-text"> <ng-container *ngIf="company">
+                  <a
+                    [routerLink]="['/company-admin/'+company.slug+'/2']">{{ 'PRODUCT.Manage Your Products' | translate }}</a>
+                </ng-container>
+                <ng-container *ngIf="profile">
+                  <a [routerLink]="['/profile/2']">{{ 'PRODUCT.Manage Your Products' | translate }}</a>
+                </ng-container></span>
+
+        </div>
+        <div class="ui-g-3 text-align-right padding-top-0">
+          <span class="select-text dushboard-text"
+                (click)="onItemClick('customer-requests')"><b> {{data.products | thousandSuffixes: 1}}&nbsp;</b></span>
+        </div>
+
+        <ng-container *ngIf="data.open_customer_requests">
+          <div class="ui-g-9 cursor-pointer padding-top-0">
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('customer-requests')"><b> {{ 'GENERAL.Open customer requests' | translate }}:</b></span>
+
+          </div>
+          <div class="ui-g-3 text-align-right padding-top-0">
+          <span class="select-text dushboard-text"
+                (click)="onItemClick('customer-requests')"><b>{{data.open_customer_requests | thousandSuffixes: 1}}&nbsp;</b></span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="data.new_customer_requests">
+          <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('customer-requests')"><b> {{ 'GENERAL.New customer requests' | translate }}:</b></span>
+
+          </div>
+          <div class="ui-g-3 text-align-right padding-top-0">
+            <span class="dushboard-text count-badge"
+                  (click)="onItemClick('customer-requests')"> <b>&nbsp;{{data.new_customer_requests | thousandSuffixes: 1}}&nbsp;</b></span>
+          </div>
+        </ng-container>
+      </div>
+      <ng-container
+      >
+        <div class="ui-g-12 padding-left-right-0 padding-bottom-0 border-bottom-small">
+
+          <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('job')"><b> {{ 'GENERAL.Jobs' | translate }}:</b></span><br/>
+
+            <span class="select-text dushboard-text" (click)="onCreatePost('job')">{{ 'GENERAL.Create a job' | translate }}</span>
+
+
+          </div>
+          <div class="ui-g-3 text-align-right padding-top-0">
+          <span class="dushboard-text"
+                (click)="onItemClick('job')"> <b>{{data.jobposts | thousandSuffixes: 1}}&nbsp;</b></span>
+          </div>
+
+
+          <ng-container *ngIf="data.new_job_responds">
+            <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('job-applicants')"><b> {{ 'GENERAL.New applicants' | translate }}:</b></span>
+
+            </div>
+            <div class="ui-g-3 text-align-right padding-top-0">
+            <span class="dushboard-text count-badge"
+                  (click)="onItemClick('job-applicants')"> <b>&nbsp;{{data.new_job_responds | thousandSuffixes: 1}}&nbsp;</b></span>
+            </div>
+          </ng-container>
+
+          <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('offering')"><b> {{ 'GENERAL.Offering' | translate }}:</b></span><br/>
+             <span class="select-text dushboard-text" (click)="onCreatePost('offering')">{{ 'GENERAL.Create an offering' | translate }}</span>
+
+
+          </div>
+          <div class="ui-g-3 text-align-right padding-top-0">
+            <span class="dushboard-text" (click)="onItemClick('offering')"> <b>{{data.offerings | thousandSuffixes: 1}}&nbsp;</b></span>
+          </div>
+
+
+          <ng-container *ngIf="data.new_offering_reponds">
+            <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('offering-applicants')"><b> {{ 'GENERAL.New responses to your offerings' | translate }}:</b></span>
+
+            </div>
+            <div class="ui-g-3 text-align-right padding-top-0">
+            <span class="dushboard-text count-badge"
+                  (click)="onItemClick('offering-applicants')"> <b>&nbsp;{{data.new_offering_reponds | thousandSuffixes: 1}}&nbsp;</b></span>
+            </div>
+          </ng-container>
+
+          <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('request')"><b> {{ 'GENERAL.Requests' | translate }}:</b></span><br/>
+             <span class="select-text dushboard-text" (click)="onCreatePost('request')">{{ 'GENERAL.Create a request' | translate }}</span>
+
+          </div>
+          <div class="ui-g-3 text-align-right padding-top-0">
+            <span class="dushboard-text" (click)="onItemClick('request')"> <b>{{data.requests | thousandSuffixes: 1}}&nbsp;</b></span>
+          </div>
+
+
+          <ng-container *ngIf="data.new_request_responds">
+            <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('request-applicants')"><b> {{ 'GENERAL.New suppliers offers' | translate }}:</b></span>
+
+            </div>
+            <div class="ui-g-3 text-align-right padding-top-0">
+            <span class="dushboard-text count-badge"
+                  (click)="onItemClick('request-applicants')"> <b>&nbsp;{{data.new_request_responds | thousandSuffixes: 1}}&nbsp;</b></span>
+            </div>
+          </ng-container>
+
+        </div>
+
+        <ng-container *ngIf="data.your_open_request_responds || data.your_open_offering_responds || data.your_open_job_responds || data.your_open_supply_requests">
+        <div class="ui-g-12 padding-left-right-0 padding-bottom-0 border-bottom-small">
+          <ng-container *ngIf="data.your_open_supply_requests">
+            <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('open-supply-requests')"><b>{{ 'GENERAL.Current purchases' | translate }}:</b></span><br/>
+
+
+            </div>
+            <div class="ui-g-3 text-align-right padding-top-0">
+          <span class="dushboard-text"
+                (click)="onItemClick('open-supply-requests')"> <b>{{data.your_open_supply_requests | thousandSuffixes: 1}}&nbsp;</b></span>
+            </div>
+
+          </ng-container>
+
+          <ng-container *ngIf="data.your_open_job_responds">
+            <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('job-responds')"><b>{{ 'GENERAL.Your job responds' | translate }}:</b></span><br/>
+
+
+            </div>
+            <div class="ui-g-3 text-align-right padding-top-0">
+          <span class="dushboard-text"
+                (click)="onItemClick('job-responds')"> <b>{{data.your_open_job_responds | thousandSuffixes: 1}}&nbsp;</b></span>
+            </div>
+
+          </ng-container>
+
+          <ng-container *ngIf="data.your_open_offering_responds">
+            <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('offering-responds')"><b>{{ 'GENERAL.Your responses to offerings' | translate }}:</b></span><br/>
+
+
+            </div>
+            <div class="ui-g-3 text-align-right padding-top-0">
+          <span class="dushboard-text"
+                (click)="onItemClick('offering-responds')"> <b>{{data.your_open_offering_responds | thousandSuffixes: 1}}&nbsp;</b></span>
+            </div>
+
+          </ng-container>
+
+          <ng-container *ngIf="data.your_open_request_responds">
+            <div class="ui-g-9 cursor-pointer padding-top-0">
+
+            <span [appHighlightborder]="'#ebe7ef'" class="text-muted dushboard-text"
+                  (click)="onItemClick('request-responds')"><b>{{ 'GENERAL.Your responses to requests' | translate }}:</b></span><br/>
+
+
+            </div>
+            <div class="ui-g-3 text-align-right padding-top-0">
+          <span class="dushboard-text"
+                (click)="onItemClick('request-responds')"> <b>{{data.your_open_request_responds | thousandSuffixes: 1}}&nbsp;</b></span>
+            </div>
+
+          </ng-container>
+
+
+        </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+
+  </div>
+</ng-container>

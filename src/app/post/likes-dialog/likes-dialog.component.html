@@ -1,0 +1,62 @@
+<ng-container *ngIf="showDialog">
+  <p-dialog [(visible)]="showDialog"
+            [modal]="true" [style]="{'width': '400px'}">
+
+
+    <p-header>
+      <strong>{{likesCount}} - {{ 'POSTS.Likes' | translate }}</strong>
+
+    </p-header>
+
+    <ng-container *ngIf="likesCount">
+      <p-scrollPanel [styleClass]="'dialog-scroll'">
+
+        <ng-container *ngIf="post">
+
+
+          <app-items-list-agile [itemsType]="'obj.UserData'" [endPoint]="'post-likes-by-page/'" [post]="post"
+                                [goToTopOnInitFilter]="false"
+                                [locale]="locale" [userFilterBar]="false" [itemsPerPage]="30" [appliedFilter]="{}">
+            <ng-template let-item let-i="index" #body>
+              <div class="ui-g-12">
+
+                <app-user-preview-short [size]="'middle'" [userData]="item.user_data" [showInfo]="true"
+                                        [locale]="locale"
+                                        [showLink]="true"></app-user-preview-short>
+              </div>
+
+            </ng-template>
+
+          </app-items-list-agile>
+
+
+        </ng-container>
+
+        <ng-container *ngIf="comment">
+
+          <app-items-list-agile [itemsType]="'obj.UserData'" [endPoint]="'post-comment-likes-by-page/'"
+                                [comment]="comment" [goToTopOnInitFilter]="false"
+                                [locale]="locale" [userFilterBar]="false" [itemsPerPage]="30" [appliedFilter]="{}">
+            <ng-template let-item let-i="index" #body>
+              <div class="ui-g-12">
+
+                <app-user-preview-short [size]="'middle'" [userData]="item.user_data" [showInfo]="true"
+                                        [locale]="locale"
+                                        [showLink]="true"></app-user-preview-short>
+              </div>
+
+            </ng-template>
+
+          </app-items-list-agile>
+
+
+        </ng-container>
+
+
+      </p-scrollPanel>
+
+    </ng-container>
+
+
+  </p-dialog>
+</ng-container>

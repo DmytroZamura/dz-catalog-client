@@ -1,0 +1,184 @@
+
+
+.ql-editor img {
+  max-width: 100%
+}
+
+.ql-clipboard {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important
+}
+
+.cursor-pointer .ql-editor > * {
+  cursor: pointer
+}
+
+.ql-bubble .ql-picker {
+  color: #424242
+}
+
+.ql-bubble .ql-tooltip {
+  background-color: #ffc107;
+  border-radius: 25px;
+  color: #424242
+}
+
+.ql-bubble .ql-editor .mention a {
+  text-decoration: unset
+}
+
+.ql-editor {
+  width: 100%;
+
+}
+
+
+
+.post-item .ql-editor {
+  overflow-y: visible
+}
+
+.ql-resizable .ql-editor {
+  overflow-y: visible !important;
+  position: absolute
+}
+
+.ql-resizable .ql-blank {
+  position: relative !important
+}
+
+.ql-bubble .ql-stroke {
+  stroke: #424242
+}
+
+.ql-bubble .ql-fill, .ql-bubble .ql-stroke.ql-fill {
+  fill: #424242
+}
+
+.ql-bubble .ql-picker-options {
+  background-color: #ffc107
+}
+
+.ql-mention-list-container {
+  width: 300px;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(30, 30, 30, .08);
+  z-index: 9001
+}
+
+.ql-mention-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden
+}
+
+.ql-mention-list-item {
+  cursor: pointer;
+  padding: 0 20px;
+  vertical-align: middle;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px
+}
+
+.ql-mention-list-item.selected {
+  background-color: #ffc107;
+  text-decoration: none
+}
+
+.ql-bubble .ql-tooltip {
+  z-index: 101
+}
+
+
+.ql-container {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto
+}
+
+.ql-container.ql-bubble:not(.ql-disabled) a {
+  white-space: normal
+}
+
+.article .ql-container{
+  font-size: 1.1rem !important
+}
+
+.article .ql-editor {
+   padding: 5px;
+}
+
+.text-show-more .ql-editor {
+  padding: 0;
+}
+
+.article .ql-editor blockquote, .article .ql-editor ol, .article .ql-editor p, .article .ql-editor pre, .article .ql-editor ul {
+  margin-top: 0;
+  margin-bottom: 1em
+}
+
+.article .ql-editor h2 {
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important
+}
+
+.article .ql-editor h3 {
+  margin-top: 1.3rem !important;
+  margin-bottom: 1rem !important
+}
+
+.article .ql-editor h4 {
+  margin-top: 1.2rem !important;
+  margin-bottom: 1rem !important
+}
+
+.ql-container.ql-bubble {
+  min-height: 80px
+}
+
+.ql-bubble .ql-editor h1 {
+  font-size: 2em
+}
+
+.ql-bubble .ql-editor h2 {
+  font-size: 1.5em
+}
+
+.ql-bubble .ql-editor h3 {
+  font-size: 1.3em
+}
+
+.ql-bubble .ql-editor h4 {
+  font-size: 1.1em
+}
+
+.ui-overlaypanel-content {
+  padding: 0
+}
+
+@media (max-width: 640px) {
+  .ui-sidebar-right.ui-sidebar-md {
+    width: 100%
+  }
+}
+
+
+@media (min-width: 1025px) and (max-width: 1200px)   {
+  .hide-md {
+    display: none !important;
+  }
+}

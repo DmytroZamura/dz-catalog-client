@@ -1,0 +1,373 @@
+<p-confirmDialog></p-confirmDialog>
+<ng-container *ngIf="product && language">
+  <div class="ui-g ui-fluid main-component-layout">
+
+
+    <div class="ui-g-12 product-profile-size padding-left-right-0">
+      <form #productForm="ngForm" (input)="ready_to_save()" (ngSubmit)="saveProduct()">
+        <div class="ui-g-12 padding-left-right-0">
+          <ng-container>
+            <div class="card card-w-title">
+          <span style="font-size: 1.5rem"><b>{{ 'GENERAL.Language' | translate }}:</b>
+
+
+          </span><br/>
+              <span style="font-size: 11px"> {{ 'GENERAL.Full Edit in English' | translate }} </span>
+
+              <div class="ui-g">
+                <div class="ui-md-6 ui-g-12">
+                  <app-select-common-item [(item)]="language" [endpoint]="'languages'"
+                                          [showFilter]="false"
+                                          [sortByName]="true" [showClear]="false"
+
+                                          (itemChange)="onLanguageSelect($event)"></app-select-common-item>
+
+
+                </div>
+              </div>
+
+            </div>
+
+
+          </ng-container>
+        </div>
+        <div class="ui-g-12 padding-left-right-0">
+          <div class="card">
+
+            <div class="ui-g">
+              <div class="ui-g-12">
+
+                <div class="ui-toolbar-group-left ql-color-white">
+                  <ng-container *ngIf="product.company_details">
+                    <a
+                      [routerLink]="['/company-admin/'+product.company_details.slug+'/2']">{{ 'PRODUCT.Manage Your Products' | translate }}</a>
+                  </ng-container>
+                  <ng-container *ngIf="!product.company_details">
+                    <a [routerLink]="['/profile/2']">{{ 'PRODUCT.Manage Your Products' | translate }}</a>
+                  </ng-container>
+                  &nbsp; &nbsp;
+                  <!--<a [routerLink]="['/product-admin/'+product.id]">{{ 'PRODUCT.Manage Your Product' | translate }}</a>-->
+                </div>
+                <div class="ui-toolbar-group-right ql-color-white">
+                  <button pButton class="ui-button-secondary flat" type="submit"
+                          [disabled]="disabled_save || !productForm.form.valid "
+                          icon="pi pi-save"></button>
+                  <!--<button pButton class="ui-button-secondary flat" type="button"-->
+                  <!--(click)="deleteProduct()"-->
+                  <!--icon="pi pi-times"></button>-->
+                </div>
+              </div>
+
+              <div class="ui-md-5 ui-g-12">
+                <app-product-image-view [product_id]="product.id" [images]="product.images"
+                                        [edit_mode]="true" [isBrowser]="isBrowser"
+                                        [isMobile]="isMobile"></app-product-image-view>
+              </div>
+              <div class="ui-md-7 ui-g-12">
+
+                <div class="ui-g-12">
+                  <div class="ui-g form-group">
+                    <div class="ui-g-12" align="right">
+                      <strong> {{ 'PRODUCT.Published' | translate }}: </strong>
+                      <p-inputSwitch [ngModel]="product.published"
+                                     [disabled]="true"
+                                     [ngModelOptions]="{standalone: true}"></p-inputSwitch>
+                    </div>
+                    <div class="ui-g-12">
+
+
+         <span class="md-inputfield translation-mark">
+
+        <input id="name" name="name" type="text" pInputText [(ngModel)]="product.name" required
+               #product_name="ngModel"/>
+        <label for="name">{{ 'PRODUCT.Product Name' | translate }}<span>&nbsp;<b>({{language.code}})</b></span>:</label>
+            <div [hidden]="product_name.valid || product_name.pristine">
+<div *ngIf="product_name.errors && product_name.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+
+                    </div>
+
+
+                    <div class="ui-g-12">
+                      <app-select-category [category]="product.category_details" [showSuggestCategory]="true"
+                                           [label_text]="'PRODUCT.Product category' | translate "
+                                           [suggestedCategory]="product.suggested_category_details"
+                                           (categorySelect)="onCategorySelected($event)"
+                                           (categorySuggested)="onCategorySuggested($event)"
+                                           #selectCategory></app-select-category>
+                    </div>
+
+                    <!--<div class="ui-g-12">-->
+
+
+                      <!--<app-select-product-group [company_id]="product.company" [user_id]="product.user"-->
+                                                <!--[group]="product.product_group_details"-->
+                                                <!--(producGroupSelected)="onGroupSelected($event)"></app-select-product-group>-->
+                    <!--</div>-->
+
+                    <div class="ui-g-12">
+
+         <span class="md-inputfield">
+
+        <input id="link_to_buy" name="link_to_buy" type="url" pInputText
+               [(ngModel)]="product.link_to_buy" pattern="^https?://.+"
+               #link_to_buy="ngModel"/>
+        <label for="link_to_buy">{{ 'PRODUCT.Buy Product Link' | translate }}:</label>
+
+           <div [hidden]="link_to_buy.valid || link_to_buy.pristine">
+
+           <div *ngIf="link_to_buy.errors && link_to_buy.errors.pattern"
+                class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+         </span>
+                    </div>
+
+
+                    <div class="ui-g-12">
+
+                      <label for="description"><b>{{ 'PRODUCT.Product short description' | translate }}
+                        <span><b>({{language.code}})</b></span>:</b> </label>
+                      <div class="translation-mark text-editor">
+                        <app-text-editor id="description" [(text)]="product.short_description"
+                                         (textChange)="ready_to_save()" [mentions]="false" [showAttachments]="true"
+                                         [styles]="{'min-height': '150px'}"></app-text-editor>
+                      </div>
+
+                    </div>
+
+
+                    <div class="ui-g-12 ui-md-6">
+
+
+                      <app-select-common-item [item]="product.origin_details" [endpoint]="'countries'"
+                                              [showFilter]="false" [viewType]="4"
+                                              [label]="'PRODUCT.Place of Origin' | translate"
+                                              [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                              [checkEnteredName]="true" [componentId]="'select-origin'"
+                                              (itemChange)="onCountrySelect($event)"
+                                              #selectOrigin></app-select-common-item>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6">
+
+
+                      <app-select-common-item [(item)]="product.unit_type_details" [endpoint]="'unit-types'"
+                                              [showFilter]="true"
+                                              [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                              [label]="'GENERAL.Unit type' | translate "
+                                              (itemChange)="onUnitTypeCnange($event)"></app-select-common-item>
+
+                    </div>
+
+                    <div class="ui-md-6 ui-g-12 text-align-right">
+                      {{ 'PRODUCT.One price' | translate }}:
+                      <p-checkbox name="one_price" [(ngModel)]="product.one_price" binary="true"
+                                  (onChange)="ready_to_save()"></p-checkbox>
+
+                    </div>
+                    <div class="ui-md-6 ui-g-12">
+
+
+                      <app-select-common-item [(item)]="product.currency_details" [endpoint]="'currencies'"
+                                              [showFilter]="true"
+                                              [sortByName]="true" [showClear]="true" [placeholder]="''"
+                                              [label]="'GENERAL.Currency' | translate "
+                                              (itemChange)="onCurrencyChange($event)"></app-select-common-item>
+
+                    </div>
+
+                    <div class="ui-md-6 ui-g-12">
+
+                      <ng-container>
+            <span class="md-inputfield">
+
+
+
+               <input id="from" name="from" class="text-align-right" type="number" pInputText
+                      [(ngModel)]="product.price_from" [disabled]="product.one_price"
+                      pKeyFilter="pnum" (ngModelChange)="calcDiscount()"/>
+
+            <label for="from">{{ 'PRODUCT.Price from' | translate }}</label>
+               </span>
+                      </ng-container>
+
+                    </div>
+                    <div class="ui-md-6 ui-g-12" align="right">
+            <span class="md-inputfield">
+
+               <input id="to" name="to" class="text-align-right" type="number" pInputText [(ngModel)]="product.price_to"
+
+                      pKeyFilter="pnum" (ngModelChange)="calcDiscount()"/>
+
+            <label *ngIf="!product.one_price" for="to">{{ 'PRODUCT.Price to' | translate }}</label>
+              <label *ngIf="product.one_price" for="to">{{ 'PRODUCT.Price' | translate }}</label>
+               </span>
+
+                    </div>
+
+
+                    <ng-container>
+
+
+                      <div class="ui-md-6 ui-g-6">
+  <span class="md-inputfield">
+
+                        <input id="discount" name="discount" type="number" class="text-align-right" pInputText
+                               maxlength="2"
+                               [(ngModel)]="product.discount" (ngModelChange)="onDiscountInput($event)"
+                               pKeyFilter="pint"/>
+        <label for="discount">{{ 'GENERAL.Discount' | translate }} %</label>
+  </span>
+
+                      </div>
+                      <div class="ui-md-6 ui-g-6">
+
+       <span class="md-inputfield">
+
+        <p-calendar id="deadline" name="deadline" class="text-align-right" [ngModel]="product.deadline"
+                    (onSelect)="onDeadlineSelect($event)"
+                    [dateFormat]="'yy-mm-dd'" [showButtonBar]="true" (onClearClick)="clearDeadLine()"></p-calendar>
+     <label for="deadline">{{ 'PRODUCT.Discount ends date' | translate }}:</label>
+       </span>
+                      </div>
+
+
+                      <div class="ui-md-6 ui-g-6">
+
+                        <ng-container>
+            <span class="md-inputfield">
+
+
+
+               <input id="discount_from" name="discount_from" type="number" pInputText class="text-align-right opacity1"
+                      [(ngModel)]="product.discount_price_from"
+                      [disabled]="product.discount || !product.currency || product.one_price"
+                      pKeyFilter="pnum"/>
+
+            <label for="discount_from">{{ 'PRODUCT.New price from' | translate }}</label>
+               </span>
+                        </ng-container>
+
+                      </div>
+                      <div class="ui-md-6 ui-g-6 text-align-right">
+            <span class="md-inputfield">
+
+               <input id="discount_to" name="discount_to" type="number" pInputText class="text-align-right opacity1"
+                      [(ngModel)]="product.discount_price_to"
+                      [disabled]="product.discount || !product.currency"
+                      pKeyFilter="pnum"/>
+
+            <label *ngIf="!product.one_price"
+                   for="discount_to">{{ 'PRODUCT.New price to' | translate }}</label>
+              <label *ngIf="product.one_price"
+                     for="discount_to">{{ 'PRODUCT.New price' | translate }}</label>
+               </span>
+
+                      </div>
+                    </ng-container>
+
+
+                    <div *ngIf="!product.one_price" class="ui-g-12">
+                      <label for="conditions"><b>{{ 'PRODUCT.Price conditions' | translate }}
+                        <span>&nbsp;<b>({{language.code}})</b></span>:</b> </label>
+                      <div class="translation-mark text-editor">
+                        <app-text-editor id="conditions" [(text)]="product.price_conditions"
+                                         (textChange)="ready_to_save()" [mentions]="false"
+                                         [styles]="{'min-height': '65px'}"></app-text-editor>
+                      </div>
+
+
+                    </div>
+
+                    <ng-container *ngIf="product.product_or_service">
+                      <div class="ui-g-12">
+
+                        <label for="packaging_and_delivery"><b>{{ 'PRODUCT.Packaging and Delivery' | translate }}<span>&nbsp;<b>({{language.code}}
+                          )</b></span>:</b>
+                        </label>
+                        <div class="translation-mark text-editor">
+                          <app-text-editor id="packaging_and_delivery" [(text)]="product.packaging_and_delivery"
+                                           (textChange)="ready_to_save()" [mentions]="false"
+                                           [styles]="{'min-height': '65px'}"></app-text-editor>
+                        </div>
+
+                      </div>
+                    </ng-container>
+
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <ng-container>
+                <div class="ui-g-12">
+                  <label for="tags">{{ 'GENERAL.Hashtags' | translate }}:</label>
+                  <p-chips [(ngModel)]="product.tags" id="tags" name="tags"
+                           title="{{ 'GENERAL.Hashtags' | translate }}" (onRemove)="ready_to_save()">
+
+                    <ng-template let-item pTemplate="item">
+                      <a class="text-white" [routerLink]="'/hashtag/'+item">
+                              <span
+                                class="ui-chips-token-label ng-star-inserted"><strong><u>#{{item}} </u></strong></span>
+                      </a>
+
+
+                    </ng-template>
+                  </p-chips>
+
+
+                </div>
+                <div class="ui-g-12">
+                  <app-object-attributes [show]="true" [attributes]="product.attributes"
+                                         [editMode]="true" (attributesChanged)="ready_to_save()"
+                                         #attributes></app-object-attributes>
+                </div>
+              </ng-container>
+              <div class="ui-g-12 border-top-primary-small" align="center">
+
+                <button pButton class="ui-button-secondary flat" type="button"
+                        label="{{ 'BUTTONS.Delete' | translate }}"
+                        (click)="deleteProduct()" [disabled]="processing"
+                        icon="pi pi-times" style="width: auto"></button> &nbsp;&nbsp;
+                <ng-container *ngIf="product.published">
+                  <button class="ui-button-secondary flat" pButton type="button"
+                          label="{{ 'BUTTONS.Unublish' | translate }}"
+                          [disabled]="processing  " (click)="Unpublish()"
+                          icon="pi pi-undo" style="width: auto"></button>&nbsp;&nbsp;
+                </ng-container>
+                <ng-container *ngIf="!product.published">
+                  <button pButton type="button" class="ui-button ui-button-success"
+                          label="{{ 'BUTTONS.Publish' | translate }}"
+                          [disabled]="!productForm.form.valid || processing " (click)="Publish()"
+                          icon="pi pi-check" style="width: auto"></button>&nbsp;&nbsp;
+                </ng-container>
+                <button pButton type="submit" label="{{ 'BUTTONS.Save' | translate }}"
+                        [disabled]="disabled_save || !productForm.form.valid || processing"
+                        icon="pi pi-save" style="width: auto"></button>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+  </div>
+
+
+</ng-container>
+
+<app-process-dialog [header]="'GENERAL.Deletion' | translate" [processName]="'GENERAL.The deletion process' | translate"
+                    [processComment]="'GENERAL.This may take several minutes' | translate"
+                    #deleteDialog></app-process-dialog>

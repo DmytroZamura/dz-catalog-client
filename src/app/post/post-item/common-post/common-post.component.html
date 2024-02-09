@@ -1,0 +1,111 @@
+<ng-container *ngIf="post">
+
+  <ng-container
+    *ngIf="post.type_details.code=='review' || (post.type_details.code=='question' && (post.related_company
+    || post.related_product || post.related_user))">
+
+      <div class="ui-g-12 padding-top-0 border-top-small">
+
+          <div class="ui-toolbar-group-left">
+            <ng-container *ngIf="relatedCompanyDetails">
+              <app-company-preview-short [company]="relatedCompanyDetails" [showPreview]="true"
+                                         [rating]="rating" [product]="relatedProductDetails" (itemClicked)="onProfileClicked()"
+                                         [currencyCode]="currencyCode" [truncate_number]="truncateNumber"
+                                         [showInfo]="!rating" [showSlug]="true" [locale]="locale"
+                                         [currentUser]="currentUserId"></app-company-preview-short>
+            </ng-container>
+
+            <ng-container *ngIf="!relatedCompanyDetails">
+              <app-user-preview-short [showSlug]="true" [showPreview]="true" [truncate_number]="truncateNumber"
+                                      [userData]="post.related_user_data" [product]="relatedProductDetails"
+                                      [rating]="rating" [showInfo]="!rating" (itemClicked)="onProfileClicked()"
+                                      [currentUser]="currentUserId" [locale]="locale"
+                                      [currencyCode]="currencyCode"></app-user-preview-short>
+            </ng-container>
+
+          </div>
+
+      </div>
+
+  </ng-container>
+
+
+
+  <div *ngIf="comment" class="ui-g-12 padding-top-0">
+
+
+    <app-text-show-more [currentUserId]="currentUserId" [text]="comment" [calcTruncateWords]="false"
+                        [richText]="true" [truncateWords]="truncateWords" (showMoreClicked)="onShowMoreClicked()"></app-text-show-more>
+
+  </div>
+  <ng-container *ngIf="post.type_details.code=='question'">
+    <ng-container *ngIf="post.post_options">
+      <ng-container *ngIf="post.post_options.length>1">
+        <div class="ui-g-12">
+          <app-post-option-votes [options]="post.post_options" [currentUserId]="currentUserId" [postId]="post.id"
+                                 [totalVotes]="post.eventsqty.votes" [multiSelection]="post.multi_selection" (voted)="onVoteClicked()"></app-post-option-votes>
+        </div>
+      </ng-container>
+    </ng-container>
+
+  </ng-container>
+
+  <ng-container *ngIf="post.type_details.code == 'review'">
+    <ng-container *ngIf="post.post_review">
+      <ng-container *ngIf="post.post_review.advantages">
+        <div class="ui-g-12 padding-top-0">
+
+          <span><strong>{{ 'GENERAL.Advantages' | translate }}:</strong></span>
+          <app-text-show-more [currentUserId]="currentUserId" [text]="post.post_review.advantages"
+                              [calcTruncateWords]="truncateComment"
+                              [richText]="true" [truncateWords]="truncateNumber+15" (showMoreClicked)="onShowMoreClicked()"></app-text-show-more>
+
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="post.post_review.disadvantages">
+        <div class="ui-g-12 padding-top-0">
+
+          <span><strong>{{ 'GENERAL.Disadvantages' | translate }}:</strong></span>
+          <app-text-show-more [currentUserId]="currentUserId" [text]="post.post_review.disadvantages"
+                              [calcTruncateWords]="truncateComment"
+                              [richText]="true" [truncateWords]="truncateNumber+15" (showMoreClicked)="onShowMoreClicked()"></app-text-show-more>
+
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="post.images[0]">
+
+    <app-images-list [isMobile]="isMobile" [isBrowser]="isBrowser" [editMode]="false"
+
+                     [viewMode]="true" [images]="post.images" (previewOpened)="onImagePreview()"></app-images-list>
+  </ng-container>
+
+
+  <app-url-preview [urlPreview]="urlPreview" [showImage]="showUrlImage" [externalLink]="externalLink" (click)="onLinkClicked()"></app-url-preview>
+<ng-container *ngIf="post.type_details.code=='article'">
+   <div *ngIf="post.tags.length>0" class="ui-g-12">
+
+                      <p-chips [(ngModel)]="post.tags" id="tags" name="tags" [disabled]="true"
+                               title="{{ 'GENERAL.Hashtags' | translate }}">
+
+                        <ng-template let-item pTemplate="item">
+
+                              <span class="ui-chips-token-label ng-star-inserted"> <a class="text-white" (click)="onLinkClicked()"
+                                                                                      [routerLink]="'/hashtag/'+item+'/'+locale">
+                                <strong class="cursor-pointer"><u>{{item}} </u></strong> </a>
+                              </span>
+
+
+                        </ng-template>
+                      </p-chips>
+
+
+                    </div>
+  </ng-container>
+
+
+</ng-container>
+

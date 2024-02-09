@@ -1,0 +1,112 @@
+<ng-container *ngIf="images">
+
+  <ng-container *ngIf="images[0]">
+    <ng-container *ngIf="editMode">
+      <ng-container *ngFor="let image of images; let i = index">
+
+        <div class="ui-g-3 float-left">
+          <div class="preview-image">
+            <img *ngIf="image.file_details" src="{{image.file_details.small_image_url}}"
+                 alt="{{image.file_details.name}}" class="img-fluid"/>
+            <button pButton class="ui-button-secondary flat object-delete-button" type="button"
+                    (click)="deleteImage(i)"
+                    icon="pi pi-times"></button>
+          </div>
+
+
+        </div>
+
+
+      </ng-container>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="viewMode">
+
+      <ng-container *ngIf="images.length == 1 || !isBrowser">
+        <ng-container *ngIf="images.length>0">
+          <div *ngIf="images[0].file_details" class="ui-g-12 padding-0 box">
+
+            <img src="{{images[0].file_details.medium_image_url}}" alt="{{images[0].file_details.name}}"
+                 class="img-fluid cursor-pointer" (click)="showFullScreen()"/>
+
+
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="isBrowser">
+
+        <div class="ui-g-12 padding-0">
+          <ng-container *ngIf="galleryImages && images.length>1">
+            <div class="ui-g-12 padding-0">
+              <p-galleria [value]="galleryImages"
+                          [showThumbnails]="false"
+                          [showIndicators]="true"
+                          [showItemNavigators]="true"
+                          [numVisible]="7" (dblclick)="showFullScreen()" (click)="onGalleryClick()">
+
+                <ng-template pTemplate="item" let-item>
+                  <img [src]="item.previewImageSrc" style="width: 100%; display: block;"/>
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                  <div class="p-grid p-nogutter p-justify-center">
+                    <img [src]="item.thumbnailImageSrc" style="display: block;"/>
+                  </div>
+                </ng-template>
+              </p-galleria>
+            </div>
+            <!--<div class="ui-g-12 padding-0 box  right-thumbnail">-->
+            <!--<p-galleria [value]="galleryImages" [fullScreen]="fullScreen" thumbnailsPosition="right"-->
+
+            <!--[circular]="false" [showItemNavigators]="isMobile" [showThumbnails]="!isMobile"-->
+            <!--[numVisible]="4" (dblclick)="showFullScreen()" (click)="onGalleryClick()">-->
+
+            <!--<ng-template pTemplate="item" let-item>-->
+            <!--<img [src]="item.previewImageSrc" style="width: 100%; display: block;"/>-->
+            <!--</ng-template>-->
+            <!--<ng-template pTemplate="thumbnail" let-item>-->
+            <!--<div class="p-grid p-nogutter p-justify-center">-->
+            <!--<img [src]="item.thumbnailImageSrc" style="display: block;"/>-->
+            <!--</div>-->
+            <!--</ng-template>-->
+            <!--</p-galleria>-->
+            <!--</div>-->
+          </ng-container>
+
+          <div class="full-screen-galleria">
+            <p-galleria [value]="galleryImages" [(visible)]="fullScreen"
+                        [containerClass]="'image-container-style'" [numVisible]="9"
+                        [circular]="true" [fullScreen]="true"
+
+                        [showItemNavigators]="true"
+                        [showThumbnails]="false"
+                        [showIndicators]="true"
+
+
+                        [baseZIndex]="100000">
+              <ng-template pTemplate="item" let-item>
+                <img [src]="item.previewImageSrc" style="width: 100%; display: block;"/>
+              </ng-template>
+              <ng-template pTemplate="thumbnail" let-item>
+                <div class="p-grid p-nogutter p-justify-center">
+                  <img [src]="item.thumbnailImageSrc" style="display: block;"/>
+                </div>
+              </ng-template>
+            </p-galleria>
+          </div>
+        </div>
+
+
+      </ng-container>
+
+
+    </ng-container>
+
+  </ng-container>
+
+
+</ng-container>
+
+

@@ -1,0 +1,97 @@
+<ng-container *ngIf="company">
+
+  <div class="card padding-left-right-0 padding-top-0">
+    <div *ngIf="canDelete" class="ui-g-12 padding-0 profile-edit-panel">
+      <div class="ui-toolbar-group-right ql-color-white">
+
+        <button pButton class="ui-button-secondary flat" type="button"
+                (click)="deleteCompany()"
+                icon="pi pi-times"></button>
+      </div>
+    </div>
+
+    <div class="ui-g-12 padding-bottom-0 border-bottom-primary-small">
+      <div class="ui-toolbar-group-left vertical-middle">
+    <p-rating [ngModel]="company.eventsqty.rating" [cancel]="false" [disabled]="true"
+              [iconOnStyle]="{'color': '#FFC107', 'font-size': '1em'}"
+              [iconOffStyle]="{'color': '#757575', 'font-size': '1em'}"></p-rating>
+    <div><span
+      class="review-text">&nbsp;{{ 'GENERAL.Reviews' | translate }}
+      : {{company.eventsqty.related_reviews | thousandSuffixes: 1 }}</span>
+    </div>
+  </div>
+    </div>
+    <div class="ui-g-12 padding-0 profile-card-header" align="center">
+      <a class="cursor-pointer" (click)="showCompany()">
+        <ng-container *ngIf="company.name">
+          <strong>{{company.name}}</strong>
+        </ng-container>
+        <a  class="link-color cursor-pointer comment-date-col" (click)="showCompany()">
+          <br/>
+          <img *ngIf="company.logo_details" name="avatar" alt="{{company.name}}"
+               src="{{company.logo_details.small_image_url}}" class="card-image"/>
+          <img *ngIf="!company.logo_details" alt="{{company.name}}"
+               src="static/assets/img/company-default.png"
+               class="card-image"/>
+        </a>
+
+      </a>
+      <br/>
+      <span>@{{company.slug}}</span>
+      <br/>
+
+
+    </div>
+    <div class="ui-g-12 profile-card-content padding-0">
+
+
+      <div *ngIf="showDetails" class="ui-g-12" align="center">
+
+        <app-follow-company-button [user_id]="curretUser" [follow_status]="company.follow_status"
+                                   [company_id]="company.id"  (itemClicked)="onItemClicked()"
+                                   ></app-follow-company-button>
+
+
+      </div>
+      <div *ngIf="showDetails" class="ui-g-12">
+
+
+        <span>{{company.headline}}</span>
+      </div>
+
+      <div *ngIf="message" class="ui-g-12">
+
+
+        <span>{{message| truncate: truncateNumber}}</span>
+      </div>
+      <div class="ui-g-12">
+
+    <div  class="ui-toolbar-group-right"> <app-location-preview [country]="company.country_details"
+                                                     [city]="company.city_details"></app-location-preview></div>
+      </div>
+      <div *ngIf="showDetails" class="ui-g-12 border-top-primary-small" >
+        <a (click)="showCompany()">
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <span class="small-text select-text">{{ 'GENERAL.Followers' | translate }}</span><br/>
+            <span class="title select-text">{{company.eventsqty.followers | thousandSuffixes: 1 }}</span>
+          </div>
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <span class="small-text select-text">{{ 'POSTS.Posts' | translate }}</span><br/>
+            <span class="title select-text">{{publications_total | thousandSuffixes: 1 }}</span>
+          </div>
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <span class="small-text select-text">{{ 'GENERAL.Products' | translate }}</span><br/>
+            <span class="title select-text">{{company.eventsqty.products | thousandSuffixes: 1 }}</span>
+          </div>
+          <div class="ui-md-3 ui-g-6 padding-0" align="center">
+            <span class="small-text select-text">{{ 'COMPANY.Employees' | translate }}</span><br/>
+            <span class="title select-text">{{company.eventsqty.employees | thousandSuffixes: 1 }}</span>
+          </div>
+
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</ng-container>

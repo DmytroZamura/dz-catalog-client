@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="ui-g">
+    <ng-container *ngIf="showTitle">
+      <div class="ui-g-12 padding-bottom-0">
+        <h1>{{product.name}}</h1>
+      </div>
+    </ng-container>
+    <div class="ui-g-12  article ">
+      <app-text-show-more [text]="product.description" [richText]="true"></app-text-show-more>
+    </div>
+    <ng-container *ngIf="showOrderForm">
+      <div class="ui-g-12">
+        <form #orderForm="ngForm" (ngSubmit)="createOrder()">
+          <div class="ui-g form-group payment-form">
+            <ng-container *ngIf="price&&currencyCode">
+
+              <div class="ui-g-12 text-align-right">
+                    <span
+                      class="big-view-price-badge"><strong>{{price | currency:currencyCode :'symbol-narrow'  }}
+                      <ng-container *ngIf="product.unit_type">/ {{product.unit_type_details.name}}</ng-container></strong></span>
+
+
+              </div>
+            </ng-container>
+            <div class="ui-g-12 padding-0 vertical-middle">
+              <div class="ui-md-6 ui-g-12 text-align-right"><span class="payment-form-field-title">{{ 'GENERAL.Quantity' | translate }}:</span>
+              </div>
+              <div class="ui-md-6 ui-g-12 text-align-right">
+                <p-inputNumber id="qty" name="qty" [(ngModel)]="qty" [showButtons]="true"
+                               [step]="1" [min]="1"
+                               inputId="vertical"
+                               decrementButtonClass="ui-button-secondary" incrementButtonClass="ui-button-secondary"
+                               incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                               (ngModelChange)="calculateTotal()"
+                               #qtyField="ngModel"></p-inputNumber>
+
+
+              </div>
+            </div>
+            <div class="ui-md-6 ui-g-12 text-align-right"><span class="payment-form-field-title">{{ 'REQUEST.Total Amount' | translate }}:</span></div>
+            <div class="ui-md-6 ui-g-12 text-align-right"><span
+              class="payment-form-field-title"><b>{{total | currency:currencyCode :'symbol-narrow'  }}</b></span>
+            </div>
+
+
+            <div class="ui-g-12 text-align-center text-align-right message-box">
+              <button pButton type="submit" label="{{ 'BUTTONS.Start' | translate }}"
+                      [disabled]="!orderForm.form.valid || !qty || difference"
+                      icon="pi pi-check"></button>
+            </div>
+            <ng-container *ngIf="difference">
+              <div class="ui-g-12 text-align-center text-align-center">
+                <h3 class="color-rejected cursor-pointer" (click)="onMakePayments()">{{ 'PROMOTION.You need to top up your balance' | translate }}
+                  - {{difference | currency:currencyCode :'symbol-narrow'}}</h3>
+                <button pButton type="button"
+                        label="{{ 'PROMOTION.Make a payment' | translate }} {{difference | currency:currencyCode :'symbol-narrow'}}"
+                        (click)="onMakePayments()"></button>
+              </div>
+            </ng-container>
+
+          </div>
+
+        </form>
+      </div>
+    </ng-container>
+  </div>
+</div>

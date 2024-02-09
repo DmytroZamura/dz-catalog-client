@@ -1,0 +1,22 @@
+<ng-container *ngIf="community">
+<div class="ui-g-12 black-quote">
+
+
+ <div class="ui-toolbar-group-left align-items-center ql-color-white">
+
+          <a [routerLink]="['/community/'+community.id]" (click)="onItemClicked()">
+            <img *ngIf="community.image_details" alt="{{community.name}}"
+                 src="{{community.image_details.small_image_url}}"
+                 class="preview-image-small"/>
+            <img *ngIf="!community.image_details" alt="{{community.name}}"
+                 src="static/assets/img/community.png"
+                 class="preview-image-small"/>
+            &nbsp;&nbsp;&nbsp; </a>
+          <span class="preview-name-small"> <a [routerLink]="['/community/'+community.id]" (click)="onItemClicked()"
+                                                class="link-color">{{community.name | truncate : truncate_number}}</a> </span>
+
+
+        </div>
+</div>
+
+</ng-container>

@@ -1,0 +1,130 @@
+<ng-container *ngIf="profile">
+
+  <ng-container *ngIf="size !== 'actor'">
+    <div class="contacts">
+      <ul>
+        <li class="clearfix ">
+          <span  class="link-color cursor-pointer" (click)="showProfile()"
+             (mouseleave)="hidePreviewPanel()">
+            <img *ngIf="profile.img_details && profile.is_active" alt="{{profile.first_name}} {{profile.last_name }}"
+                 src="{{profile.img_details.small_image_url}}"  (mouseover)="showPreviewPanel($event)" class="user-preview-image-{{size}}"/>
+
+            <img *ngIf="!profile.img_details || !profile.is_active" alt="{{profile.first_name}} {{profile.last_name }}"
+                 src="static/assets/img/default-user.jpeg" (mouseover)="showPreviewPanel($event)"
+                 class="user-preview-image-{{size}}"/>
+          </span>
+          <ng-container *ngIf="product">
+            <span class="link-color cursor-pointer" (click)="showProduct()"
+               (mouseleave)="hidePreviewPanel()">
+              <img *ngIf="product.images[0]" alt="{{product.name}}" (mouseover)="showProductPreviewPanel($event)"
+                   src="{{product.images[0].image_details.small_image_url}}" class="preview-margin-image-{{size}}"/>
+
+              <img *ngIf="!product.images[0]" alt="{{product.name}}" (mouseover)="showProductPreviewPanel($event)"
+                   src="static/assets/img/default_product.png"
+                   class="preview-margin-image-{{size}}"/>
+            </span>
+          </ng-container>
+
+          <div class="contact-info">
+            <ng-container *ngIf="!((rating &&  product) || (editRating && product))">
+              <span  class="link-color cursor-pointer" (click)="showProfile()"
+                 (mouseover)="showPreviewPanel($event)"
+                 (mouseleave)="hidePreviewPanel()">
+                <ng-container *ngIf="!profile.is_active">
+                  <span class="user-preview-name-{{size}}">{{ 'GENERAL.А user is deleted' | translate }}</span>
+
+                </ng-container>
+                <ng-container *ngIf="profile.is_active">
+            <span
+              class="user-preview-name-{{size}}">{{profile.full_name| truncate : truncate_number}}
+              <ng-container *ngIf="showSlug"> <span class="text-muted">@{{profile.slug}}</span></ng-container>
+            </span>
+
+
+                  <span *ngIf="!profile.first_name"
+                        class="user-preview-name-{{size}}">{{profile.nickname| truncate : truncate_number}}</span>
+
+
+                  <ng-container *ngIf="showInfo && profile.is_active && !product">
+                <span *ngIf="profile.headline"
+                      class="user-preview-info-{{size}}">{{profile.headline | truncate : truncate_number + 4}}</span>
+                  </ng-container>
+                </ng-container>
+              </span>
+            </ng-container>
+
+            <ng-container *ngIf="(showInfo && product) || (rating && product) || (editRating && product)">
+              <ng-container *ngIf="product.published && !product.deleted">
+                <span class="link-color cursor-pointer" (click)="showProduct()"
+                   (mouseover)="showProductPreviewPanel($event)"
+                   (mouseleave)="hidePreviewPanel()">
+               <span
+                 class="user-preview-name-{{size}}"><strong>{{product.name | truncate : truncate_number}}</strong></span>
+
+                </span>
+
+              </ng-container>
+
+              <span *ngIf="product.deleted || !product.published"
+                    class="user-preview-name-{{size}}"><strong>{{'GENERAL.А product is deleted' | translate}}</strong></span>
+            </ng-container>
+
+            <ng-container *ngIf="rating || editRating">
+              <ng-container *ngIf="!product">
+                <span class="link-color cursor-pointer opacity1" (click)="showProfile()"
+                   (mouseover)="showPreviewPanel($event)"
+                   (mouseleave)="hidePreviewPanel()">
+                  <p-rating [ngModel]="rating" [cancel]="false" [disabled]="!editRating" (onRate)="onRate($event)"
+                            [iconOnStyle]="{'color': '#FFC107'}"></p-rating>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="product">
+                <span class="link-color cursor-pointer" (click)="showProduct()"
+                   (mouseover)="showProductPreviewPanel($event)"
+                   (mouseleave)="hidePreviewPanel()">
+                  <p-rating [ngModel]="rating" [cancel]="false" [disabled]="!editRating" (onRate)="onRate($event)"
+                            [iconOnStyle]="{'color': '#FFC107'}"></p-rating>
+                </span>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="message">
+                <span class="user-preview-message-{{size}} muted">
+                 <i><app-text-show-more [text]="message" [richText]="true" [currentUserId]="currentUser"
+                                        [truncateWords]="20" [showSeeMore]="false"></app-text-show-more>
+                 </i>
+                </span>
+              <!--<span class="user-preview-message-{{size}} muted"><i>{{message| truncate : truncate_number}}</i></span>-->
+
+            </ng-container>
+
+          </div>
+
+        </li>
+
+      </ul>
+
+
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="size == 'actor'">
+ <span class="select-text middle-text"
+       (click)="showProfile()" (mouseover)="showPreviewPanel($event)"
+       (mouseleave)="hidePreviewPanel()"><strong>
+   <ng-container *ngIf="profile.is_active && profile.user_id!=currentUser">
+{{profile.first_name}} {{profile.last_name}}</ng-container>
+   <ng-container *ngIf="profile.is_active && profile.user_id==currentUser">
+{{ 'GENERAL.You' | translate }}</ng-container>
+    <ng-container *ngIf="!profile.is_active">
+      {{ 'GENERAL.Nameless' | translate }}
+    </ng-container>
+
+ </strong></span>
+  </ng-container>
+
+  <ng-container *ngIf="showPreview && profile.is_active">
+    <app-preview-overlay-panel  [currentUser]="currentUser" [currencyCode]="currencyCode"
+                               [locale]="locale" (itemClicked)="onItemClicked()"
+                               #previewpanel></app-preview-overlay-panel>
+  </ng-container>
+</ng-container>

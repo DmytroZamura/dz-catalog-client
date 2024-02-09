@@ -1,0 +1,34 @@
+<ng-container *ngIf="isBrowser && accounts">
+
+
+  <div class="ui-g dashboard main-component-layout">
+
+    <div class="ui-g-12 info-search-list-size">
+      <div class="ui-g-12 ui-fluid">
+        <ng-container *ngIf="msgs1">
+          <p-message id="messages" text="{{msgs1}}" severity="{{severity}}" #messages></p-message>
+        </ng-container>
+      </div>
+      <div class="ui-g-12 ">
+        <h1>{{ 'PROMOTION.Payment accounts' | translate }}:</h1>
+      </div>
+
+      <ng-container *ngFor="let account of accounts; let i = index">
+        <div class="ui-g-12">
+
+
+          <app-payment-account-preview [account]="account"
+                                       (makePaymentClicked)="onMakePayment(account.id, account.currency_details, i)"></app-payment-account-preview>
+
+
+        </div>
+
+      </ng-container>
+
+    </div>
+  </div>
+
+
+  <app-make-payment-dialog [locale]="app.translate.currentLang" (paymentCreated)="onPaymentCreated($event)"
+                           #paymentDialog></app-make-payment-dialog>
+</ng-container>

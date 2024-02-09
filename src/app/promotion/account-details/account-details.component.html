@@ -1,0 +1,107 @@
+<ng-container *ngIf="!account">
+  <div class="ui-g-12 text-center loading" align="center">
+    <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                       animationDuration=".5s"></p-progressSpinner>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="account">
+  <div class="ui-g dashboard main-component-layout">
+
+    <div class="ui-g-12 info-search-list-size">
+      <div class="ui-g-12 ui-fluid">
+        <ng-container *ngIf="msgs1">
+          <p-message id="messages" text="{{msgs1}}" severity="{{severity}}" #messages></p-message>
+        </ng-container>
+      </div>
+
+
+      <div class="ui-g-12 padding-bottom-0 padding-top-0">
+        <h2>{{ 'PROMOTION.Account Balance' | translate }}</h2>
+      </div>
+
+      <div class="ui-g-12 padding-top-0">
+
+
+        <app-payment-account-preview [account]="account" [shortMode]="false" [showDetails]="false"
+                                     (makePaymentClicked)="onMakePayment(account.id, account.currency_details)"></app-payment-account-preview>
+
+
+      </div>
+
+      <div class="ui-g-12">
+        <div class="card">
+          <div class="ui-g">
+
+            <div class="ui-g-12">
+              <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}">
+
+
+              </p-tabMenu>
+
+            </div>
+            <div class="ui-g-12">
+              <ng-container *ngIf="activeTab==0 && account">
+
+
+                <app-items-list-agile [endPoint]="'get-payments/'" [itemsPerPage]="20" [itemsType]="'payments'"
+                                      [account]="account.id"
+                                      #paymentslist>
+                  <ng-template let-item let-i="index" #body>
+
+
+                    <div class="ui-g-12 padding-0">
+                      <app-payment-item [currencyCode]="account.currency_details.code" [payment]="item"
+                                        [index]="i"></app-payment-item>
+                    </div>
+
+
+                  </ng-template>
+
+                </app-items-list-agile>
+
+              </ng-container>
+
+
+              <ng-container *ngIf="activeTab==1 && account">
+
+                <app-items-list-agile [endPoint]="'get-payment-orders/'" [itemsPerPage]="20"
+                                      [itemsType]="'payment-order'"
+                                      [account]="account.id"
+
+                                      #paymentOrderslist>
+                  <ng-template let-item let-i="index" #body>
+
+
+
+                        <div class="ui-g-12 padding-0">
+                          <app-payment-order-item [currencyCode]="account.currency_details.code" [order]="item"
+                                                  [index]="i"></app-payment-order-item>
+                        </div>
+
+
+                  </ng-template>
+
+                </app-items-list-agile>
+
+
+
+              </ng-container>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <app-make-payment-dialog [locale]="app.translate.currentLang"
+                           #paymentDialog></app-make-payment-dialog>
+
+</ng-container>
+
+
+

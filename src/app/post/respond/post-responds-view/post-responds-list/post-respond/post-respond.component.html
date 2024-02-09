@@ -1,0 +1,148 @@
+<div class="card padding-0">
+  <div class="ui-g">
+    <div class="ui-g-12 padding-0">
+
+
+      <div class="ui-g-12  vertical-middle  padding-0 border-bottom-small bg-light">
+        <div class="ui-md-8 ui-g-7">
+          <a [routerLink]="['/post/'+respond?.post]"> <span><b>{{respond?.post_details.post_title}}</b> </span></a>
+        </div>
+        <div class="ui-md-4 ui-g-5 text-align-right">
+
+          <ng-container *ngIf="userType=='responder'">
+
+            <span
+              class="status-badge-{{respond?.status_details.code}}"> {{'GENERAL.' + respond?.status_details.code | translate}}</span>
+
+          </ng-container>
+          <ng-container *ngIf="userType=='owner'">
+            <p-rating [(ngModel)]="respond.rating" [cancel]="false" [iconOnStyle]="{'color': '#FFC107'}"
+                      [disabled]="userType!=='owner'"
+                      (onRate)="updateRating()"></p-rating>
+          </ng-container>
+
+
+        </div>
+
+      </div>
+      <div class="ui-g-8 padding-bottom-0">
+        <ng-container *ngIf="userType=='owner'">
+          <ng-container *ngIf="!respond.company">
+            <app-user-preview-short [userData]="respond?.user_details" [currentUser]="currentUserId"
+                                    [showPreview]="false"
+                                    [truncate_number]="truncateNumber"></app-user-preview-short>
+          </ng-container>
+          <ng-container *ngIf="respond.company">
+            <ng-container *ngIf="respond.company_details">
+              <app-company-user-preview-short [userData]="respond?.user_details" [company]="respond.company_details"
+                                              [truncate_number]="truncateNumber"></app-company-user-preview-short>
+            </ng-container>
+            <ng-container *ngIf="!respond.company_details && respond.user_details">
+              <app-company-user-preview-short [userData]="respond?.user_details"
+                                              [company]="respond.company_default_details"
+                                              [truncate_number]="truncateNumber"></app-company-user-preview-short>
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="userType=='responder'">
+          <ng-container *ngIf="!respond.post_details.company && respond.post_details.user_data">
+            <app-user-preview-short [userData]="respond.post_details.user_data" [currentUser]="currentUserId"
+                                    [showPreview]="false"
+                                    [truncate_number]="truncateNumber"></app-user-preview-short>
+          </ng-container>
+          <ng-container *ngIf="respond.post_details.company">
+            <ng-container *ngIf="respond.post_details.company_details">
+              <app-company-user-preview-short [userData]="respond.post_details.user_data"
+                                              [company]="respond.post_details.company_details"
+                                              [truncate_number]="truncateNumber"></app-company-user-preview-short>
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div class="ui-g-4 padding-bottom-0 text-align-right">
+
+
+        <span class="date-time-text" style="float: right">{{respond.create_date | dateAgo: locale}}</span> <br/>
+        <ng-container *ngIf="respond.chat_details">
+      <span *ngIf="respond.chat_details.chat_details.unread_messages>0" class="count-badge left-count-badge"><strong>&nbsp; {{respond?.chat_details.chat_details.unread_messages}}
+        &nbsp;</strong></span>
+
+          <button pButton type="button" icon="pi pi-envelope" (click)="onChatClick()"
+                  class="ui-button-secondary flat"></button>
+
+        </ng-container>
+      </div>
+      <ng-container *ngIf="respond.proposed_price && respond.currency_details">
+        <div class="ui-g-6 ui-md-7 text-right padding-0">
+        </div>
+        <div class="ui-g-6 ui-md-5 text-right padding-0"
+             style="background-color: #FFA000; color: white; height: 2em; ">
+       <span
+         style="float: right; font-size: 1em; margin-top: 0.5em"><strong>{{respond.proposed_price | currency:respond.currency_details.code :'symbol-narrow'  }}&nbsp;&nbsp;</strong></span>
+
+
+        </div>
+      </ng-container>
+
+      <div class="ui-g-12 padding-top-0 padding-left-right-0 ">
+
+        <ng-container *ngIf="postType=='job'">
+          <div class="ui-g-12">{{ 'USERPROFILE.Resume' | translate }}:
+            <a *ngIf="respond.resume_details"
+               href="{{respond?.resume_details.file_url}}">{{respond?.resume_details.name}}</a>
+
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="postType=='request' && respond.documents">
+          <ng-container *ngIf="respond.documents[0]">
+            <div class="ui-g-12">
+              <app-attached-documents [documents]="respond.documents" [editMode]="false"></app-attached-documents>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <div class="ui-g-12  padding-top-0" *ngIf="respond.cover_letter">
+          <app-text-show-more [text]="respond.cover_letter" [richText]="false" [currentUserId]="currentUserId"
+                              [truncate_number]="50"></app-text-show-more>
+        </div>
+
+        <div class="ui-g-12 border-top-small border-bottom-small middle-text bg-supper-light"><i
+          class="pi pi-envelope select-button-icon"></i>
+          <span> {{respond?.contact_email}}</span> <span
+            *ngIf="respond.contact_phone"> | <i
+            class="pi pi-phone select-button-icon"></i>&nbsp;{{respond?.contact_phone}}</span> <span
+            *ngIf="respond.skype"> | <b>Skype:</b> {{respond?.skype}}</span>
+
+        </div>
+        <ng-container *ngIf="userType=='owner'">
+          <div class="ui-g-12 ">
+            <div class="small-comment-box">
+
+                <app-inplace-text-editor [currentUserId]="currentUserId" [text]="respond.comment"
+                                         [placeholder]="'GENERAL.Comment placeholder' | translate"
+                [writePlaceholder]="'GENERAL.Click to write a comment' | translate" (textChange)="onSaveComment($event)"></app-inplace-text-editor>
+
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="userType=='owner'">
+          <div class="ui-g-12">
+            <div class="select-button-mobile-line customer-buttons">
+
+              <app-select-common-item [item]="respond.status_details" [items]="statusesList" [viewType]="2"
+                                      [sortByName]="false" [middleText]="true"
+                                      [disabled]="respond.post_details.deleted"
+                                      (itemChange)="onStatusSelected($event)"></app-select-common-item>
+            </div>
+          </div>
+        </ng-container>
+
+
+      </div>
+    </div>
+  </div>
+</div>

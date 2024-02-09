@@ -1,0 +1,131 @@
+<ng-container *ngFor="let activity of activities; let i = index"  >
+  <ng-container *ngIf="activity.actor">
+    <ng-container *ngIf="i>1">,</ng-container>
+    <ng-container *ngIf="i==0 && showFirstProfileFull">
+
+      <ng-container *ngIf="!actorIsCompany">
+        <app-user-preview-short [userData]="activity.actor" [size]="'small'" [showPreview]="false" [locale]="locale"
+                                [showInfo]="true" [truncate_number]="truncateNumber" (itemClicked)="onItemClicked()"
+                                [currentUser]="currentUserId"></app-user-preview-short>
+      </ng-container>
+      <ng-container *ngIf="actorIsCompany">
+        <app-company-preview-short [truncate_number]="truncateNumber" [size]="'small'" [company]="activity.actor"
+                                   (itemClicked)="onItemClicked()" [showPreview]="false" [locale]="locale"
+                                   [currentUser]="currentUserId"></app-company-preview-short>
+      </ng-container>
+
+
+    </ng-container>
+    <ng-container>
+
+      <ng-container *ngIf="i==1 && showFirstProfileFull">
+                        <span
+                          class="middle-text"><b> {{'GENERAL.as well as' | translate}}</b> </span>
+      </ng-container>
+      <ng-container *ngIf="i>0 || !showFirstProfileFull">
+        <ng-container *ngIf="!actorIsCompany">
+          <app-user-preview-short [userData]="activity.actor" [size]="'actor'" [showPreview]="false"
+                                  [showInfo]="false" [truncate_number]="truncateNumber"
+                                  [currentUser]="currentUserId" [locale]="locale"
+                                  (itemClicked)="onItemClicked()"></app-user-preview-short>
+        </ng-container>
+        <ng-container *ngIf="actorIsCompany">
+          <app-company-preview-short [truncate_number]="truncateNumber" [size]="'actor'" [company]="activity.actor"
+                                     [showPreview]="false" [currentUser]="currentUserId"
+                                     [locale]="locale"
+                                     [showInfo]="false" (itemClicked)="onItemClicked()"></app-company-preview-short>
+        </ng-container>
+
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="verb=='user message' || verb=='company message'">
+  <span class="middle-text">&nbsp;<b>{{ 'GENERAL.New message' | translate }}:</b></span>
+</ng-container>
+
+
+<ng-container *ngIf="verb=='company_follower' || verb=='followcompany'">
+  <ng-container
+    *ngIf="activities.length==1"><span
+    class="middle-text">&nbsp;<b>{{'GENERAL.follows your company' | translate}}</b></span>
+  </ng-container>
+  <ng-container
+    *ngIf="activities.length>1"><span
+    class="middle-text">&nbsp;<b>{{'GENERAL.follow your company' | translate}}</b></span>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="verb=='profile_follower'">
+  <ng-container
+    *ngIf="activities.length==1"><span
+    class="middle-text">&nbsp;<b>{{'GENERAL.follows you' | translate}}</b></span>
+  </ng-container>
+  <ng-container
+    *ngIf="activities.length>1"><span
+    class="middle-text">&nbsp;<b>{{'GENERAL.follow you' | translate}}</b></span>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="verb=='like'">
+  <span class="middle-text">&nbsp;<b>{{ 'POSTS.likes this' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='comment_like'">
+  <span class="middle-text">&nbsp;<b>{{ 'POSTS.liked your comment' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='comment'">
+  <span class="middle-text">&nbsp;<b>{{ 'POSTS.commented on this' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='user community_invitation' || verb=='company community_invitation'">
+  <span class="middle-text">&nbsp;<b>{{ 'COMMUNITY.sent a membership request' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='user_community_member' || verb == 'company_community_member'">
+  <span class="middle-text">&nbsp;<b>{{ 'COMMUNITY.are a member of the community' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='community_administrator_created'">
+  <span class="middle-text">&nbsp;<b>{{ 'COMMUNITY.is new community administrator' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='community_administrator_deleted'">
+  <span class="middle-text">&nbsp;<b>{{ 'COMMUNITY.is no longer a community administrator' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='company_administrator_created'">
+  <span class="middle-text">&nbsp;<b>{{ 'COMPANY.is new company administrator' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='company_administrator_deleted'">
+  <span class="middle-text">&nbsp;<b>{{ 'COMPANY.is no longer a company administrator' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='job_post_response'">
+  <span class="middle-text">&nbsp;<b>{{ 'GENERAL.A new applicant for your job post' | translate }}:</b></span>
+</ng-container>
+
+
+<ng-container *ngIf="verb=='user offering_post_response' || verb=='company offering_post_response'">
+  <span class="middle-text">&nbsp;<b>{{ 'GENERAL.A new response to your offering' | translate }}:</b></span>
+</ng-container>
+
+<ng-container *ngIf="verb=='user request_post_response' || verb=='company request_post_response'">
+  <span class="middle-text">&nbsp;<b>{{ 'GENERAL.A new response to your request' | translate }}:</b></span>
+</ng-container>
+
+<ng-container
+  *ngIf="customerRequestVerbs.includes(verb)">
+  <span class="middle-text">&nbsp;<b>{{ 'GENERAL.New Request' | translate }} </b></span>
+  <ng-container *ngIf="activities[0].object">
+    <ng-container *ngIf="activities[0].object.id">
+      <span>№{{activities[0].object.id}}  </span>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+

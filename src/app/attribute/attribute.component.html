@@ -1,0 +1,119 @@
+<ng-container *ngIf="attribute">
+  <div class="ui-md-5 ui-g-12 padding-2">
+    <ng-container *ngIf="!attribute.user_attribute || !editMode">
+      <span><strong>{{name}}:</strong></span>
+    </ng-container>
+
+    <ng-container *ngIf="attribute.user_attribute && editMode">
+
+      <p-inplace [active]="attribute.editName">
+    <span pInplaceDisplay>
+        <span >{{name}}:</span>
+    </span>
+        <span pInplaceContent>
+    <input id="user_attribute_name{{attributeId}}" name="user_attribute_name{{attributeId}}" title="Attribute {{name}}"
+           type="text" pInputText [(ngModel)]="attribute.name"
+           [placeholder]="'GENERAL.Enter a name' | translate"
+           (input)="onNameInput()"
+
+           [maxlength]="40"/>
+    </span>
+      </p-inplace>
+    </ng-container>
+
+
+  </div>
+
+  <ng-container *ngIf="attribute.values">
+    <div class="ui-md-7 ui-g-12 padding-2">
+      <ng-container *ngIf="!attribute.multiple">
+        <ng-container *ngIf="attribute.values[0]">
+          <ng-container *ngIf="!attribute.user_attribute">
+            <ng-container *ngIf="attribute.attribute_details.type==1">
+              <ng-container *ngIf="editMode && values">
+                <p-dropdown id="dropdown{{attributeId}}" name="dropdown{{attributeId}}" [options]="values"
+                            [(ngModel)]="attribute.values[0].value_list_details" [filter]="values.length>7"
+                            placeholder="{{ 'GENERAL.Select' | translate }}"
+                            optionLabel="name" [showClear]="true" (onChange)="onValueChanged($event)"></p-dropdown>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="!editMode && attribute.values[0].value_list_details">
+              {{attribute.values[0].value_list_details.name}}
+            </ng-container>
+            <ng-container *ngIf="attribute.attribute_details.type==2">
+              <ng-container *ngIf="editMode">
+                <input id="value_number{{attributeId}}" name="value_number{{attributeId}}" title="{{name}}"
+                       type="number" pInputText pKeyFilter="pnum"
+                       placeholder="{{ 'GENERAL.Enter value' | translate }}"
+                       [(ngModel)]="attribute.values[0].value_number"/>
+
+              </ng-container>
+              <ng-container *ngIf="!editMode">
+                {{attribute.values[0].value_number | number : '1.0-2'}}
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="attribute.attribute_details.type==3">
+              <ng-container *ngIf="editMode">
+                <input id="value_string{{attributeId}}" name="value_string{{attributeId}}" title="{{name}}"
+                       type="text" pInputText
+                       placeholder="{{ 'GENERAL.Enter value' | translate }}"
+                       [(ngModel)]="attribute.values[0].value_string" [maxlength]="150"/>
+              </ng-container>
+              <ng-container *ngIf="!editMode">
+                {{attribute.values[0].value_string}}
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="attribute.attribute_details.type==4">
+
+              <p-checkbox id="checkbox{{attributeId}}" name="checkbox{{attributeId}}"
+                          [(ngModel)]="attribute.values[0].value_boolean" binary="true" [disabled]="!editMode"
+                          (onChange)="onAttributeChanged()"></p-checkbox>
+            </ng-container>
+            <ng-container *ngIf="attribute.attribute_details.type==5">
+              <ng-container *ngIf="editMode">
+                <input id="value_integer{{attributeId}}" name="value_integer{{attributeId}}" title="{{name}}"
+                       type="number" pInputText pKeyFilter="pint"
+                       placeholder="{{ 'GENERAL.Enter value' | translate }}"
+                       [(ngModel)]="attribute.values[0].value_integer"/>
+              </ng-container>
+              <ng-container *ngIf="!editMode">
+                {{attribute.values[0].value_integer | number : '1.0-0'}}
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="attribute.user_attribute">
+
+
+            <ng-container *ngIf="editMode">
+              <input id="user_value{{attributeId}}" name="user_value{{attributeId}}" title="{{name}}" type="text"
+                     pInputText
+                     placeholder="{{ 'GENERAL.Enter value' | translate }}"
+                     [(ngModel)]="attribute.values[0].value_string" [maxlength]="150"/>
+            </ng-container>
+            <ng-container *ngIf="!editMode">
+              {{attribute.values[0].value_string}}
+            </ng-container>
+
+
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="attribute.multiple">
+        <ng-container *ngIf="attribute.attribute_details.type==1">
+          <ng-container *ngIf="editMode">
+            <p-multiSelect id="multiSelect{{attributeId}}" name="multiSelect{{attributeId}}" [options]="values"
+                           [(ngModel)]="object_values" optionLabel="name" (onChange)="onMultiSelectChange()"
+                           [dataKey]="'id'" [maxSelectedLabels]="4"
+                           [defaultLabel]="'GENERAL.Choose' | translate"
+                           [selectedItemsLabel]="'{0} - ' + ('GENERAL.items selected' | translate)"></p-multiSelect>
+          </ng-container>
+          <ng-container *ngIf="!editMode">
+            <ng-container *ngFor="let value of object_values; let i = index"  >
+              <span *ngIf ="i>0 && i<object_values.length">, </span> <span> {{value.name}}</span>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>

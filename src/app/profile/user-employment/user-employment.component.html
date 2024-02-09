@@ -1,0 +1,98 @@
+<p-panel *ngIf="edit_mode || employments">
+  <p-header>
+    <div class="ui-g-10">
+      <ng-container *ngIf="!education">
+        <span class="title">{{ 'USERPROFILE.Employment' | translate }} </span>
+      </ng-container>
+      <ng-container *ngIf="education">
+        <span class="title">{{ 'USERPROFILE.Education' | translate }} </span>
+      </ng-container>
+    </div>
+    <div class="ui-g-2">
+      <div class="ui-toolbar-group-right">
+      <button *ngIf="edit_mode" type="button" class="ui-button-secondary flat" [disabled]="disabled"
+              pButton (click)="addEmploymnet()" icon="pi pi-plus"></button>
+        </div>
+    </div>
+  </p-header>
+  <ng-container *ngFor="let employment of employments; let i = index"  >
+
+    <app-edit-user-employment *ngIf="edit_mode" [employment]="employment" [disabled]="disabled" [education]="education"
+                              [language_code]="language_code"
+                              (employmentDeleted)="onEmploymentDeleted(i)"></app-edit-user-employment>
+
+
+    <ng-container *ngIf="!edit_mode">
+
+      <div class="ui-g dashboard">
+        <div class="ui-g-12 contacts">
+          <div class="ui-toolbar-group-left ql-color-white">
+            <ul>
+              <li class="clearfix">
+                <ng-container *ngIf="employment.company_details">
+                  <a [routerLink]="['/company/'+employment.company_details.slug+'/'+this.language_code]"> <img
+                    class="middle-profile-image"
+                    *ngIf="employment.company_details.logo_details" alt="{{employment.company_details.name}}"
+                    src="{{employment.company_details.logo_details.small_image_url}}"/>
+                    <img *ngIf="!employment.company_details.logo_details" alt="{{employment.company_details.name}}"
+                         src="static/assets/img/company-default.png" class="middle-profile-image"
+                         /></a>
+                </ng-container>
+
+                <img *ngIf="!employment.company_details" alt="company" class="middle-profile-image"
+                     src="static/assets/img/company-default.png"/>
+
+                <div class="contact-info">
+                  <span class="name">{{employment.title}}</span>
+
+                  <ng-container *ngIf="employment.company_details">
+                    <a class="link-color"
+                       [routerLink]="['/company/'+employment.company_details.slug+'/'+this.language_code]">
+                      <span class="name"><b>{{employment.company_details.name}}</b></span></a>
+                  </ng-container>
+
+                  <ng-container *ngIf="!employment.company_details">
+                    <span class="name"><b>{{employment.company_name}}</b></span>
+                  </ng-container>
+                  <span class="location">
+                    <ng-container *ngIf="employment.start_date">
+                {{employment.start_date| date:'MMM, y'}} -
+                  </ng-container>
+
+                     <ng-container *ngIf="employment.present_time">
+                {{ 'USERPROFILE.Present' | translate }}
+                  </ng-container>
+
+                      <ng-container *ngIf="!employment.present_time && employment.end_date">
+                {{employment.end_date| date:'MMM, y'}}
+                  </ng-container>
+
+
+
+      </span>
+
+                  <app-location-preview [country]="employment.country_details"
+                                        [city]="employment.city_details"></app-location-preview>
+
+                </div>
+
+              </li>
+            </ul>
+
+
+            <ng-container *ngIf="employment.description">
+
+              <app-text-show-more [text]="employment.description" [richText]="true" [currentUserId]="currentUserId"
+                                  [calcTruncateWords]="false"
+                                  [truncateWords]="60"></app-text-show-more>
+
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <hr class="small-hr"/>
+    </ng-container>
+
+  </ng-container>
+</p-panel>

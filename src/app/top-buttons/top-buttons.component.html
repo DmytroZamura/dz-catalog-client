@@ -1,0 +1,31 @@
+    <div class="app-name" joyrideStep="search" title="{{ 'ONBOARDING.searchTitle' | translate }}"
+           text="{{ 'ONBOARDING.searchText' | translate }}" stepPosition="bottom">
+
+        <ng-container *ngIf="appService.loadingIcons">
+          <app-search-box [searchId]="'topSearch'" [showRightButton]="false" [inputgroupClass]="'bg-white'"
+                          [showLeftButton]="false"
+                          [showRightIcon]="true" [rightIconClass]="'top-bar-search-icon'"
+                          [keyword]="keyword"
+                          [inputClass]="'topbar-search-input'" [onlyButtonEvent]="true" [suggestions]="true"
+                          (searchKeyword)="onSearch($event)" #searchBox></app-search-box>
+        </ng-container>
+
+
+      </div>
+
+
+    <ng-container>
+
+      <div class="show-desktop top-bar-button-container" joyrideStep="create"
+           title="{{ 'ONBOARDING.createTitle' | translate }}"
+           text="{{ 'ONBOARDING.createText' | translate }}" stepPosition="bottom">
+        <ng-container *ngIf="appService.loadingIcons">
+          <p-splitButton label="{{ 'BUTTONS.Create' | translate }}" icon="pi pi-plus" [model]="items"
+                         (onClick)="createButton.onDropdownButtonClick(null)"
+                         styleClass="ui-button-secondary top-create-button"
+                         #createButton></p-splitButton>
+        </ng-container>
+
+      </div>
+
+    </ng-container>

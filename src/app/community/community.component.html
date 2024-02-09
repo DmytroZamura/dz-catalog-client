@@ -1,0 +1,80 @@
+<ng-container *ngIf="isBrowser">
+
+  <ng-container *ngIf="!community">
+    <div class="ui-g-12 text-center loading" align="center">
+      <p-progressSpinner strokeWidth="8" fill="#EEEEEE"
+                         animationDuration=".5s"></p-progressSpinner>
+    </div>
+  </ng-container>
+
+  <div class="ui-g">
+    <div class="ui-g-12 padding-0">
+      <div class="layout-top">
+        <div class="card" *ngIf="community">
+          <div class="align-items-center">
+            <ng-container *ngIf="!isMobile">
+              <img *ngIf="community.image_details" alt="{{community.name}}"
+                   src="{{community.image_details.file_url}}"
+                   class="top-tab-image "/>
+              <img *ngIf="!community.image_details" alt="{{community.name}}"
+                   src="static/assets/img/community.png"
+                   class="top-tab-image "/>&nbsp;
+              &nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </ng-container>
+            <p-tabMenu [model]="items" [activeItem]="items[activeTab]" [style]="{'border': 'none'}">
+              <ng-template pTemplate="item" let-item let-i="index">
+
+          <span>&nbsp;&nbsp;&nbsp;
+            {{item.label}}</span>
+                <ng-container *ngIf="item.badge">
+                  <ng-container *ngIf="item.badge>0">
+                    &nbsp;&nbsp;<span
+                    class="count-badge">&nbsp;&nbsp;{{item.badge | thousandSuffixes: 1 }}&nbsp;&nbsp;</span>
+                  </ng-container>
+                </ng-container>
+              </ng-template>
+
+            </p-tabMenu>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g-12 layout-work">
+      <ng-container *ngIf="activeTab==0 && community">
+        <app-community-feed [community]="community" (joined)="onJoined()" (leaved)="onLeaved()"></app-community-feed>
+
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==1 && community">
+        <app-community-members *ngIf="community" [community]="community" [locale]="language"
+                               [currentUserId]="currentUserId" [isMobile]="isMobile"></app-community-members>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab==2 && community">
+        <app-community-companies *ngIf="community" [community]="community" [locale]="language"
+                                 [currentUserId]="currentUserId"></app-community-companies>
+
+      </ng-container>
+
+
+      <ng-container *ngIf="activeTab==3 && community">
+        <app-community-products *ngIf="community" [community]="community.id" [isMobile]="isMobile"
+                                [locale]="language"></app-community-products>
+
+      </ng-container>
+
+
+      <ng-container *ngIf="activeTab==4 && community.admin_status">
+        <app-community-invitations *ngIf="community" [community]="community"
+                                   (invitationProcessed)="onInvitationProcessed()"
+                                   #invitations></app-community-invitations>
+
+      </ng-container>
+
+    </div>
+  </div>
+</ng-container>

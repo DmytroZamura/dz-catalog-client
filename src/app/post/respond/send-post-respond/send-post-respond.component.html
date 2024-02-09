@@ -1,0 +1,158 @@
+<ng-container *ngIf="userDetails && respond">
+  <p-dialog [(visible)]="show_dialog" [appendTo]="'body'" [header]="'GENERAL.Response to publication' | translate"
+            [styleClass]="'mobile-dialog'" [modal]="true">
+
+    <div class="ui-g ui-fluid  dashboard">
+      <div class="ui-g-12 padding-top-0 posts-list-size">
+        <form #applicantForm="ngForm" (ngSubmit)="onSendRespond()">
+          <p-scrollPanel [styleClass]="'dialog-scroll'">
+            <div class="ui-g ui-fluid">
+              <ng-container *ngIf="postType=='job'">
+                <div *ngIf="userDetails" class="ui-g-12 ui-md-12">
+                  <app-user-preview-short [userData]="userDetails" [currentUser]="userDetails.user_profile.user_id"
+                                          [showLink]="false"
+                                          [truncate_number]="50"></app-user-preview-short>
+                </div>
+              </ng-container>
+              <div class="ui-g form-group">
+                <ng-container *ngIf="postType!='job'">
+                  <div class="ui-g-12" >
+                    <app-select-user-or-company [viewType]="1" [disabled]="disabledSelectUserOrCompany"
+                                                [selected_company]="company"
+                                                (selectedRole)="onSelectedRole($event)"></app-select-user-or-company>
+                  </div>
+                </ng-container>
+
+                <div class="ui-g-12 ui-md-12">
+
+         <span class="md-inputfield">
+
+        <input id="email" name="email" type="text" pInputText
+               [(ngModel)]="respond.contact_email" required
+               pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" #email="ngModel"/>
+        <label for="email">{{ 'GENERAL.Contact Email' | translate }}:</label>
+
+           <div [hidden]="email.valid ">
+
+           <div *ngIf="email.errors && email.errors.required" class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           <div *ngIf="email.errors && email.errors.pattern" class="ui-message ui-messages-error ui-corner-all">
+               {{ 'GENERAL.This field is invalid' | translate }}
+            </div>
+           </div>
+         </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+
+                       <span class="md-inputfield">
+        <input id="phone_number" name="phone_number"  type="text"
+               pInputText
+               [(ngModel)]="respond.contact_phone"/>
+
+        <label for="phone_number">{{ 'GENERAL.Contact Phone Number' | translate }}:</label>
+
+         </span>
+
+
+                </div>
+                <div class="ui-g-12 ui-md-6">
+
+                       <span class="md-inputfield">
+        <input id="skype" name="skype" type="text"
+               pInputText
+               [(ngModel)]="respond.skype"/>
+
+        <label for="skype">Skype:</label>
+
+         </span>
+
+
+                </div>
+                <ng-container *ngIf="postType != 'job'">
+                  <div class="ui-g-8">
+            <span class="md-inputfield">
+
+               <input id="price" name="price" class="text-align-right" type="number" pInputText
+                      [(ngModel)]="respond.proposed_price"
+                      pKeyFilter="pnum"/>
+
+
+              <label for="price">{{ 'GENERAL.Proposed Price' | translate }}</label>
+               </span>
+
+                  </div>
+
+                  <div class="ui-g-4">
+
+
+
+
+                     <app-select-common-item [(item)]="respond.currency_details" [endpoint]="'currencies'"
+                                          [showFilter]="true"
+                                          [sortByName]="true" [showClear]="false"
+                                          (itemChange)="onCurrencyChange($event)"></app-select-common-item>
+
+                  </div>
+                </ng-container>
+
+
+                <div class="ui-g-12">
+                  <label for="message"><strong>{{ 'GENERAL.Message' | translate }}:</strong> </label>
+                  <textarea id="message" name="message" pInputTextarea
+                            [(ngModel)]="respond.cover_letter" placeholder=""
+                            rows="6" [maxlength]="1000"></textarea>
+                </div>
+
+                <ng-container *ngIf="postType=='request'">
+                  <div class="ui-g-12 padding-0">
+                    <app-attached-documents [documents]="respond.documents"
+                                            (documentsChanged)="onDocumentsChanged($event)"
+                                            [editMode]="true"></app-attached-documents>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="postType=='job'">
+                  <div class="ui-g-12">
+                    <span>{{ 'GENERAL.Your CV' | translate }}:</span>
+                    <ng-container *ngIf="selectedResume"><b> {{selectedResume.file_details.name}}</b></ng-container>
+                    <ng-container *ngIf="!selectedResume && resumeRequred && resumeChecked"><span
+                      class="error-text"> {{ 'GENERAL.CV required' | translate }}</span>
+                    </ng-container>
+                  </div>
+
+                  <div class="ui-g-12 border-primary-small">
+                    <app-resume [profile]="userDetails.user_profile.id" [selectMode]="true"
+                                (resumeSelected)="onResumeSelected($event)"
+                                ></app-resume>
+                  </div>
+
+                </ng-container>
+              </div>
+
+
+            </div>
+          </p-scrollPanel>
+          <div class="ui-g-12 text-align-center">
+            <button pButton type="button" class="ui-button-secondary flat" label="{{ 'BUTTONS.Cancel' | translate }}"
+                    (click)="onCancel()" style="width: auto"></button>
+
+            &nbsp;&nbsp;
+            <button pButton type="submit" label="{{ 'BUTTONS.Send' | translate }}"
+                    [disabled]="disabled_save || !applicantForm.form.valid "
+                    style=" width: auto"></button>
+          </div>
+
+        </form>
+
+
+      </div>
+    </div>
+  </p-dialog>
+</ng-container>
+
+<app-process-dialog [header]="'GENERAL.Response to publication' | translate" [processName]="'GENERAL.Sending' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

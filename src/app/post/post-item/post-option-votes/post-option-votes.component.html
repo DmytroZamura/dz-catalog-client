@@ -1,0 +1,53 @@
+<ng-container *ngIf="options">
+  <ng-container *ngIf="options.length>1">
+    <ng-container *ngFor="let option of options; let i = index"  >
+
+      <div class="ui-g-11">
+        {{option.name}}:
+        <p-progressBar [value]="option.votes_percent" [style]="{'background-color': '#f5f5f5'}"
+                       [showValue]="true"></p-progressBar>
+        <span [appHighlightborder]="'#ebe7ef'" class="middle-text text-muted cursor-pointer" (click)="showVotes(i)"> {{ 'GENERAL.Votes' | translate }}: {{option.votes}}</span>
+      </div>
+      <ng-container *ngIf="currentUserId">
+        <div class="ui-g-1">
+          <ng-container *ngIf="!option.vote_status">
+            <button pButton class="ui-button-secondary flat" type="button"
+                    (click)="vote(i)"
+                    icon="pi pi-check"></button>
+          </ng-container>
+          <ng-container *ngIf="option.vote_status">
+            <button pButton class="ui-button-voted flat ui-button" type="button"
+                    (click)="deleteVote(i)"
+                    icon="pi pi-check"></button>
+          </ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="votesListClicked">
+  <p-dialog [(visible)]="showDialog" [responsive]="true"
+            [modal]="true" [style]="{'width': '400px'}" (onHide)="onHideDialog()">
+
+
+    <p-header>
+      <strong>{{ 'GENERAL.Votes' | translate }}</strong>
+
+    </p-header>
+
+
+    <p-scrollPanel [styleClass]="'dialog-scroll'">
+      <ng-container *ngIf="currentOptionId">
+        <!--<app-items-list [itemsType]="'obj.UserData'" [endPoint]="'post-option-votes/'" [post]="postId"-->
+                        <!--[option]="currentOptionId" [goToTopOnInitFilter]="false"-->
+                        <!--[userFilterBar]="false" [itemsPerPage]="30"></app-items-list>-->
+      </ng-container>
+
+
+    </p-scrollPanel>
+
+
+  </p-dialog>
+</ng-container>

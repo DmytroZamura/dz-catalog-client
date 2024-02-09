@@ -1,0 +1,26 @@
+<ng-container *ngIf="isBrowser">
+
+<p-toast key="message">
+  </p-toast>
+
+  <p-toast key="notification" life="4000000" [styleClass]="'notification-toast'">
+    <ng-template let-message pTemplate="message">
+      <p-header><strong>{{ 'GENERAL.Notification' | translate }}</strong></p-header>
+      <div class="ui-g ui-fluid dashboard">
+<ng-container *ngIf="message.data">
+        <div class="ui-g-12 padding-0">
+          <app-notification-item [item]="message.data" [truncateNumber]="truncateNumber"
+                                 [currentUserId]="currentUserId" (chatSelected)="onShowChat($event)"></app-notification-item>
+        </div>
+</ng-container>
+      </div>
+    </ng-template>
+  </p-toast>
+
+
+
+
+
+</ng-container>
+
+

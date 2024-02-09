@@ -1,0 +1,61 @@
+<p-dialog [(visible)]="showDialog" (onHide)="onCancel()"
+          [maximizable]="false" [closeOnEscape]="true" [blockScroll]="true">
+
+
+  <p-header>
+    <strong>{{ 'CATEGORY.Suggest a category' | translate }}</strong>
+
+  </p-header>
+
+  <ng-container *ngIf="suggestion">
+     <div class="ui-g ui-fluid">
+ <div class="ui-g-12 padding-0 posts-list-size">
+
+    <form #suggestForm="ngForm" (ngSubmit)="saveSuggestion()">
+      <div class="ui-g form-group">
+
+          <ng-container *ngIf="parentCategory">
+            <div class="ui-g-12 ui-md-12">
+
+         <span class="md-inputfield">
+
+        <input id="parentname" name="parentname" type="text" pInputText [ngModel]="parentCategory.name"
+               [disabled]="true"/>
+        <label for="parentname">{{ 'CATEGORY.Parent category' | translate }}:</label>
+
+         </span>
+            </div>
+          </ng-container>
+
+          <div class="ui-g-12 ui-md-12">
+
+         <span class="md-inputfield">
+
+        <input id="category_name" name="category_name" type="text" pInputText [(ngModel)]="suggestion.name" required
+               #suggestion_name="ngModel"/>
+        <label for="category_name">{{ 'GENERAL.Enter a name' | translate }}:</label>
+            <div [hidden]="suggestion_name.valid || suggestion_name.pristine">
+<div *ngIf="suggestion_name.errors && suggestion_name.errors.required"
+     class="ui-message ui-messages-error ui-corner-all">
+                          {{ 'GENERAL.This field is required' | translate }}
+                        </div>
+           </div>
+         </span>
+          </div>
+          <div class="ui-g-12 text-align-center message-box">
+            <button pButton type="button" class="ui-button-secondary flat" label="{{ 'BUTTONS.Cancel' | translate }}"
+                    (click)="onCancel()" style="width: auto"></button>
+
+            &nbsp;&nbsp;
+            <button pButton type="submit" label="{{ 'BUTTONS.Send' | translate }}" style="width: auto"
+                    [disabled]=" !suggestForm.form.valid || saveDisabled"
+                    icon="pi pi-envelope"></button>
+          </div>
+
+        </div>
+
+    </form>
+  </div>
+     </div>
+  </ng-container>
+</p-dialog>

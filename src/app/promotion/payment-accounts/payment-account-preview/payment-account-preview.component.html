@@ -1,0 +1,47 @@
+<ng-container *ngIf="account">
+
+  <div class="card">
+    <div class="ui-g">
+
+      <div class="ui-g-12 ui-md-6">
+        <ng-container *ngIf="!shortMode">
+          <ng-container *ngIf="account.user">
+
+            <app-user-preview-short [userData]="account.user_details" [showPreview]="false"
+                                    [showLink]="false"></app-user-preview-short>
+
+          </ng-container>
+
+          <ng-container *ngIf="account.company">
+            <app-company-preview-short [company]="account.company_details"
+                                       [showLink]="false"></app-company-preview-short>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="shortMode">
+         <h1>{{ 'PROMOTION.Account Balance' | translate }}</h1>
+        </ng-container>
+      </div>
+
+      <div class="ui-g-12 ui-md-6">
+        <div class="ui-toolbar-group-right"><h1>{{account.balance }} {{account.currency_details.code}}</h1>
+        </div>
+
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-toolbar-group-right">
+          <button pButton type="button" class="flat" label="{{ 'PROMOTION.Make a payment' | translate }}"
+                  (click)="onMakePayment()"
+          ></button>
+        </div>
+      </div>
+      <ng-container *ngIf="!shortMode && showDetails">
+        <div class="ui-g-12 text-align-center ui-fluid">
+
+          <button pButton type="button" class="ui-button ui-button-secondary flat color-primary"
+                  label="{{ 'BUTTONS.Show details' | translate }}..." (click)="showAccountDetails()"
+          ></button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

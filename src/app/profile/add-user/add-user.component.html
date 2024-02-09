@@ -1,0 +1,30 @@
+
+<p-dialog [(visible)]="show_dialog" [responsive]="true"
+          [modal]="true" [style]="{'width': width+'px'}">
+
+
+  <p-header>
+    <strong>{{header }}</strong>
+
+  </p-header>
+
+  <div class="ui-g form-group ui-fluid">
+
+
+    <div class="ui-g-12">
+      <app-select-profile [profile]="this.selectedProfile" [company]="company" [community]="community"
+                          (porfileSelected)="onProfileSelected($event)"></app-select-profile>
+    </div>
+  </div>
+
+  <p-footer>
+    <button pButton type="button" label="{{ 'BUTTONS.Cancel' | translate }}"
+            (click)="onCancel()"></button>
+
+    &nbsp;&nbsp;
+    <button pButton type="button" label="{{submitButtonLabel}}"
+            (click)="onAddProfile()" style=" color: #009688; font-weight: bold"></button>
+  </p-footer>
+
+
+</p-dialog>

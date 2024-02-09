@@ -1,0 +1,11 @@
+<ng-container *ngIf="isBrowser">
+<p-tree [value]="lazyCategories" (onNodeExpand)="nodeExpand($event)"
+             selectionMode="single" [(selection)]="selectedCategory" (onNodeSelect)="categorySelect($event)"
+             [style]="{'width':'100%', 'border': 'none'}">
+         <ng-template let-node pTemplate="default">
+           <span *ngIf="node.data.id" class="category-tree-label"> {{node.label}}</span>
+           <span *ngIf="!node.data.id" class="category-tree-label"> <strong>{{node.label}}</strong></span>
+    </ng-template>
+     </p-tree>
+
+</ng-container>

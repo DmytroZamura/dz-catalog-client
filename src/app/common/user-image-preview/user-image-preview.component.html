@@ -1,0 +1,15 @@
+<ng-container *ngIf="image">
+  <div class="{{className}}">
+    <ng-container *ngIf="editMode">
+      <button pButton class="ui-button-secondary flat image-delete-button" type="button"
+              icon="pi pi-times"  (click)="onDeleted()"></button>
+    </ng-container>
+
+    <img class="user-image cursor-pointer" src="{{image.file_url}}" alt="{{image.name}}" (click)="openPreview()">
+  </div>
+
+ <ng-container *ngIf="!editMode">
+      <!--<ngx-gallery [options]="galleryOptions" [images]="galleryImages" #gallery></ngx-gallery>-->
+ </ng-container>
+
+</ng-container>

@@ -1,0 +1,130 @@
+
+<ng-container *ngIf="!imagePreview">
+<ng-container *ngIf="!onlyIcon">
+
+
+  <button id="filebutton1" name="filebutton1" class="{{class}}" type="button" label="{{label}}"
+          pButton (click)="fileInput.click()" icon="{{icon}}" style="width: auto"></button>
+
+</ng-container>
+
+
+<ng-container *ngIf="onlyIcon">
+  <button id="filebutton" name="filebutton" type="button" class="{{class}}"
+          pButton (click)="fileInput.click()" icon="{{icon}}"></button>
+
+</ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="imagePreview">
+  <ng-container *ngIf="!image">
+  <div class="ui-g-12 head-image bg-light" (click)="fileInput.click()">
+    <span class="big-price-text text-muted"><i class="pi pi-image select-icon"></i>&nbsp;{{ 'GENERAL.Click to add an image' | translate }}</span>
+  </div>
+  </ng-container>
+  <ng-container *ngIf="image">
+    <div class="ui-g-12 head-image bg-light" (click)="fileInput.click()" [ngStyle]="getBackground()">
+         <button pButton class="ui-button-secondary flat " type="button"
+
+                    icon="pi pi-pencil"></button>
+&nbsp;&nbsp;
+      <button pButton class="ui-button-secondary flat " type="button"
+                    (click)="deleteImage()"
+                    icon="pi pi-times"></button>
+  </div>
+
+  </ng-container>
+</ng-container>
+<input type="file" #fileInput (change)="onUpload($event)" placeholder="Upload file"
+       accept="{{this.accept}}" hidden="hidden">
+
+
+<ng-container *ngIf="cropImage && imageChangedEvent">
+  <p-dialog [(visible)]="showDialog"  [styleClass]="'mobile-dialog'" [positionTop]="0" [closeOnEscape]="true" [appendTo]="'body'"
+            [modal]="true" >
+
+
+    <p-header>
+      <strong>{{ 'GENERAL.Image cropping' | translate }}</strong>
+
+    </p-header>
+
+
+    <div class="ui-g-12" align="center">
+
+      <button id="rotateLeft" name="rotateLeft" title="Rotate Left" type="button" class="ui-button-secondary flat"
+              pButton (click)="rotateLeft()" icon="pi pi-replay"></button>&nbsp;
+      <button id="rotateRightt" name="rotateRight" title="Rotate Right" type="button" class="ui-button-secondary flat"
+              pButton (click)="rotateRight()" icon="pi pi-refresh"></button>&nbsp;
+      <button id="flipHorizontal" name="flipHorizontal" title="Flip Horizontal" type="button"
+              class="ui-button-secondary flat"
+              pButton (click)="flipHorizontal()" icon="pi pi-step-forward"></button>
+      <button id="flipVertical" name="flipVertical" title="Flip Vertical" type="button" class="ui-button-secondary flat"
+              pButton (click)="flipVertical()" icon="pi pi-caret-up"></button>
+      <ng-container *ngIf="changeAspectRatio">
+        <button id="crop-square" name="crop-square" type="button" class="ui-button-secondary flat"
+                pButton (click)="cropSquare()" icon="pi pi-image"></button>
+        <button id="crop-portrait" name="crop-portrait" type="button" class="ui-button-secondary flat"
+                pButton (click)="cropPortrait()" icon="pi pi-mobile"></button>
+        <button id="crop-16-9" name="crop-16-9" type="button" class="ui-button-secondary flat"
+                pButton (click)="crop16x9()" icon="pi pi-money-bill"></button>
+        <button id="crop-5-4" name="crop-5-4" type="button" class="ui-button-secondary flat"
+                pButton (click)="crop5x4()" icon="pi pi-id-card"></button>
+      </ng-container>
+
+      <!--<button type="button" (click)="rotateLeft()">Rotate left</button>-->
+      <!--<button type="button" (click)="rotateRight()">Rotate right</button>-->
+      <!--<button type="button" (click)="flipHorizontal()">Flip horizontal</button>-->
+      <!--<button type="button" (click)="flipVertical()">Flip vertical</button>-->
+    </div>
+     <div class="container ">
+     <ng-container *ngIf="loading">
+      <div class="ui-g-12 padding-left-right-0 image-loading-spiner" align="center" >
+        <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+                           animationDuration=".5s"></p-progressSpinner>
+      </div>
+    </ng-container>
+
+    <div class="ui-g-12" align="center">
+      <div style="max-width: 600px; min-width: 400px; min-height: 150px; max-height: 400px" class="box-border-small">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="maintainAspectRatio"
+          [aspectRatio]="aspectRatio"
+          [resizeToWidth]="resizeToWidth"
+          [cropperMinWidth]="cropperMinWidth"
+          [onlyScaleDown]="onlyScaleDown"
+          [roundCropper]="roundCropper"
+          [imageQuality]="95"
+          format="jpeg"
+          outputType="file"
+          [autoCrop]="false"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()"
+          [style.display]="showCropper ? null : 'none'" style="max-height: 400px"
+        ></image-cropper>
+      </div>
+
+    </div>
+       <div class="ui-g-12  text-align-center">
+
+
+            <button pButton class="ui-button-secondary flat" type="button" label="{{ 'BUTTONS.Cancel' | translate }}"
+              (click)="onCancel()" style="width: auto"></button>&nbsp;
+      <button pButton type="button" label="{{ 'BUTTONS.Save' | translate }}" [disabled]="loading"
+              (click)="onCroped()" style="width: auto" icon="pi pi-check"></button>
+
+       </div>
+     </div>
+
+
+
+  </p-dialog>
+</ng-container>
+
+<app-process-dialog [header]="'BUTTONS.Upload' | translate" [processName]="'GENERAL.Processing' | translate"
+                    [processComment]="'GENERAL.This may take several seconds' | translate"
+                    #processDialog></app-process-dialog>

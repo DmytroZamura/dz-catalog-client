@@ -1,0 +1,70 @@
+<div class="ui-g ui-fluid main-component-layout">
+
+  <div class="ui-g-12 posts-list-size padding-left-right-0">
+
+    <ng-container *ngIf="product.published && product.admin_status">
+      <div class="ui-g-12 padding-left-right-0">
+        <div class="card padding-0">
+          <app-create-post [company]="product.company" [product]="product"
+                           [placeholder]="'POSTS.share_message' | translate "></app-create-post>
+        </div>
+      </div>
+    </ng-container>
+
+
+    <div class="ui-g-12 padding-left-right-0">
+      <app-manage-items-list [itemsType]="'feed'"
+                             [showFilter]="true" [showCategories]="true"
+                             (newKeyword)="postsList.setKeyword($event)"
+                             (newOrdering)="postsList.changeOrdering($event)"
+                             #postsManagePanel></app-manage-items-list>
+    </div>
+    <div class="ui-g-12 padding-left-right-0">
+      <app-items-list-agile [endPoint]="'get-filtered-posts-by-page/'" [deleteEndpoint]="'delete-post/'"
+                            [itemsPerPage]="5"
+                            [itemsType]="'feed'" [initCurrency]="true" [product]="product.id"
+                            [addTimestampToFilter]="true"
+                            [currentUserId]="currentUserId"
+                            #postsList>
+        <ng-template let-item let-i="index" #body>
+
+          <div class="ui-g-12 padding-left-right-0">
+            <div class="ui-g-12 border-bottom-small">
+              <ng-container *ngIf="!item.published">
+          <span class="info-badge-black"
+                style="float: left">&nbsp;<b>{{'POSTS.Unpublished' | translate}}</b>&nbsp;</span>
+              </ng-container>
+              <span class="date-time-text"
+                    style="float: right">{{item.create_date | dateAgo: locale }}</span>
+            </div>
+            <app-post-item [post]="item" [currentUserId]="currentUserId" [index]="i"
+                           [locale]="locale"
+                           [isMobile]="isMobile" [truncateNumber]="truncateNumber" [showCommunity]="true"
+                           [siteUrl]="siteUrl" [isBrowser]="isBrowser"
+                           (categorySelect)="postsList.onSelectCategory($event)"
+                           (showLikes)="postsManagePanel.onShowLikes($event)"
+                           (postDeleted)="postsList.onDeleted($event)"
+                           (sendRespond)="onSendRespond($event, i , 2)"
+                           (copyPostLink)="postsList.onCopyLink($event)"></app-post-item>
+          </div>
+
+
+        </ng-template>
+
+      </app-items-list-agile>
+    </div>
+
+    <ng-container *ngIf="isBrowser">
+      <ng-container *ngIf="currentUserId">
+
+        <app-send-post-respond (responded)="postsList.onResponded($event)"
+                               #respond></app-send-post-respond>
+      </ng-container>
+    </ng-container>
+
+
+  </div>
+
+
+</div>
+

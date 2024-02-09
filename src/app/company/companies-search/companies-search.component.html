@@ -1,0 +1,50 @@
+<div class="ui-g ui-fluid  dashboard main-component-layout">
+
+  <ng-container *ngIf="paramsChecked">
+    <div class="ui-g-12 ui-md-10 info-search-list-size padding-left-right-0">
+
+
+      <div class="ui-g-12 padding-left-right-0">
+        <app-manage-items-list [itemsType]="'companies'"
+                               [showFilter]="true" [showCategories]="true" [showChildCategories]="false"
+                               [showSearch]="false" [showOrdering]="true" [showSearchLabel]="false"
+                               [childCategoriesCarouselView]="false"
+                               [appliedFilter]="appliedFilter"
+                               (newKeyword)="list.setKeyword($event)"
+                               (newOrdering)="list.changeOrdering($event)"></app-manage-items-list>
+      </div>
+      <div class="ui-g-12 padding-left-right-0">
+        <app-items-list-agile [endPoint]="'companies-by-page/'" [itemsPerPage]="10" [showAdd]="true"
+                              [adClient]="'ca-pub-4091968257038599'" [adSlot]="2347723942" [adFormat]="'fluid'"
+                              [layoutKey]="'-fb+5w+4e-db+86'"
+                              [display]="'block'" [itemsPerAdd]="10"
+                              [orderingCode]="'popularity'"
+                              [itemsType]="'companies'" [initCurrency]="true" [published]="true"
+                              [currentUserId]="currentUserId"
+
+
+                              [addTimestampToFilter]="true"
+                              [addUserToFilter]="true"
+                              [appliedFilter]="appliedFilter"
+                              #list>
+          <ng-template let-item let-i="index" #body>
+            <div class="ui-g-12 padding-left-right-0">
+              <app-company-feed-preview [user]="currentUserId" [company]="item"
+                                        [locale]="language"></app-company-feed-preview>
+            </div>
+
+          </ng-template>
+
+        </app-items-list-agile>
+      </div>
+
+
+    </div>
+
+
+  </ng-container>
+
+
+</div>
+
+

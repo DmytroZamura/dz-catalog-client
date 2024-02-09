@@ -1,0 +1,106 @@
+<p-confirmDialog></p-confirmDialog>
+
+
+<div class="ui-g ui-fluid">
+  <div class="ui-g-9">
+  <span class="text-center"><strong>{{ 'PRODUCT.Product groups' | translate }}</strong></span>
+  </div>
+  <div class="ui-g-3" align="right">
+    <!--<button pButton type="submit" class="ui-button-secondary flat"-->
+
+                        <!--icon="pi pi-save" style="vertical-align: middle"></button>-->
+    <ng-container *ngIf="editable">
+     <i  *ngIf="!edit_mode" class="pi pi-pencil"
+           (click)="editGroups()" style="cursor:pointer; vertical-align: middle"></i>
+      <i  *ngIf="edit_mode" class="pi pi-times-circle"
+           (click)="cancelEditGroups()" style="cursor:pointer; vertical-align: middle"></i>
+    </ng-container>
+  </div>
+  <!--<div class="ui-g-12">-->
+     <!--<p-toggleButton [(ngModel)]="edit_mode" onLabel="Overview" offLabel="Edit"></p-toggleButton>-->
+  <!--</div>-->
+
+  <ng-container *ngIf="edit_mode">
+  <div class="ui-g-12">
+    <span style="font-size: 8px"> {{ 'GENERAL.Choose a language to translate' | translate }} </span>
+    <br/>
+    <app-select-common-item [(item)]="language" [endpoint]="'languages'"
+                                          [showFilter]="false"
+                                          [sortByName]="true" [showClear]="false"
+
+                                          (itemChange)="onLanguageSelect($event)"></app-select-common-item>
+
+  </div>
+
+  <div class="ui-g-12" align="center">
+    <button type="button" pButton icon="pi pi-plus" (click)="addNewGroup()"
+            label="{{ 'PRODUCT.Add a product group' | translate }}" class="ui-button-secondary"
+            style="width: auto" ></button>
+
+  </div>
+  </ng-container>
+
+</div>
+
+<p-tree [value]="lazyNodes" (onNodeExpand)="nodeExpand($event)"
+        selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)"
+        (onNodeUnselect)="nodeUnselect($event)"
+        [style]="{'width':'100%', 'border': 'none', 'margin-left':'-10px'}">
+  <ng-template let-node pTemplate="default">
+    <!--<span style="font-size: 11px"> {{node.label}}</span>-->
+
+
+    <span *ngIf="(node!=selectedNode || node.data.id == null) || !edit_mode "
+          style="font-size: 13px;  white-space: normal"> {{node.data.name}}</span>
+    <ng-container *ngIf="edit_mode && node.data.id">
+      <input *ngIf="node==selectedNode" type="text" pInputText [(ngModel)]="node.data.name"
+             (input)="setChanged(node)" style="font-size: 13px; width: auto;"/>
+
+      <ng-container *ngIf="selectedNode">
+
+        &nbsp;
+        <i *ngIf="node.data.changed && node.data.id==selectedNode.data.id" class="pi pi-save"
+           (click)="saveGroup(node)" style="cursor:pointer; vertical-align: middle"></i>
+        <i *ngIf="node.data.id==selectedNode.data.id && !node.data.changed" class="pi pi-times"
+           (click)="deleteGroup(node)" style="cursor:pointer; vertical-align: middle"></i>
+      </ng-container>
+    </ng-container>
+
+  </ng-template>
+</p-tree>
+
+<p-dialog header="{{ 'PRODUCT.Add a product group' | translate }}" [(visible)]="displayDialog" [responsive]="true"
+          showEffect="fade" [modal]="false" [style]="{'max-width': '600px'}" [appendTo]="'body'">
+  <div class="ui-g form-group ui-fluid" *ngIf="newGroup">
+
+    <div class="ui-g-12">
+      <p-checkbox [(ngModel)]="root_group" binary="true"></p-checkbox>
+      <span class="normal-text">{{ 'PRODUCT.A root group' | translate }}</span><br/>
+      <span class="normal-text"
+        *ngIf="!root_group && selectedNode">{{ 'PRODUCT.A parent group' | translate }}: <strong>{{selectedNode.data.name}}</strong></span>
+    </div>
+
+    <div class="ui-g-12">
+      <span class="middle-text text-muted">{{ 'GENERAL.Please fill data in English' | translate }}</span>
+    </div>
+    <div class="ui-g-12">
+
+
+               <span class="md-inputfield">
+                <input pInputText id="name" [(ngModel)]="newGroup.name"/>
+                 <label for="name">{{ 'GENERAL.Name' | translate }}</label>
+               </span>
+
+    </div>
+
+
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="fa fa-close" (click)="cancel()"
+              label="{{ 'BUTTONS.Cancel' | translate }}"></button>
+      <button type="button" pButton icon="fa fa-check" (click)="saveNewGroup()"
+              label="{{ 'BUTTONS.Save' | translate }}"></button>
+    </div>
+  </p-footer>
+</p-dialog>

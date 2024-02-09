@@ -1,0 +1,64 @@
+<ng-container *ngIf="paramsChecked">
+  <div class="ui-g dashboard main-component-layout">
+
+
+    <div class="ui-g-12 product-list-size padding-left-right-0">
+      <div class="ui-g-12 padding-left-right-0">
+
+        <ng-container *ngIf="currentCurrencyDetails">
+
+          <div class="ui-g-12 padding-left-right-0">
+            <app-manage-items-list [itemsType]="'favorite-products'"
+                                   [showFilter]="true" [showCategories]="true" [showChildCategories]="true"
+                                   [childCategoriesProductView]="true" [showSearch]="false" [showOrdering]="true"
+                                   [showSearchLabel]="false"
+                                   [appliedFilter]="{}"
+                                   (newKeyword)="productsList.setKeyword($event)"
+                                   (newOrdering)="productsList.changeOrdering($event)"></app-manage-items-list>
+          </div>
+          <div class="ui-g-12 padding-left-right-0">
+
+            <app-items-list-agile [endPoint]="'products-by-page/'" [itemsPerPage]="20"
+                                  [itemsType]="'products'" [initCurrency]="true" [published]="true"
+                                  [appliedFilter]="appliedFilter"
+                                  [orderingCode]="'popularity'"
+                                  [addTimestampToFilter]="true"
+                                  [currentUserId]="currentUserId"
+                                  #productsList>
+              <ng-template let-item let-i="index" #body>
+
+                <div class="ui-g-6 ui-md-3 product-item-size padding-left-0">
+
+                  <div class="card padding-0 ">
+
+                    <app-product-item [product]="item" [truncateNumber]="15"
+                                      [currentUserId]="currentUserId"
+                                      [currencyCode]="currentCurrencyDetails?.code" [isMobile]="isMobile"
+                                      [showPreview]="true" [locale]="language"></app-product-item>
+
+
+                  </div>
+                </div>
+
+
+              </ng-template>
+
+            </app-items-list-agile>
+
+          </div>
+        </ng-container>
+
+
+        <!--<app-items-list-view [endPoint]="'products-by-page/'" [itemsPerPage]="20"-->
+        <!--[itemsType]="'products'" [initCurrency]="true" [published]="true"-->
+        <!--[appliedFilter]="appliedFilter"-->
+        <!--&gt;</app-items-list-view>-->
+      </div>
+
+
+    </div>
+
+  </div>
+</ng-container>
+
+
